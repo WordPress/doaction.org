@@ -1,0 +1,233 @@
+.site-header .custom-logo-link {
+	float: none !important;
+	margin: 0 auto !important;
+}
+.site-info {
+	text-align: center;
+	font-style: italic;
+	opacity: 0.5;
+}
+.page-template-template-homepage .entry-header {
+	display: none;
+}
+.page-template-template-homepage .hentry {
+	margin: 0;
+}
+.page-template-template-homepage .site-main {
+	padding-top: 0 !important;
+}
+
+.storefront-primary-navigation {
+	margin-top: 50px;
+}
+
+.page-template-template-homepage h2 {
+	text-align: center;
+}
+.upcoming-events {
+	margin: 0;
+}
+.upcoming-events li {
+	list-style-type: none;
+	display: block;
+	border-bottom: 1px solid #1e73be;
+	width: 100%;
+	text-align: center;
+	clear: both;
+	padding-bottom: 20px;
+    margin: 30px 0;
+}
+.upcoming-events li .event-image {
+	display: inline-block;
+	width: 40%;
+	text-align: right;
+	margin-right: 3%;
+}
+.upcoming-events li .event-image img {
+	display: inline-block;
+}
+.upcoming-events li .event-details {
+	display: inline-block;
+	width: 40%;
+	text-align: left;
+	vertical-align: top;
+	margin-left: 3%;
+}
+.upcoming-events li .event-title {
+	font-size: 150%;
+	font-weight: bold;
+	display: block;
+	margin-bottom: 5px;
+	color: #545b68;
+}
+.upcoming-events li .event-date {
+	display: block;
+	margin-bottom: 10px;
+	color: #545b68;
+}
+.upcoming-events li .event-button {
+	display: inline-block;
+}
+.single-non-profit .content-area, .single-sponsor .content-area {
+	width: 100% !important;
+}
+.single-event .entry-header .entry-title {
+	margin-bottom: .1em;
+}
+#event-map {
+	height: 400px;
+}
+.single-event .entry-header .event-date {
+    text-align: center;
+    display: block;
+    font-style: italic;
+    margin-bottom: 1em;
+}
+.single-event .posted-on {
+	display: none;
+}
+.single-event .entry-title {
+	text-align: center;
+}
+.single-event .entry-content {
+	border-bottom: 1px solid rgba(0,0,0,.05);
+}
+.single-event .form-description {
+	font-style: italic;
+	font-size: 80%;
+}
+.non-profit-options {
+	margin-left: 0;
+}
+.single-event .non-profit-options li {
+	list-style-type: none;
+	display: inline-block;
+	width: 45%;
+	margin: 0 2% 20px 2%;
+	border-bottom: 1px solid #1e73be;
+	padding: 10px;
+}
+.single-event .non-profit-options li.selected,
+.role-selector-list li label.selected {
+	background-color: rgba( 30, 115, 190, 0.1);
+}
+.role-selector-list li label.selected {
+	font-weight: bold;
+}
+.single-event .non-profit-options li input {
+	display: none;
+}
+.single-event .non-profit-options li label {
+	cursor: pointer;
+	display: inline-block;
+	font-weight: normal;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+.single-event .non-profit-options li label.available {
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+	filter: alpha(opacity=100);
+	opacity: 1.0;
+}
+.single-event .non-profit-options li .nonprofit-title {
+	display: block;
+	font-weight: bold;
+}
+.single-event .non-profit-options li .nonprofit-title em {
+	font-style: italic;
+	font-size: 80%;
+	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: alpha(opacity=50);
+	opacity: 0.5;
+}
+.single-event .non-profit-options li .nonprofit-url {
+	font-style: italic;
+	font-size: 80%;
+}
+.single-event .non-profit-options li .nonprofit-excerpt {
+	font-size: 80%;
+}
+#non-profit-role-wrapper, #participant-details-wrapper, #form-submit-row {
+	display: none;
+}
+.role-selector-list {
+	margin-left: 0;
+}
+.role-selector-list li {
+	list-style-type: none;
+}
+.role-selector-list li.disabled label {
+	opacity: 0.5;
+	cursor: not-allowed !important;
+}
+.role-selector-list li input {
+	display: none;
+}
+.role-selector-list li label {
+	cursor: pointer;
+	font-weight: normal;
+	font-size: 90%;
+	padding: 5px 10px;
+}
+#non-profit-role-wrapper .role-description {
+	font-style: italic;
+	display: none;
+	border-top: 1px solid #1e73be;
+    border-bottom: 1px solid #1e73be;
+    padding: 20px;
+}
+.form-success-box {
+	background: rgba( 0, 128, 0, 0.2 );
+	padding: 10px;
+	text-align: center;
+    border-bottom: 1px solid green;
+    border-top: 1px solid green;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+.form-error-box {
+	background: rgba( 255, 0, 0, 0.2 );
+	padding: 10px;
+	text-align: center;
+    border-bottom: 1px solid red;
+    border-top: 1px solid red;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+#event-sign-up-form input[type="text"],
+#event-sign-up-form input[type="email"],
+#event-sign-up-form textarea,
+#event-application-form input[type="text"],
+#event-application-form input[type="email"],
+#event-application-form textarea {
+	width: 50% !important;
+}
+#event-application-form label {
+	display: block;
+	margin-bottom: 5px;
+}
+#event_sponsors li {
+	margin: 10px 0 20px 0;
+	text-align: center;
+}
+#event_sponsors li .sponsor-image {
+	max-width: 100%;
+	height: auto;
+	border: 0;
+}
+.single-sponsor .entry-title {
+	text-align: center;
+}
+.single-sponsor .entry-header .sponsor-meta {
+    text-align: center;
+    display: block;
+    font-style: italic;
+    margin-bottom: 1em;
+}
+
+@media(max-width:767px){
+	.single-event .non-profit-options li {
+		width: 100%;
+	}
+}

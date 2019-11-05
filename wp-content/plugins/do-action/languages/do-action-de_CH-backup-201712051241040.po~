@@ -1,0 +1,862 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: do_action\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-31 17:08+0000\n"
+"PO-Revision-Date: 2017-10-31 18:08+0000\n"
+"Last-Translator: zurich <claudio@haptiq.studio>\n"
+"Language-Team: German (Switzerland)\n"
+"Language: de-CH\n"
+"Plural-Forms: nplurals=2; plural=n != 1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco - https://localise.biz/"
+
+#: includes/class-do-action.php:90 includes/class-do-action.php:1414
+msgid "Events"
+msgstr "Veranstaltungen"
+
+#: includes/class-do-action.php:90
+msgid "Event"
+msgstr "Veranstaltung"
+
+#: includes/class-do-action.php:91
+msgid "Non-profits"
+msgstr "Non-Profit-Organisationen"
+
+#: includes/class-do-action.php:91
+msgid "Non-profit"
+msgstr "Non-Profit-Organisation"
+
+#: includes/class-do-action.php:92 includes/class-do-action.php:284
+msgid "Sponsors"
+msgstr "Sponsoren"
+
+#: includes/class-do-action.php:92
+msgid "Sponsor"
+msgstr "Sponsor"
+
+#: includes/class-do-action.php:96
+msgid "Roles"
+msgstr "Rollen"
+
+#: includes/class-do-action.php:96 includes/class-do-action-tools.php:462
+msgid "Role"
+msgstr "Rolle"
+
+#: includes/class-do-action.php:157
+msgid "Upcoming Events"
+msgstr "Bevorstehende Veranstaltungen"
+
+#: includes/class-do-action.php:198 includes/class-do-action.php:531
+msgid "Sign up!"
+msgstr "Jetzt Anmelden!"
+
+#: includes/class-do-action.php:328
+msgid "Non-profit applications are now closed"
+msgstr "Non-Profit Anmeldungen sind jetzt geschlossen"
+
+#: includes/class-do-action.php:329
+msgid ""
+"We are now deciding on the final list of organisations for this hackathon - "
+"once we have finalised the list, we will be in touch with all of the "
+"applications to let them know. We will then open up participant sign-ups for "
+"the event."
+msgstr ""
+"Wir sind aktuell daran, die finale Liste der Organisationen für diesen "
+"Hackathon zu bestimmen - sobald die Liste abgeschlossen ist, werden wir uns "
+"mit allen angemeldeten Organisartionen in Verbindung setzen. Anschliessend "
+"öffnen wir die Registrierung für die Teilnehmer."
+
+#: includes/class-do-action.php:339
+msgid "This hackathon has ended"
+msgstr "Dieser Hackathon ist beendet"
+
+#: includes/class-do-action.php:340
+msgid "Thank you to everyone who was involved!"
+msgstr "Vielen Dank an alle, die involviert waren!"
+
+#: includes/class-do-action.php:356
+msgid "Apply for your organisation to be a part of this hackathon"
+msgstr "Melde deine Organisation an, um an diesem Hackathon teilzunehmen"
+
+#: includes/class-do-action.php:357
+msgid ""
+"Fill in the form below in order for your non-profit organisation to be a "
+"part of this event and to potentially be one of the organiseations that "
+"receives a brand new website."
+msgstr ""
+"Fülle das folgende Formular aus, um deine Non-Profit-Organisation für diese "
+"Veranstaltung anzumelden und - falls ihr ausgewählt werdet - eine brandneue "
+"Webseite zu bekommen."
+
+#: includes/class-do-action.php:360
+msgid "What is the name of your organisation?"
+msgstr "Wie ist der Name deiner Organisation?"
+
+#: includes/class-do-action.php:365
+msgid "What is your organisation's website address?"
+msgstr "Wie ist die Webadresse deiner Organisation?"
+
+#: includes/class-do-action.php:367
+msgid ""
+"This is the address for your current website, Facebook page, or any other "
+"page that tells us a bit about your organisation."
+msgstr ""
+"Dies ist die Adresse deiner jetzigen Webseite, facebook Seite, oder sonstige "
+"Seiten auf denen wir mehr über deine Organisation erfahren können."
+
+#: includes/class-do-action.php:371
+msgid "What do you hope to achieve with a new website for your organisation?"
+msgstr "Was hoffst du dir von einer neuen Webseite für deine Organisation?"
+
+#: includes/class-do-action.php:373
+msgid ""
+"Be as descriptive as you like - this is to give us an idea of what you are "
+"looking for and is not a final analysis of your needs."
+msgstr ""
+"Sei so ausführlich wie du möchtest - dies soll uns einen ersten Überblick "
+"über deine Bedürfnisse geben, ist aber noch nicht keine finale "
+"Bedarfsanalyse."
+
+#: includes/class-do-action.php:377
+msgid "What is your name?"
+msgstr "Wie ist dein Name?"
+
+#: includes/class-do-action.php:379
+msgid ""
+"This individual will be the primary contact between us and your organisation."
+msgstr ""
+"Diese Person wird die Kontaktperson zwischen uns und deiner Organisation."
+
+#: includes/class-do-action.php:383
+msgid "What is your email address?"
+msgstr "Wie ist deine Emailadresse?"
+
+#: includes/class-do-action.php:385
+msgid ""
+"This will be the primary contact email address between us and your "
+"organisation."
+msgstr ""
+"Dies ist die Adresse der Kontaktperson zwischen uns und deiner Organisation."
+
+#: includes/class-do-action.php:389
+msgid "Apply!"
+msgstr "Anmelden!"
+
+#: includes/class-do-action.php:409
+msgid "Sign up as a participant for this hackathon"
+msgstr "Melde dich als Teilnehmer für diesen Hackathon an"
+
+#: includes/class-do-action.php:410
+#, php-format
+msgid ""
+"To be a part of this event, simply fill in the form below and your "
+"participation will be final. Read our %1$sparticipant's guide%2$s for more "
+"details on what is expected of you when you sign up."
+msgstr ""
+"Um Teil dieser Veranstaltung zu werden, fülle das folgende Formular aus und "
+"deine Teilnahme ist final. Lese unser %1$sHandbuch für Teilnehmer%2$s für "
+"weitere Details, was von dir erwartet wird wenn du dich anmeldest."
+
+#: includes/class-do-action.php:412
+msgid "Select an organisation"
+msgstr "Wähle eine Organisation aus"
+
+#: includes/class-do-action.php:413
+msgid ""
+"Click on a non-profit organisation to select it and, once you have done so, "
+"you will be able to select your role on the build team for that organisation."
+" If an organisation is faded out, then it has no roles available."
+msgstr ""
+"Klicke auf eine Non-Profit-Organisation um diese auszuwählen. Sobald du eine "
+"ausgewählt hast, kannst du die gewünschte Rolle in diesem Team auswählen. "
+"Wenn eine Organisation ausgegraut dargestellt wird, dann sind für dieses "
+"Projekt keine Rollen mehr frei."
+
+#: includes/class-do-action.php:423
+msgid "(All positions filled)"
+msgstr "(Alle Positionen sind besetzt)"
+
+#: includes/class-do-action.php:434
+#, php-format
+msgid "(%s position available)"
+msgid_plural "(%s positions available)"
+msgstr[0] "(%s Positionen frei)"
+msgstr[1] ""
+
+#: includes/class-do-action.php:446 includes/class-do-action.php:875
+#, php-format
+msgid "%1$sWebsite%2$s"
+msgstr "%1$sWebseite%2$s"
+
+#: includes/class-do-action.php:451
+msgid "Select"
+msgstr "Auswählen"
+
+#: includes/class-do-action.php:460
+msgid "Select your role"
+msgstr "Wähle deine Rolle aus"
+
+#: includes/class-do-action.php:461
+msgid ""
+"Each build team has a selection of roles available - select the one that "
+"suits you the best. If a role is greyed out, then it has already been filled."
+msgstr ""
+"Jedes Team hat verschiedene Rollen zur Auswahl - wähle die Rolle aus, die am "
+"besten zu dir passt. Wenn diese Rolle in Grau dargestellt wird, ist diese "
+"bereits besetzt."
+
+#: includes/class-do-action.php:480 includes/class-do-action.php:501
+#: includes/class-do-action.php:906 includes/class-do-action-tools.php:166
+#: includes/class-do-action-tools.php:274
+#: includes/class-do-action-tools.php:615
+msgid "Developer"
+msgstr "Entwickler"
+
+#: includes/class-do-action.php:514
+msgid "Fill in your details"
+msgstr "Fülle deine Details aus"
+
+#: includes/class-do-action.php:515
+msgid ""
+"All we need form you now are your details so we can provide you with further "
+"information about the event."
+msgstr ""
+"Alles, was wir jetzt brauchen sind deine Details, damit wir dir alle "
+"weiteren Informationen zur Veranstaltung senden können."
+
+#: includes/class-do-action.php:518 includes/class-do-action.php:1200
+msgid "Name:"
+msgstr "Name:"
+
+#: includes/class-do-action.php:521 includes/class-do-action.php:1208
+msgid "Email address:"
+msgstr "Emailadresse:"
+
+#: includes/class-do-action.php:524 includes/class-do-action.php:1216
+msgid "Phone number:"
+msgstr "Telefonnummer:"
+
+#: includes/class-do-action.php:529
+#, php-format
+msgid ""
+"By submitting this form you are confirming that you will attend the event on "
+"the listed date and that you have read through the %1$sparticipant's "
+"guide%2$s."
+msgstr ""
+"Mit dem Absenden dieses Formulars bestätigst du, dass du an dieser "
+"Veranstaltung am angegebenen Datum teilnehmen wirst und das %1$sHandbuch für "
+"Teilnehmer%2$s gelesen hast."
+
+#: includes/class-do-action.php:645
+msgid "Thank you for signing up!"
+msgstr "Vielen Dank für die Registrierung!"
+
+#: includes/class-do-action.php:647 includes/class-do-action.php:794
+#: includes/class-do-action-tools.php:392
+#, php-format
+msgid "do_action %s"
+msgstr "do_action %s"
+
+#: includes/class-do-action.php:655 includes/class-do-action.php:802
+#, php-format
+msgid "Hi %s,"
+msgstr "Hi %s,"
+
+#: includes/class-do-action.php:657
+#, php-format
+msgid ""
+"Thank you for signing up as %1$s for %2$s at the %3$s do_action hackathon. "
+"You have been added to the build team and we will be in touch with more "
+"details in the coming weeks."
+msgstr ""
+"Vielen Dank für die Registrierung als %1$s für %2$s am %3$s do_action "
+"Hackathon. Du bist nun als Teil des Teams registriert und wirst in den "
+"kommenden Wochen weitere Informationen erhalten."
+
+#: includes/class-do-action.php:660
+#, php-format
+msgid ""
+"As the Project Manager you will need to be in touch with your chosen non-"
+"profit organisation before the event. To that end, you will find the non-"
+"profit contact details as well as your team's contact details %1$sright "
+"here%2$s. The password to view the info on that page is \"%3$s\" (without "
+"the quotation marks) and the team list will be filled up there as "
+"participants sign up."
+msgstr ""
+"Als Projektmanager wirst du mit deiner gewählten Non-Profit-Organisation "
+"schon vor der Veranstaltung in Kontakt treten. Dazu findest du die "
+"Kontaktdetails der Organisation sowie diejenigen deines Teams %1$sunter "
+"diesem Link%2$s. Das Passwort, um die Informationen abzurufen ist \"%3$s\" "
+"(ohne Anführungszeichen), die Teamliste wird laufend ergänzt wenn neue "
+"Teilnehmer sich anmelden."
+
+#: includes/class-do-action.php:662
+msgid ""
+"Your team's Project Manager will also be in touch with you closer to the "
+"time regarding the non-profit you have chosen as well as any pre-planning "
+"you can do before the event."
+msgstr ""
+"Der Projektmanager deines Teams wird mit dir vor der Veranstaltung in "
+"Kontakt treten betreffend dem Projekt welches du gewählt hast, um die "
+"genauere Planung vor der Veranstaltung zu besprechen."
+
+#: includes/class-do-action.php:665
+#, php-format
+msgid ""
+"Please make sure that you read our %1$sparticipant's guide%2$s for more "
+"details on what is expected of you now that you have signed up. You will "
+"also find vital information there explaining how the day will work and what "
+"you need to bring with you."
+msgstr ""
+"Bitte versichere dich, dass du das %1$sHandbuch für Teilnehmer%2$s gelesen "
+"hast für alle weiteren Details was von den Teilnehmern erwartet wird, die "
+"sich angemeldet haben. Du findest dort ebenfalls alle wichtigen "
+"Informationen, wie der Tag ablaufen wird und was du mitbringen solltest."
+
+#: includes/class-do-action.php:667
+#, php-format
+msgid ""
+"It would be really helpful if you sent %1$sthe sign up link%2$s to anyone "
+"that you know who might also be interested in participating in the day."
+msgstr ""
+"Wenn du weitere Personen kennst, die als Teilnehmer in Frage kommen und "
+"interessiert sein könnten, schicke unbedingt %1$sden Anmeldelink%2$s weiter!"
+
+#: includes/class-do-action.php:669 includes/class-do-action.php:810
+#, php-format
+msgid "Cheers,%sThe do_action team"
+msgstr "Beste Grüsse,%sdas do_action Team"
+
+#: includes/class-do-action.php:792
+msgid "Thank you for your application!"
+msgstr "Vielen Dank für deine Anmeldung!"
+
+#: includes/class-do-action.php:804
+#, php-format
+msgid ""
+"Thank you for applying for %1$s to be a part of the %2$s do_action hackathon."
+" Your application has been received and we will be in touch once we have "
+"decided on the final list of non-profit organisations."
+msgstr ""
+"Danke für die Anmeldung von %1$s, um Teil des %2$s do_action Hackathons zu "
+"sein. Deine Anmeldung ist bei uns eingegangen und wir werden uns mit dir in "
+"Verbindung setzen, sobald die finale Liste der Non-Profit-Organisationen "
+"feststeht."
+
+#: includes/class-do-action.php:806
+#, php-format
+msgid ""
+"If you would like to know more about do_action and what it's all about, then "
+"you can find out more %1$shere%2$s."
+msgstr ""
+"Wenn du mehr wissen möchtest über do_action und worum es dabei geht, dann "
+"findest du mehr Informationen %1$shier%2$s."
+
+#: includes/class-do-action.php:808
+#, php-format
+msgid ""
+"If you know of any other non-profit organisation that could benefit from "
+"this event, then it would be great if you sent %1$sthe application link%2$s "
+"to them. The more the merrier!"
+msgstr ""
+"Wenn du andere Non-Profit-Organisationen kennst, die von dieser "
+"Veranstaltung profitieren könnten, dann schicke Ihnen doch diesen "
+"%1$sAnmeldelink%2$s weiter. Je mehr desto besser!"
+
+#: includes/class-do-action.php:856
+msgid "A bit about the organisation:"
+msgstr "Informationen über die Organisation:"
+
+#: includes/class-do-action.php:863 includes/class-do-action.php:1185
+msgid "What the organisation hopes to achieve with a new website:"
+msgstr "Was erhofft sich die Non-Profit-Organisation von einer neuen Webseite:"
+
+#: includes/class-do-action.php:872
+msgid "Contact Details"
+msgstr "Kontaktdetails"
+
+#: includes/class-do-action.php:877
+#, php-format
+msgid "Contact name: %1$s"
+msgstr "Kontaktname: %1$s"
+
+#: includes/class-do-action.php:878
+#, php-format
+msgid "Email address: %1$s"
+msgstr "Emailadresse: %1$s"
+
+#: includes/class-do-action.php:879
+#, php-format
+msgid "Phone number: %1$s"
+msgstr "Telefonnummer: %1$s"
+
+#: includes/class-do-action.php:882
+msgid "Build Team"
+msgstr "Team"
+
+#: includes/class-do-action.php:1004
+msgid "at"
+msgstr ""
+
+#: includes/class-do-action.php:1008
+msgid "Visit website"
+msgstr "Webseite besuchen"
+
+#: includes/class-do-action.php:1061
+msgid "Announced"
+msgstr "Angekündigt"
+
+#: includes/class-do-action.php:1062
+msgid "Accepting non-profit applications"
+msgstr "Anmeldung der Non-Profit-Organisationen"
+
+#: includes/class-do-action.php:1063
+msgid "Selecting non-profits"
+msgstr "Selektion der Non-Profit-Organisationen"
+
+#: includes/class-do-action.php:1064
+msgid "Accepting participant sign-ups"
+msgstr "Registrierung der Teilnehmer"
+
+#: includes/class-do-action.php:1065
+msgid "Completed"
+msgstr "Abgeschlossen"
+
+#: includes/class-do-action.php:1071
+msgid "Status of event:"
+msgstr "Status der Veranstaltung:"
+
+#: includes/class-do-action.php:1079
+msgid "Organiser email address:"
+msgstr "Emailadresse des Organisators:"
+
+#: includes/class-do-action.php:1087
+msgid "Event date:"
+msgstr "Veranstaltungsdatum:"
+
+#: includes/class-do-action.php:1090
+msgid "25 March 2016"
+msgstr "24. März 2018"
+
+#: includes/class-do-action.php:1095
+msgid "Non-profits:"
+msgstr "Non-Profit-Organisationen:"
+
+#: includes/class-do-action.php:1103
+msgid "Sponsors:"
+msgstr "Sponsoren:"
+
+#: includes/class-do-action.php:1111
+msgid "Venue name:"
+msgstr "Veranstaltungsort:"
+
+#: includes/class-do-action.php:1115
+msgid "Used for display purposes only."
+msgstr "Dient nur zu Anzeigezwecken."
+
+#: includes/class-do-action.php:1120
+msgid "Venue location:"
+msgstr "Location des Veranstaltungsortes:"
+
+#: includes/class-do-action.php:1153 includes/class-do-action.php:1234
+msgid "URL:"
+msgstr "URL:"
+
+#: includes/class-do-action.php:1161
+msgid "Contact name:"
+msgstr "Kontaktname:"
+
+#: includes/class-do-action.php:1169 includes/class-do-action.php:1242
+msgid "Contact email address:"
+msgstr "Kontakt Emailadresse:"
+
+#: includes/class-do-action.php:1177
+msgid "Contact phone number:"
+msgstr "Kontakt Telefonnummer:"
+
+#: includes/class-do-action.php:1261
+#, php-format
+msgid "%s Details"
+msgstr "%s Details"
+
+#: includes/class-do-action.php:1270
+#, php-format
+msgid "Role: %s"
+msgstr "Rolle: %s"
+
+#: includes/class-do-action.php:1331
+msgid "All events"
+msgstr "Alle Veranstaltungen"
+
+#: includes/class-do-action-tools.php:30 includes/class-do-action-tools.php:30
+#: includes/class-do-action-tools.php:37
+msgid "do_action Tools"
+msgstr "do_action Werkzeuge"
+
+#: includes/class-do-action-tools.php:45 includes/class-do-action-tools.php:462
+msgid "Email"
+msgstr "Email"
+
+#: includes/class-do-action-tools.php:46
+msgid "Export"
+msgstr "Export"
+
+#: includes/class-do-action-tools.php:90
+msgid "Email sent successfully."
+msgstr "Email wurde erfolgreich versendet."
+
+#: includes/class-do-action-tools.php:94
+msgid "There was an error sending your email - please try again."
+msgstr ""
+"Beim Senden der Email ist ein Fehler aufgetreten - bitte versuche es erneut."
+
+#: includes/class-do-action-tools.php:99
+msgid "There was an error exporting the data - please try again."
+msgstr ""
+"Beim Exportieren der Daten ist ein Fehler aufgetreten - bitte versuche es "
+"erneut."
+
+#: includes/class-do-action-tools.php:129
+#: includes/class-do-action-tools.php:237
+msgid "Event:"
+msgstr "Veranstaltung:"
+
+#: includes/class-do-action-tools.php:131
+#: includes/class-do-action-tools.php:239
+msgid "-- Select event --"
+msgstr "-- Wähle eine Veranstaltung --"
+
+#: includes/class-do-action-tools.php:140
+#: includes/class-do-action-tools.php:248
+msgid "Organisation(s):"
+msgstr "Organisation(en):"
+
+#: includes/class-do-action-tools.php:142
+msgid ""
+"If you don't select any organisations, then the email will be sent to the "
+"applicable recipients from all of them."
+msgstr ""
+"Wenn keine Organisationen ausgewählt sind, wird die Email an zutreffenden  "
+"Empfänger gesendet."
+
+#: includes/class-do-action-tools.php:152
+#: includes/class-do-action-tools.php:260
+msgid "Recipient roles:"
+msgstr "Empfänger Rollen:"
+
+#: includes/class-do-action-tools.php:154
+#: includes/class-do-action-tools.php:262
+msgid "Event organiser"
+msgstr "Veranstaltungsorganisation:"
+
+#: includes/class-do-action-tools.php:155
+#: includes/class-do-action-tools.php:263
+msgid "Non-profit organisation"
+msgstr "Non-Profit-Organisation"
+
+#: includes/class-do-action-tools.php:179
+#, php-format
+msgid ""
+"The following placeholders are available for the email subject and body: "
+"%1$s, %2$s, %3$s and %4$s"
+msgstr ""
+"Die folgenden Platzhalter können im Betreff sowie Inhalt der Email verwendet "
+"werden: %1$s, %2$s, %3$s und %4$s"
+
+#: includes/class-do-action-tools.php:184
+msgid "Email subject:"
+msgstr "Email Betreff:"
+
+#: includes/class-do-action-tools.php:190
+msgid "Email body:"
+msgstr "Email Inhalt:"
+
+#: includes/class-do-action-tools.php:200
+msgid "Preview"
+msgstr "Vorschau"
+
+#: includes/class-do-action-tools.php:201
+msgid "Send"
+msgstr "Senden"
+
+#: includes/class-do-action-tools.php:206
+msgid ""
+"Note that email previews use demo data taken from the entire database to "
+"replace the placeholders, so they may not reflect data from the selected "
+"event/roles."
+msgstr ""
+"Beachte, dass die Vorschau der Email Daten aus der gesamten Datenbank "
+"verwendet um die Platzhalter zu ersetzen, und nicht die effektiven Daten der "
+"ausgewählten Veranstaltung/Rolle widerspiegelt."
+
+#: includes/class-do-action-tools.php:210
+msgid "Email preview"
+msgstr "Email Vorschau"
+
+#: includes/class-do-action-tools.php:250
+msgid ""
+"If you don't select any organisations, then export data will include people "
+"from all of them."
+msgstr ""
+"Wenn du keine Organisation auswählst, werden die Daten aller Organisationen "
+"exportiert."
+
+#: includes/class-do-action-tools.php:288
+msgid "Download CSV"
+msgstr "CSV herunterladen"
+
+#: includes/class-do-action-tools.php:306
+msgid "Please select an event."
+msgstr "Bitte wähle eine Veranstaltung."
+
+#: includes/class-do-action-tools.php:462
+msgid "Name"
+msgstr "Name"
+
+#: includes/class-do-action-tools.php:462
+msgid "Phone"
+msgstr "Telefonnummer"
+
+#: includes/class-do-action-tools.php:462
+msgid "Organisation"
+msgstr "Organisation"
+
+#: includes/class-do-action-tools.php:547
+#, php-format
+msgid "do_action %1$s"
+msgstr "do_action %1$s"
+
+#: includes/class-do-action-tools.php:548
+#, php-format
+msgid "%1$s Organiser"
+msgstr "%1$s Organisator"
+
+#: includes/class-do-action-tools.php:554
+msgid "Event Organiser"
+msgstr "Veranstaltungsorganisator"
+
+#: includes/class-do-action-tools.php:586
+msgid "Non-Profit Representative"
+msgstr "Vertreter der Non-Profit-Organisation"
+
+#: includes/lib/class-do-action-taxonomy.php:75
+#: includes/lib/class-do-action-post-type.php:80
+#, php-format
+msgid "All %s"
+msgstr "Alle %s"
+
+#: includes/lib/class-do-action-taxonomy.php:76
+#: includes/lib/class-do-action-post-type.php:78
+#, php-format
+msgid "Edit %s"
+msgstr "%s bearbeiten"
+
+#: includes/lib/class-do-action-taxonomy.php:77
+#: includes/lib/class-do-action-post-type.php:81
+#, php-format
+msgid "View %s"
+msgstr "%s anzeigen"
+
+#: includes/lib/class-do-action-taxonomy.php:78
+#, php-format
+msgid "Update %s"
+msgstr "%s aktualisieren"
+
+#: includes/lib/class-do-action-taxonomy.php:79
+#: includes/lib/class-do-action-post-type.php:77
+#, php-format
+msgid "Add New %s"
+msgstr "Neue %s erstellen"
+
+#: includes/lib/class-do-action-taxonomy.php:80
+#, php-format
+msgid "New %s Name"
+msgstr "Neue %s Namen"
+
+#: includes/lib/class-do-action-taxonomy.php:81
+#, php-format
+msgid "Parent %s"
+msgstr "Übergeordnete %s"
+
+#: includes/lib/class-do-action-taxonomy.php:82
+#, php-format
+msgid "Parent %s:"
+msgstr "Übergeordnete %s"
+
+#: includes/lib/class-do-action-taxonomy.php:83
+#: includes/lib/class-do-action-post-type.php:82
+#, php-format
+msgid "Search %s"
+msgstr "Suche %s"
+
+#: includes/lib/class-do-action-taxonomy.php:84
+#, php-format
+msgid "Popular %s"
+msgstr "Beliebte %s"
+
+#: includes/lib/class-do-action-taxonomy.php:85
+#, php-format
+msgid "Separate %s with commas"
+msgstr "Trenne %s mit Kommas"
+
+#: includes/lib/class-do-action-taxonomy.php:86
+#, php-format
+msgid "Add or remove %s"
+msgstr "%s Hinzufügen oder entfernen"
+
+#: includes/lib/class-do-action-taxonomy.php:87
+#, php-format
+msgid "Choose from the most used %s"
+msgstr "Wähle von den meistgenutzten %s"
+
+#: includes/lib/class-do-action-taxonomy.php:88
+#, php-format
+msgid "No %s found"
+msgstr "Keine %s gefunden"
+
+#: includes/lib/class-do-action-post-type.php:76
+msgid "Add New"
+msgstr "Neu hinzufügen"
+
+#: includes/lib/class-do-action-post-type.php:79
+#, php-format
+msgid "New %s"
+msgstr "Neue %s"
+
+#: includes/lib/class-do-action-post-type.php:83
+#, php-format
+msgid "No %s Found"
+msgstr "Keine %s gefunden"
+
+#: includes/lib/class-do-action-post-type.php:84
+#, php-format
+msgid "No %s Found In Trash"
+msgstr "Keine %s im Papierkorb gefunden"
+
+#: includes/lib/class-do-action-post-type.php:124
+#, php-format
+msgid "%1$s updated. %2$sView %3$s%4$s."
+msgstr "%1$s aktualisiert. %2$sAnzeigen %3$s%4$s."
+
+#: includes/lib/class-do-action-post-type.php:125
+msgid "Custom field updated."
+msgstr "Benutzerdefiniertes Feld aktualisiert."
+
+#: includes/lib/class-do-action-post-type.php:126
+msgid "Custom field deleted."
+msgstr "Benutzerdefiniertes Feld gelöscht."
+
+#: includes/lib/class-do-action-post-type.php:127
+#, php-format
+msgid "%1$s updated."
+msgstr "%1$s aktualisiert."
+
+#: includes/lib/class-do-action-post-type.php:128
+#, php-format
+msgid "%1$s restored to revision from %2$s."
+msgstr "%1$s wiederhergestellt aus Revision von %2$s-"
+
+#: includes/lib/class-do-action-post-type.php:129
+#, php-format
+msgid "%1$s published. %2$sView %3$s%4s."
+msgstr "%1$s veröffentlicht. %2$sAnzeigen %3$s%4$s."
+
+#: includes/lib/class-do-action-post-type.php:130
+#, php-format
+msgid "%1$s saved."
+msgstr "%1$s gespeichert."
+
+#: includes/lib/class-do-action-post-type.php:131
+#, php-format
+msgid "%1$s submitted. %2$sPreview post%3$s%4$s."
+msgstr "%1$s eingereicht. %2$sBeitrag anzeigen%3$s%4$s."
+
+#: includes/lib/class-do-action-post-type.php:132
+#, php-format
+msgid "%1$s scheduled for: %2$s. %3$sPreview %4$s%5$s."
+msgstr "%1$s geplant für: %2$s. %3$sVorschau %4$s%5$s."
+
+#: includes/lib/class-do-action-post-type.php:132
+msgid "M j, Y @ G:i"
+msgstr "j. F Y @ G:i"
+
+#: includes/lib/class-do-action-post-type.php:133
+#, php-format
+msgid "%1$s draft updated. %2$sPreview %3$s%4$s."
+msgstr "%1$s Entwurf aktualisiert. %2$sVorschau %3$s%4$s."
+
+#: includes/lib/class-do-action-post-type.php:148
+#, php-format
+msgid "%1$s %2$s updated."
+msgid_plural "%1$s %3$s updated."
+msgstr[0] "%1$s %2$s aktualisiert."
+msgstr[1] "%1$s %3$s aktualisiert."
+
+#: includes/lib/class-do-action-post-type.php:149
+#, php-format
+msgid "%1$s %2$s not updated, somebody is editing it."
+msgid_plural "%1$s %3$s not updated, somebody is editing them."
+msgstr[0] ""
+"%1$s %2$s konnte nicht aktualisiert werden, jemand bearbeitet dies gerade."
+msgstr[1] ""
+"%1$s %3$s konnte nicht aktualisiert werden, jemand bearbeitet diese gerade."
+
+#: includes/lib/class-do-action-post-type.php:150
+#, php-format
+msgid "%1$s %2$s permanently deleted."
+msgid_plural "%1$s %3$s permanently deleted."
+msgstr[0] "%1$s %2$s dauerhaft gelöscht."
+msgstr[1] "%1$s %3$s dauerhaft gelöscht."
+
+#: includes/lib/class-do-action-post-type.php:151
+#, php-format
+msgid "%1$s %2$s moved to the Trash."
+msgid_plural "%1$s %3$s moved to the Trash."
+msgstr[0] "%1$s %2$s in den Papierkorb bewegt."
+msgstr[1] "%1$s %3$s in den Papierkorb bewegt."
+
+#: includes/lib/class-do-action-post-type.php:152
+#, php-format
+msgid "%1$s %2$s restored from the Trash."
+msgid_plural "%1$s %3$s restored from the Trash."
+msgstr[0] "%1$s %2$s aus dem Papierkorb wiederhergestellt."
+msgstr[1] "%1$s %3$s aus dem Papierkorb wiederhergestellt."
+
+#: includes/lib/class-do-action-admin-api.php:162
+msgid "Upload an image"
+msgstr "Bild hochladen"
+
+#: includes/lib/class-do-action-admin-api.php:162
+msgid "Use image"
+msgstr "Bild benutzen"
+
+#: includes/lib/class-do-action-admin-api.php:162
+msgid "Upload new image"
+msgstr "Neues Bild hochladen"
+
+#: includes/lib/class-do-action-admin-api.php:163
+msgid "Remove image"
+msgstr "Bild entfernen"
+
+#. Name of the plugin
+msgid "do_action"
+msgstr "do_action"
+
+#. Description of the plugin
+msgid "Custom functionality for doaction.org"
+msgstr "Custom Funktionen für doaction.org"
+
+#. URI of the plugin
+msgid "http://doaction.org/"
+msgstr "http://doaction.org/"
+
+#. Author of the plugin
+msgid "Hugh Lashbrooke"
+msgstr "Hugh Lashbrooke"
+
+#. Author URI of the plugin
+msgid "http://hughlashbrooke.com/"
+msgstr "http://hughlashbrooke.com/"

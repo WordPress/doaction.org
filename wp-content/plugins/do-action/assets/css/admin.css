@@ -1,0 +1,69 @@
+#dashboard_right_now a.event-count:before,
+#dashboard_right_now span.event-count:before {
+  content: "\f508";
+}
+#dashboard_right_now a.non-profit-count:before,
+#dashboard_right_now span.non-profit-count:before {
+  content: "\f513";
+}
+#dashboard_right_now a.sponsor-count:before,
+#dashboard_right_now span.sponsor-count:before {
+  content: "\f487";
+}
+#non_profit_role_content-manager .custom-field-panel .form-field,
+#non_profit_role_project-manager .custom-field-panel .form-field,
+#non_profit_role_social-media-manager .custom-field-panel .form-field,
+#non_profit_role_developer-1 .custom-field-panel .form-field,
+#non_profit_role_developer-2 .custom-field-panel .form-field,
+#non_profit_role_developer-3 .custom-field-panel .form-field,
+#non_profit_role_designer .custom-field-panel .form-field,
+#non_profit_role_quality-assurance-tester .custom-field-panel .form-field {
+	display: inline-block;
+}
+.custom-field-panel label {
+	margin-right: 10px;
+}
+.custom-field-panel .form-field input[type=text],
+.custom-field-panel .form-field input[type=password],
+.custom-field-panel .form-field input[type=email],
+.custom-field-panel .form-field input[type=number],
+.custom-field-panel .form-field input[type=search],
+.custom-field-panel .form-field input[type=tel],
+.custom-field-panel .form-field input[type=url],
+.custom-field-panel .form-field textarea {
+	width: auto;
+}
+.custom-field-panel input[type=text].geocomplete {
+	width: 90%;
+}
+
+#do_action_tools form label {
+	display: block;
+	margin-bottom: 3px;
+	font-weight: bold;
+}
+#do_action_tools form li label {
+	font-weight: normal;
+}
+
+#event_details .select2-container {
+	min-width: 60%;
+}
+.edit-non-profit-from-event {
+	text-decoration: none;
+}
+#do-action-email-preview-wrapper {
+	display: none;
+}
+#do-action-email-preview .spinner-wrapper {
+	text-align: center;
+}
+#do-action-email-preview .spinner-wrapper .spinner {
+	float: none;
+}
+
+#recipient-org-select-wrapper .select2-container {
+	min-width: 60%;
+}
+
+.chosen-container { min-width: 250px !important; }
