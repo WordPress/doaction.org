@@ -4,8 +4,7 @@ function storefront_post_header() {
 	do_action_functions()->storefront_post_header();
 }
 
-
-
+load_theme_textdomain( 'do-action' );
 
 /** STRING TRANSLATIONS **/
 
