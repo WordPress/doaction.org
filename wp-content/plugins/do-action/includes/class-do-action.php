@@ -422,6 +422,18 @@ class do_action {
 
 	}
 
+	public function get_pll_current_language_path() {
+		if ( function_exists( 'pll_current_language' ) ) {
+			if ( pll_current_language() == 'en' ) {
+				return null;
+			} else {
+				return '/' . pll_current_language();
+			}
+		} else {
+		return null;
+		}
+	}
+
 	public function event_sign_up_form ( $event = null ) {
 
 		if( ! $event ) {
@@ -436,7 +448,7 @@ class do_action {
 			<div id="event-sign-up-form">
 				<form name="event-sign-up-form" action="" method="post">
 					<h2><?php _e( 'Sign up as a participant for this hackathon', 'do-action' ); ?></h2>
-					<p><?php printf( __( 'To be a part of this event, simply fill in the form below and your participation will be final. Read our %1$sparticipant\'s guide%2$s for more details on what is expected of you when you sign up.', 'do-action' ), '<a href="' . get_site_url() . '/participants-guide/">', '</a>' ); ?></p>
+					<p><?php printf( __( 'To be a part of this event, simply fill in the form below and your participation will be final. Read our %1$sparticipant\'s guide%2$s for more details on what is expected of you when you sign up.', 'do-action' ), '<a href="' . get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/">', '</a>' ); ?></p>
 
 					<h3><?php _e( 'Select an organisation', 'do-action' ); ?></h3>
 					<p class="form-description"><?php _e( 'Click on a non-profit organisation to select it and, once you have done so, you will be able to select your role on the build team for that organisation. If an organisation is faded out, then it has no roles available.', 'do-action' ); ?></p>
@@ -555,7 +567,7 @@ class do_action {
 					</div>
 
 					<div id="form-submit-row">
-						<p class="form-description"><?php printf( __( 'By submitting this form you are confirming that you will attend the event on the listed date and that you have read through the %1$sparticipant\'s guide%2$s.', 'do-action' ), '<a href="' . get_site_url() . '/participants-guide/">', '</a>' ); ?></p>
+						<p class="form-description"><?php printf( __( 'By submitting this form you are confirming that you will attend the event on the listed date and that you have read through the %1$sparticipant\'s guide%2$s.', 'do-action' ), '<a href="' . get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/">', '</a>' ); ?></p>
 						<input type="hidden" name="doaction_signed_up" value="true" />
 						<input type="submit" disabled value="<?php esc_attr_e( 'Sign up!', 'do-action' ); ?>" id="participant-form-submit" />
 					</div>
@@ -691,7 +703,7 @@ class do_action {
 			<p><?php _e( 'Your team\'s Project Manager will also be in touch with you closer to the time regarding the non-profit you have chosen as well as any pre-planning you can do before the event.', 'do-action' ); ?></p>
 		<?php } ?>
 
-		<p><?php printf( __( 'Please make sure that you read our %1$sparticipant\'s guide%2$s for more details on what is expected of you now that you have signed up. You will also find vital information there explaining how the day will work and what you need to bring with you.', 'do-action' ), '<a href="' . get_site_url() . '/participants-guide/">', '</a>' ); ?></p>
+		<p><?php printf( __( 'Please make sure that you read our %1$sparticipant\'s guide%2$s for more details on what is expected of you now that you have signed up. You will also find vital information there explaining how the day will work and what you need to bring with you.', 'do-action' ), '<a href="' . get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/">', '</a>' ); ?></p>
 
 		<p><?php printf( __( 'It would be really helpful if you sent %1$sthe sign up link%2$s to anyone that you know who might also be interested in participating in the day.', 'do-action' ), '<a href="' . esc_url( get_permalink( $event->ID ) ) . '">', '</a>' ); ?></p>
 
@@ -837,7 +849,7 @@ class do_action {
 
 		<p><?php printf( __( 'Thank you for applying for %1$s to be a part of the %2$s do_action hackathon. Your application has been received and we will be in touch once we have decided on the final list of non-profit organisations.', 'do-action' ), $org->post_title, $event->post_title ); ?></p>
 
-		<p><?php printf( __( 'If you would like to know more about do_action and what it\'s all about, then you can find out more %1$shere%2$s.', 'do-action' ), '<a href="' . get_site_url() . '/about/">', '</a>' ); ?></p>
+		<p><?php printf( __( 'If you would like to know more about do_action and what it\'s all about, then you can find out more %1$shere%2$s.', 'do-action' ), '<a href="' . get_site_url() . $this->get_pll_current_language_path() . '/about/">', '</a>' ); ?></p>
 
 		<p><?php printf( __( 'If you know of any other non-profit organisation that could benefit from this event, then it would be great if you sent %1$sthe application link%2$s to them. The more the merrier!', 'do-action' ), '<a href="' . esc_url( get_permalink( $event->ID ) ) . '">', '</a>' ); ?></p>
 
