@@ -19,6 +19,9 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// Load plugin localisation
+load_plugin_textdomain('do-action', false, dirname(plugin_basename(__FILE__)) . '/languages/');
+
 // Load plugin class files
 require_once( 'includes/class-do-action.php' );
 require_once( 'includes/class-do-action-tools.php' );

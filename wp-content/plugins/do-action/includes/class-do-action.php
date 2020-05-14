@@ -146,8 +146,6 @@ class do_action {
 			$this->admin = new do_action_Admin_API();
 		}
 
-		// Handle localisation
-		add_action( 'plugins_loaded', array( $this, 'load_localisation' ) );
 	} // End __construct ()
 
 	public function upcoming_events () {
@@ -1622,16 +1620,6 @@ class do_action {
 		wp_enqueue_script( $this->_token . '-admin' );
 
 	} // End admin_enqueue_scripts ()
-
-	/**
-	 * Load plugin localisation
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
-	 */
-	public function load_localisation () {
-		load_plugin_textdomain( 'do-action', false, dirname( plugin_basename( $this->file ) ) . '/languages/' );
-	} // End load_localisation ()
 
 	/**
 	 * Main do_action Instance

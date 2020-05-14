@@ -73,7 +73,7 @@ class do_action_Post_Type {
 			'name' => $this->plural,
 			'singular_name' => $this->single,
 			'name_admin_bar' => $this->single,
-			'add_new' => _x( 'Add New', $this->post_type , 'do-action' ),
+			'add_new' => __( 'Add New', 'do-action' ),
 			'add_new_item' => sprintf( __( 'Add New %s' , 'do-action' ), $this->single ),
 			'edit_item' => sprintf( __( 'Edit %s' , 'do-action' ), $this->single ),
 			'new_item' => sprintf( __( 'New %s' , 'do-action' ), $this->single ),
