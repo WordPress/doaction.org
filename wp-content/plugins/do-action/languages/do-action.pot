@@ -1,31 +1,46 @@
-#, fuzzy
+# Copyright (C) 2020 Hugh Lashbrooke
+# This file is distributed under the same license as the do_action plugin.
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Project-Id-Version: do_action\n"
-"POT-Creation-Date: 2020-04-15 16:35+0900\n"
-"PO-Revision-Date: 2020-04-15 16:33+0900\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Project-Id-Version: do_action 1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/do-action\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.3\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: do-action.php\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+"POT-Creation-Date: 2020-05-13T13:51:33-04:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.3.0\n"
+"X-Domain: do-action\n"
 
-#: includes/class-do-action-tools.php:30 includes/class-do-action-tools.php:37
+#. Plugin Name of the plugin
+msgid "do_action"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "http://doaction.org/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Custom functionality for doaction.org"
+msgstr ""
+
+#. Author of the plugin
+msgid "Hugh Lashbrooke"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://hughlashbrooke.com/"
+msgstr ""
+
+#: includes/class-do-action-tools.php:30
+#: includes/class-do-action-tools.php:37
 msgid "do_action Tools"
 msgstr ""
 
-#: includes/class-do-action-tools.php:45 includes/class-do-action-tools.php:462
+#: includes/class-do-action-tools.php:45
+#: includes/class-do-action-tools.php:462
 msgid "Email"
 msgstr ""
 
@@ -61,9 +76,7 @@ msgid "Organisation(s):"
 msgstr ""
 
 #: includes/class-do-action-tools.php:142
-msgid ""
-"If you don't select any organisations, then the email will be sent to the "
-"applicable recipients from all of them."
+msgid "If you don't select any organisations, then the email will be sent to the applicable recipients from all of them."
 msgstr ""
 
 #: includes/class-do-action-tools.php:152
@@ -83,16 +96,15 @@ msgstr ""
 
 #: includes/class-do-action-tools.php:166
 #: includes/class-do-action-tools.php:274
-#: includes/class-do-action-tools.php:615 includes/class-do-action.php:509
-#: includes/class-do-action.php:530 includes/class-do-action.php:940
+#: includes/class-do-action-tools.php:615
+#: includes/class-do-action.php:509
+#: includes/class-do-action.php:530
+#: includes/class-do-action.php:940
 msgid "Developer"
 msgstr ""
 
 #: includes/class-do-action-tools.php:179
-#, php-format
-msgid ""
-"The following placeholders are available for the email subject and body: "
-"%1$s, %2$s, %3$s and %4$s"
+msgid "The following placeholders are available for the email subject and body: %1$s, %2$s, %3$s and %4$s"
 msgstr ""
 
 #: includes/class-do-action-tools.php:184
@@ -112,10 +124,7 @@ msgid "Send"
 msgstr ""
 
 #: includes/class-do-action-tools.php:206
-msgid ""
-"Note that email previews use demo data taken from the entire database to "
-"replace the placeholders, so they may not reflect data from the selected "
-"event/roles."
+msgid "Note that email previews use demo data taken from the entire database to replace the placeholders, so they may not reflect data from the selected event/roles."
 msgstr ""
 
 #: includes/class-do-action-tools.php:210
@@ -123,9 +132,7 @@ msgid "Email preview"
 msgstr ""
 
 #: includes/class-do-action-tools.php:250
-msgid ""
-"If you don't select any organisations, then export data will include people "
-"from all of them."
+msgid "If you don't select any organisations, then export data will include people from all of them."
 msgstr ""
 
 #: includes/class-do-action-tools.php:288
@@ -136,9 +143,9 @@ msgstr ""
 msgid "Please select an event."
 msgstr ""
 
-#: includes/class-do-action-tools.php:392 includes/class-do-action.php:676
+#: includes/class-do-action-tools.php:392
+#: includes/class-do-action.php:676
 #: includes/class-do-action.php:828
-#, php-format
 msgid "do_action %s"
 msgstr ""
 
@@ -150,7 +157,8 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
-#: includes/class-do-action-tools.php:462 includes/class-do-action.php:96
+#: includes/class-do-action-tools.php:462
+#: includes/class-do-action.php:96
 msgid "Role"
 msgstr ""
 
@@ -159,12 +167,10 @@ msgid "Organisation"
 msgstr ""
 
 #: includes/class-do-action-tools.php:547
-#, php-format
 msgid "do_action %1$s"
 msgstr ""
 
 #: includes/class-do-action-tools.php:548
-#, php-format
 msgid "%1$s Organiser"
 msgstr ""
 
@@ -176,13 +182,8 @@ msgstr ""
 msgid "Non-Profit Representative"
 msgstr ""
 
-#: includes/class-do-action-tools.php:695
-#: includes/class-do-action-tools.php:704 includes/class-do-action.php:1647
-#: includes/class-do-action.php:1656
-msgid "Cheatin&#8217; huh?"
-msgstr ""
-
-#: includes/class-do-action.php:90 includes/class-do-action.php:1512
+#: includes/class-do-action.php:90
+#: includes/class-do-action.php:1512
 msgid "Events"
 msgstr ""
 
@@ -198,7 +199,8 @@ msgstr ""
 msgid "Non-profit"
 msgstr ""
 
-#: includes/class-do-action.php:92 includes/class-do-action.php:302
+#: includes/class-do-action.php:92
+#: includes/class-do-action.php:302
 msgid "Sponsors"
 msgstr ""
 
@@ -214,15 +216,18 @@ msgstr ""
 msgid "Upcoming Events"
 msgstr ""
 
-#: includes/class-do-action.php:206 includes/class-do-action.php:418
+#: includes/class-do-action.php:206
+#: includes/class-do-action.php:418
 msgid "Apply!"
 msgstr ""
 
-#: includes/class-do-action.php:210 includes/class-do-action.php:560
+#: includes/class-do-action.php:210
+#: includes/class-do-action.php:560
 msgid "Sign up!"
 msgstr ""
 
-#: includes/class-do-action.php:214 includes/class-do-action.php:1004
+#: includes/class-do-action.php:214
+#: includes/class-do-action.php:1004
 msgid "Read more"
 msgstr ""
 
@@ -231,11 +236,7 @@ msgid "Non-profit applications are now closed"
 msgstr ""
 
 #: includes/class-do-action.php:352
-msgid ""
-"We are now deciding on the final list of organisations for this hackathon - "
-"once we have finalised the list, we will be in touch with all of the "
-"applications to let them know. We will then open up participant sign-ups for "
-"the event."
+msgid "We are now deciding on the final list of organisations for this hackathon - once we have finalised the list, we will be in touch with all of the applications to let them know. We will then open up participant sign-ups for the event."
 msgstr ""
 
 #: includes/class-do-action.php:362
@@ -251,10 +252,7 @@ msgid "Apply for your organisation to be a part of this hackathon"
 msgstr ""
 
 #: includes/class-do-action.php:380
-msgid ""
-"Fill in the form below in order for your non-profit organisation to be a "
-"part of this event and to potentially be one of the organiseations that "
-"receives a brand new website."
+msgid "Fill in the form below in order for your non-profit organisation to be a part of this event and to potentially be one of the organiseations that receives a brand new website."
 msgstr ""
 
 #: includes/class-do-action.php:383
@@ -266,9 +264,7 @@ msgid "What is your organisation's website address?"
 msgstr ""
 
 #: includes/class-do-action.php:390
-msgid ""
-"This is the address for your current website, Facebook page, or any other "
-"page that tells us a bit about your organisation."
+msgid "This is the address for your current website, Facebook page, or any other page that tells us a bit about your organisation."
 msgstr ""
 
 #: includes/class-do-action.php:394
@@ -276,9 +272,7 @@ msgid "What is your organisation all about?"
 msgstr ""
 
 #: includes/class-do-action.php:396
-msgid ""
-"Tell us what your organisation does, how you work, what your mission "
-"statement is, or anything else that you feel is relevant."
+msgid "Tell us what your organisation does, how you work, what your mission statement is, or anything else that you feel is relevant."
 msgstr ""
 
 #: includes/class-do-action.php:400
@@ -286,9 +280,7 @@ msgid "What do you hope to achieve with a new website for your organisation?"
 msgstr ""
 
 #: includes/class-do-action.php:402
-msgid ""
-"Be as descriptive as you like - this is to give us an idea of what you are "
-"looking for and is not a final analysis of your needs."
+msgid "Be as descriptive as you like - this is to give us an idea of what you are looking for and is not a final analysis of your needs."
 msgstr ""
 
 #: includes/class-do-action.php:406
@@ -296,8 +288,7 @@ msgid "What is your name?"
 msgstr ""
 
 #: includes/class-do-action.php:408
-msgid ""
-"This individual will be the primary contact between us and your organisation."
+msgid "This individual will be the primary contact between us and your organisation."
 msgstr ""
 
 #: includes/class-do-action.php:412
@@ -305,9 +296,7 @@ msgid "What is your email address?"
 msgstr ""
 
 #: includes/class-do-action.php:414
-msgid ""
-"This will be the primary contact email address between us and your "
-"organisation."
+msgid "This will be the primary contact email address between us and your organisation."
 msgstr ""
 
 #: includes/class-do-action.php:438
@@ -315,11 +304,7 @@ msgid "Sign up as a participant for this hackathon"
 msgstr ""
 
 #: includes/class-do-action.php:439
-#, php-format
-msgid ""
-"To be a part of this event, simply fill in the form below and your "
-"participation will be final. Read our %1$sparticipant's guide%2$s for more "
-"details on what is expected of you when you sign up."
+msgid "To be a part of this event, simply fill in the form below and your participation will be final. Read our %1$sparticipant's guide%2$s for more details on what is expected of you when you sign up."
 msgstr ""
 
 #: includes/class-do-action.php:441
@@ -327,11 +312,7 @@ msgid "Select an organisation"
 msgstr ""
 
 #: includes/class-do-action.php:442
-msgid ""
-"Click on a non-profit organisation to select it and, once you have done so, "
-"you will be able to select your role on the build team for that "
-"organisation. If an organisation is faded out, then it has no roles "
-"available."
+msgid "Click on a non-profit organisation to select it and, once you have done so, you will be able to select your role on the build team for that organisation. If an organisation is faded out, then it has no roles available."
 msgstr ""
 
 #: includes/class-do-action.php:452
@@ -339,14 +320,13 @@ msgid "(All positions filled)"
 msgstr ""
 
 #: includes/class-do-action.php:463
-#, php-format
 msgid "(%s position available)"
 msgid_plural "(%s positions available)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-do-action.php:475 includes/class-do-action.php:909
-#, php-format
+#: includes/class-do-action.php:475
+#: includes/class-do-action.php:909
 msgid "%1$sWebsite%2$s"
 msgstr ""
 
@@ -359,9 +339,7 @@ msgid "Select your role"
 msgstr ""
 
 #: includes/class-do-action.php:490
-msgid ""
-"Each build team has a selection of roles available - select the one that "
-"suits you the best. If a role is greyed out, then it has already been filled."
+msgid "Each build team has a selection of roles available - select the one that suits you the best. If a role is greyed out, then it has already been filled."
 msgstr ""
 
 #: includes/class-do-action.php:543
@@ -369,84 +347,59 @@ msgid "Fill in your details"
 msgstr ""
 
 #: includes/class-do-action.php:544
-msgid ""
-"All we need from you now are your details so we can provide you with further "
-"information about the event."
+msgid "All we need from you now are your details so we can provide you with further information about the event."
 msgstr ""
 
-#: includes/class-do-action.php:547 includes/class-do-action.php:1299
+#: includes/class-do-action.php:547
+#: includes/class-do-action.php:1299
 msgid "Name:"
 msgstr ""
 
-#: includes/class-do-action.php:550 includes/class-do-action.php:1307
+#: includes/class-do-action.php:550
+#: includes/class-do-action.php:1307
 msgid "Email address:"
 msgstr ""
 
-#: includes/class-do-action.php:553 includes/class-do-action.php:1315
+#: includes/class-do-action.php:553
+#: includes/class-do-action.php:1315
 msgid "Phone number:"
 msgstr ""
 
 #: includes/class-do-action.php:558
-#, php-format
-msgid ""
-"By submitting this form you are confirming that you will attend the event on "
-"the listed date and that you have read through the %1$sparticipant's guide"
-"%2$s."
+msgid "By submitting this form you are confirming that you will attend the event on the listed date and that you have read through the %1$sparticipant's guide%2$s."
 msgstr ""
 
 #: includes/class-do-action.php:674
 msgid "Thank you for signing up!"
 msgstr ""
 
-#: includes/class-do-action.php:684 includes/class-do-action.php:836
-#, php-format
+#: includes/class-do-action.php:684
+#: includes/class-do-action.php:836
 msgid "Hi %s,"
 msgstr ""
 
 #: includes/class-do-action.php:686
-#, php-format
-msgid ""
-"Thank you for signing up as %1$s for %2$s at the %3$s do_action hackathon. "
-"You have been added to the build team and we will be in touch with more "
-"details in the coming weeks."
+msgid "Thank you for signing up as %1$s for %2$s at the %3$s do_action hackathon. You have been added to the build team and we will be in touch with more details in the coming weeks."
 msgstr ""
 
 #: includes/class-do-action.php:689
-#, php-format
-msgid ""
-"As the Project Manager you will need to be in touch with your chosen non-"
-"profit organisation before the event. To that end, you will find the non-"
-"profit contact details as well as your team's contact details %1$sright here"
-"%2$s. The password to view the info on that page is \"%3$s\" (without the "
-"quotation marks) and the team list will be filled up there as participants "
-"sign up."
+msgid "As the Project Manager you will need to be in touch with your chosen non-profit organisation before the event. To that end, you will find the non-profit contact details as well as your team's contact details %1$sright here%2$s. The password to view the info on that page is \"%3$s\" (without the quotation marks) and the team list will be filled up there as participants sign up."
 msgstr ""
 
 #: includes/class-do-action.php:691
-msgid ""
-"Your team's Project Manager will also be in touch with you closer to the "
-"time regarding the non-profit you have chosen as well as any pre-planning "
-"you can do before the event."
+msgid "Your team's Project Manager will also be in touch with you closer to the time regarding the non-profit you have chosen as well as any pre-planning you can do before the event."
 msgstr ""
 
 #: includes/class-do-action.php:694
-#, php-format
-msgid ""
-"Please make sure that you read our %1$sparticipant's guide%2$s for more "
-"details on what is expected of you now that you have signed up. You will "
-"also find vital information there explaining how the day will work and what "
-"you need to bring with you."
+msgid "Please make sure that you read our %1$sparticipant's guide%2$s for more details on what is expected of you now that you have signed up. You will also find vital information there explaining how the day will work and what you need to bring with you."
 msgstr ""
 
 #: includes/class-do-action.php:696
-#, php-format
-msgid ""
-"It would be really helpful if you sent %1$sthe sign up link%2$s to anyone "
-"that you know who might also be interested in participating in the day."
+msgid "It would be really helpful if you sent %1$sthe sign up link%2$s to anyone that you know who might also be interested in participating in the day."
 msgstr ""
 
-#: includes/class-do-action.php:698 includes/class-do-action.php:844
-#, php-format
+#: includes/class-do-action.php:698
+#: includes/class-do-action.php:844
 msgid "Cheers,%sThe do_action team"
 msgstr ""
 
@@ -455,33 +408,23 @@ msgid "Thank you for your application!"
 msgstr ""
 
 #: includes/class-do-action.php:838
-#, php-format
-msgid ""
-"Thank you for applying for %1$s to be a part of the %2$s do_action "
-"hackathon. Your application has been received and we will be in touch once "
-"we have decided on the final list of non-profit organisations."
+msgid "Thank you for applying for %1$s to be a part of the %2$s do_action hackathon. Your application has been received and we will be in touch once we have decided on the final list of non-profit organisations."
 msgstr ""
 
 #: includes/class-do-action.php:840
-#, php-format
-msgid ""
-"If you would like to know more about do_action and what it's all about, then "
-"you can find out more %1$shere%2$s."
+msgid "If you would like to know more about do_action and what it's all about, then you can find out more %1$shere%2$s."
 msgstr ""
 
 #: includes/class-do-action.php:842
-#, php-format
-msgid ""
-"If you know of any other non-profit organisation that could benefit from "
-"this event, then it would be great if you sent %1$sthe application link%2$s "
-"to them. The more the merrier!"
+msgid "If you know of any other non-profit organisation that could benefit from this event, then it would be great if you sent %1$sthe application link%2$s to them. The more the merrier!"
 msgstr ""
 
 #: includes/class-do-action.php:890
 msgid "A bit about the organisation:"
 msgstr ""
 
-#: includes/class-do-action.php:897 includes/class-do-action.php:1284
+#: includes/class-do-action.php:897
+#: includes/class-do-action.php:1284
 msgid "What the organisation hopes to achieve with a new website:"
 msgstr ""
 
@@ -490,17 +433,14 @@ msgid "Contact Details"
 msgstr ""
 
 #: includes/class-do-action.php:911
-#, php-format
 msgid "Contact name: %1$s"
 msgstr ""
 
 #: includes/class-do-action.php:912
-#, php-format
 msgid "Email address: %1$s"
 msgstr ""
 
 #: includes/class-do-action.php:913
-#, php-format
 msgid "Phone number: %1$s"
 msgstr ""
 
@@ -572,7 +512,8 @@ msgstr ""
 msgid "Venue location:"
 msgstr ""
 
-#: includes/class-do-action.php:1252 includes/class-do-action.php:1333
+#: includes/class-do-action.php:1252
+#: includes/class-do-action.php:1333
 msgid "URL:"
 msgstr ""
 
@@ -580,7 +521,8 @@ msgstr ""
 msgid "Contact name:"
 msgstr ""
 
-#: includes/class-do-action.php:1268 includes/class-do-action.php:1341
+#: includes/class-do-action.php:1268
+#: includes/class-do-action.php:1341
 msgid "Contact email address:"
 msgstr ""
 
@@ -589,25 +531,16 @@ msgid "Contact phone number:"
 msgstr ""
 
 #: includes/class-do-action.php:1360
-#, php-format
 msgid "%s Details"
 msgstr ""
 
 #: includes/class-do-action.php:1369
-#, php-format
 msgid "Role: %s"
 msgstr ""
 
 #: includes/class-do-action.php:1430
 msgid "All events"
 msgstr ""
-
-#: includes/class-do-action.php:1495
-#, php-format
-msgid "%s "
-msgid_plural "%s "
-msgstr[0] ""
-msgstr[1] ""
 
 #: includes/lib/class-do-action-admin-api.php:162
 msgid "Upload an image"
@@ -625,59 +558,48 @@ msgstr ""
 msgid "Remove image"
 msgstr ""
 
+#: includes/lib/class-do-action-post-type.php:76
+msgid "Add New"
+msgstr ""
+
 #: includes/lib/class-do-action-post-type.php:77
 #: includes/lib/class-do-action-taxonomy.php:79
-#, php-format
 msgid "Add New %s"
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:78
 #: includes/lib/class-do-action-taxonomy.php:76
-#, php-format
 msgid "Edit %s"
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:79
-#, php-format
 msgid "New %s"
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:80
 #: includes/lib/class-do-action-taxonomy.php:75
-#, php-format
 msgid "All %s"
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:81
 #: includes/lib/class-do-action-taxonomy.php:77
-#, php-format
 msgid "View %s"
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:82
 #: includes/lib/class-do-action-taxonomy.php:83
-#, php-format
 msgid "Search %s"
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:83
-#, php-format
 msgid "No %s Found"
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:84
-#, php-format
 msgid "No %s Found In Trash"
 msgstr ""
 
-#: includes/lib/class-do-action-post-type.php:85
-#: includes/lib/class-do-action-taxonomy.php:81
-#, php-format
-msgid "Parent %s"
-msgstr ""
-
 #: includes/lib/class-do-action-post-type.php:128
-#, php-format
 msgid "%1$s updated. %2$sView %3$s%4$s."
 msgstr ""
 
@@ -690,32 +612,26 @@ msgid "Custom field deleted."
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:131
-#, php-format
 msgid "%1$s updated."
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:132
-#, php-format
 msgid "%1$s restored to revision from %2$s."
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:133
-#, php-format
 msgid "%1$s published. %2$sView %3$s%4s."
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:134
-#, php-format
 msgid "%1$s saved."
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:135
-#, php-format
 msgid "%1$s submitted. %2$sPreview post%3$s%4$s."
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:136
-#, php-format
 msgid "%1$s scheduled for: %2$s. %3$sPreview %4$s%5$s."
 msgstr ""
 
@@ -724,101 +640,71 @@ msgid "M j, Y @ G:i"
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:137
-#, php-format
 msgid "%1$s draft updated. %2$sPreview %3$s%4$s."
 msgstr ""
 
 #: includes/lib/class-do-action-post-type.php:152
-#, php-format
 msgid "%1$s %2$s updated."
 msgid_plural "%1$s %3$s updated."
 msgstr[0] ""
 msgstr[1] ""
 
 #: includes/lib/class-do-action-post-type.php:153
-#, php-format
 msgid "%1$s %2$s not updated, somebody is editing it."
 msgid_plural "%1$s %3$s not updated, somebody is editing them."
 msgstr[0] ""
 msgstr[1] ""
 
 #: includes/lib/class-do-action-post-type.php:154
-#, php-format
 msgid "%1$s %2$s permanently deleted."
 msgid_plural "%1$s %3$s permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
 #: includes/lib/class-do-action-post-type.php:155
-#, php-format
 msgid "%1$s %2$s moved to the Trash."
 msgid_plural "%1$s %3$s moved to the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
 #: includes/lib/class-do-action-post-type.php:156
-#, php-format
 msgid "%1$s %2$s restored from the Trash."
 msgid_plural "%1$s %3$s restored from the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
 #: includes/lib/class-do-action-taxonomy.php:78
-#, php-format
 msgid "Update %s"
 msgstr ""
 
 #: includes/lib/class-do-action-taxonomy.php:80
-#, php-format
 msgid "New %s Name"
 msgstr ""
 
+#: includes/lib/class-do-action-taxonomy.php:81
+msgid "Parent %s"
+msgstr ""
+
 #: includes/lib/class-do-action-taxonomy.php:82
-#, php-format
 msgid "Parent %s:"
 msgstr ""
 
 #: includes/lib/class-do-action-taxonomy.php:84
-#, php-format
 msgid "Popular %s"
 msgstr ""
 
 #: includes/lib/class-do-action-taxonomy.php:85
-#, php-format
 msgid "Separate %s with commas"
 msgstr ""
 
 #: includes/lib/class-do-action-taxonomy.php:86
-#, php-format
 msgid "Add or remove %s"
 msgstr ""
 
 #: includes/lib/class-do-action-taxonomy.php:87
-#, php-format
 msgid "Choose from the most used %s"
 msgstr ""
 
 #: includes/lib/class-do-action-taxonomy.php:88
-#, php-format
 msgid "No %s found"
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "do_action"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid "http://doaction.org/"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid "Custom functionality for doaction.org"
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "Hugh Lashbrooke"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "http://hughlashbrooke.com/"
 msgstr ""
