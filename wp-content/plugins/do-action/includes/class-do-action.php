@@ -677,7 +677,7 @@ class do_action {
 	    return $password;
 	}
 
-	private function send_signup_email ( $email = '', $name = '', $org = fales, $role = false, $event = false ) {
+	private function send_signup_email ( $email = '', $name = '', $org = false, $role = false, $event = false ) {
 
 		if( ! $email || ! $name || ! $org || ! $role || ! $event ) {
 			return false;
@@ -829,7 +829,7 @@ class do_action {
 		return true;
 	}
 
-	private function send_application_email ( $email = '', $name = '', $org = fales, $event = false ) {
+	private function send_application_email ( $email = '', $name = '', $org = false, $event = false ) {
 
 		if( ! $email || ! $name || ! $org || ! $event ) {
 			return false;
