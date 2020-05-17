@@ -989,7 +989,7 @@ class do_action {
 			'meta_key' => 'date',
 			'orderby' => 'meta_value',
 			'order' => 'DESC',
-			'lang' => 'en',
+			'lang' => '', // Show events from all locales
 			'posts_per_page' => -1,
 		);
 
