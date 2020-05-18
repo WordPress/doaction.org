@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: do_action\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/do-action\n"
 "POT-Creation-Date: 2020-05-14T04:54:36-04:00\n"
-"PO-Revision-Date: 2020-05-14 04:56-0400\n"
+"PO-Revision-Date: 2020-05-14 14:56-0400\n"
 "Last-Translator: Yordan Soares <contacto@yordansoar.es>\n"
 "Language-Team: \n"
 "Language: es_PE\n"
@@ -704,7 +704,7 @@ msgstr "Nuevo %s"
 #: includes/lib/class-do-action-post-type.php:80
 #: includes/lib/class-do-action-taxonomy.php:75
 msgid "All %s"
-msgstr "Todos los %s"
+msgstr "Ver todo"
 
 #: includes/lib/class-do-action-post-type.php:81
 #: includes/lib/class-do-action-taxonomy.php:77
