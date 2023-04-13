@@ -1582,7 +1582,7 @@ class do_action {
 	 */
 	public function enqueue_scripts () {
 
-		wp_register_script( $this->_token . '-google-maps', '//maps.googleapis.com/maps/api/js?key=AIzaSyCxLB91fJO-JOkTEsWtr0y3_Gypcxjn6nM&callback=initMap', array(), '4.0.2', true );
+		wp_register_script( $this->_token . '-google-maps', '//maps.googleapis.com/maps/api/js?key=AIzaSyAqRmSdBU_mA94UejB5Of4iQLlGlEXbGow&callback=initMap', array(), '4.0.2', true );
 
 		wp_register_script( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'js/frontend' . $this->script_suffix . '.js', array( 'jquery', $this->_token . '-google-maps' ), $this->_version, true );
 		wp_enqueue_script( $this->_token . '-frontend' );
@@ -1613,7 +1613,7 @@ class do_action {
 	 */
 	public function admin_enqueue_scripts ( $hook = '' ) {
 
-		wp_register_script( $this->_token . '-google-places', '//maps.googleapis.com/maps/api/js?key=AIzaSyCxLB91fJO-JOkTEsWtr0y3_Gypcxjn6nM&libraries=places', array(), '4.0.2' );
+		wp_register_script( $this->_token . '-google-places', '//maps.googleapis.com/maps/api/js?key=AIzaSyAqRmSdBU_mA94UejB5Of4iQLlGlEXbGow&libraries=places', array(), '4.0.2' );
 		wp_register_script( $this->_token . '-geocomplete', esc_url( $this->assets_url ) . 'js/jquery.geocomplete' . $this->script_suffix . '.js', array( 'jquery', $this->_token . '-google-places' ), '1.7.0' );
 
 		wp_register_script( $this->_token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', $this->_token . '-geocomplete' ), $this->_version );
