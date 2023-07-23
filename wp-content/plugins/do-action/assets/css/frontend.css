@@ -231,8 +231,8 @@
 		width: 100%;
 	}
 	.site-header{ display:flex;justify-content: space-between; }
-  .storefront-primary-navigation { margin-top:0px;display:flex;align-items:center; }
-  .site-branding { width:100%; }
+	.storefront-primary-navigation { margin-top:0px;display:flex;align-items:center; }
+	.site-branding { width:100%; }
 }
 
 #event-application-form{
