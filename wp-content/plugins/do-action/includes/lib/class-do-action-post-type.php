@@ -61,6 +61,9 @@ class do_action_Post_Type {
 		// Display custom update messages for posts edits
 		add_filter( 'post_updated_messages', array( $this, 'updated_messages' ) );
 		add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_updated_messages' ), 10, 2 );
+
+		// Add filter to add new bulk action to non profits
+		add_filter ( 'bulk_actions-edit-non-profit', array( $this, 'bulk_actions_non_profit' ) );
 	}
 
 	/**
@@ -157,6 +160,19 @@ class do_action_Post_Type {
 	    );
 
 	    return $bulk_messages;
+	}
+
+	/**
+	 * Adds Move to trash bulk action option to non profits
+	 *
+	 * @param $actions
+	 *
+	 * @return array
+	 */
+	public function bulk_actions_non_profit( $actions ) {
+		$actions['trash'] = 'Move to Trash';
+
+		return $actions;
 	}
 
 }
