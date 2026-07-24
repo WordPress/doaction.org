@@ -74,7 +74,7 @@ class do_action_tools {
 				}
 
 				// Output tab
-				$html .= '<a href="' . $tab_link . '" class="' . esc_attr( $class ) . '">' . esc_html( $label ) . '</a>' . "\n";
+				$html .= '<a href="' . esc_url( $tab_link ) . '" class="' . esc_attr( $class ) . '">' . esc_html( $label ) . '</a>' . "\n";
 
 				++$c;
 			}
@@ -130,7 +130,7 @@ class do_action_tools {
 					$html .= '<select id="recipient_event" name="recipient_event">' . "\n";
 						$html .= '<option value="0">' . __( '-- Select event --', 'do-action' ) . '</option>' . "\n";
 						foreach( $events as $event_id ) {
-							$html .= '<option value="' . intval( $event_id ) . '">' . get_the_title( $event_id ) . '</option>' . "\n";
+							$html .= '<option value="' . intval( $event_id ) . '">' . esc_html( get_the_title( $event_id ) ) . '</option>' . "\n";
 						}
 					$html .= '</select>' . "\n";
 				$html .= '</p>' . "\n";
@@ -191,6 +191,7 @@ class do_action_tools {
 					ob_start();
 					wp_editor( '', 'email_body' );
 					$html .= ob_get_clean();
+					$html .= wp_nonce_field( 'do_action_send_email', '_wpnonce', true, false ) . "\n";
 					$html .= '<input type="hidden" name="send_do_action_email" value="true" />' . "\n";
 				$html .= '</p>' . "\n";
 
@@ -238,7 +239,7 @@ class do_action_tools {
 					$html .= '<select id="recipient_event" name="recipient_event">' . "\n";
 						$html .= '<option value="0">' . __( '-- Select event --', 'do-action' ) . '</option>' . "\n";
 						foreach( $events as $event_id ) {
-							$html .= '<option value="' . intval( $event_id ) . '">' . get_the_title( $event_id ) . '</option>' . "\n";
+							$html .= '<option value="' . intval( $event_id ) . '">' . esc_html( get_the_title( $event_id ) ) . '</option>' . "\n";
 						}
 					$html .= '</select>' . "\n";
 				$html .= '</p>' . "\n";
@@ -284,6 +285,7 @@ class do_action_tools {
 				// Generate export data
 				$html .= '<p class="submit">' . "\n";
 					$html .= '<input type="hidden" name="tab" value="' . esc_attr( $tab ) . '" />' . "\n";
+					$html .= wp_nonce_field( 'do_action_export_csv', '_wpnonce', true, false ) . "\n";
 					$html .= '<input type="hidden" name="export_do_action_data" value="export" />' . "\n";
 					$html .= '<input name="Submit" type="submit" class="button-primary" value="' . __( 'Download CSV', 'do-action' ) . '" />' . "\n";
 				$html .= '</p>' . "\n";
@@ -299,7 +301,19 @@ class do_action_tools {
 
 	public function format_email_preview() {
 
+		// Only users who can use the tools may generate an email preview (which reads
+		// recipient PII out of the database).
+		if( ! current_user_can( 'use_do_action_tools' ) ) {
+			wp_send_json_error( '', 403 );
+		}
+
 		$event_id = intval( $_POST['event_id'] );
+
+		// The tools capability alone does not scope an organiser to their own events, so
+		// confirm the current user may edit this specific event before reading its PII.
+		if( $event_id && ! current_user_can( 'edit_post', $event_id ) ) {
+			wp_send_json_error( '', 403 );
+		}
 
 		if( ! $event_id ) {
 			$response = array(
@@ -312,6 +326,14 @@ class do_action_tools {
 		$roles = get_terms( array( 'hide_empty' => true, 'fields' => 'id=>slug' ) );
 
 		$recipients = $this->get_people_data( $event_id, $roles );
+
+		if( empty( $recipients ) ) {
+			wp_send_json( array(
+				'email_subject' => __( 'No recipient data available for this event.', 'do-action' ),
+				'email_body' => '&nbsp;',
+			) );
+		}
+
 		$recipient = $recipients[ array_rand( $recipients, 1 ) ];
 
 		$subject = $this->format_email( $_POST['email_subject'], $recipient, 'subject' );
@@ -327,7 +349,17 @@ class do_action_tools {
 
 	public function fetch_event_orgs () {
 
+		// Only users who can use the tools may list an event's organisations.
+		if( ! current_user_can( 'use_do_action_tools' ) ) {
+			wp_send_json_error( '', 403 );
+		}
+
 		$event_id = intval( $_POST['event_id'] );
+
+		// Confirm the current user may edit this specific event before listing its orgs.
+		if( $event_id && ! current_user_can( 'edit_post', $event_id ) ) {
+			wp_send_json_error( '', 403 );
+		}
 
 		$select = '<select id="recipient_orgs" name="recipient_orgs[]" multiple="multiple" disabled="disabled">' . "\n" . '</select>' . "\n";
 
@@ -367,7 +399,21 @@ class do_action_tools {
 			return false;
 		}
 
+		// This handler runs on admin_init, which fires for unauthenticated requests to
+		// admin-post.php. Require the tools capability and a valid nonce before doing anything.
+		if( ! current_user_can( 'use_do_action_tools' ) ) {
+			return false;
+		}
+
+		check_admin_referer( 'do_action_send_email' );
+
 		$event_id = intval( $_POST['recipient_event'] );
+
+		// The tools capability alone does not scope an organiser to their own events, so
+		// confirm the current user may edit this specific event before mailing its people.
+		if( $event_id && ! current_user_can( 'edit_post', $event_id ) ) {
+			return false;
+		}
 
 		$sent_mails = $failed_mails = array();
 		if( $event_id ) {
@@ -378,12 +424,12 @@ class do_action_tools {
 
 				// Get selected organisations
 				$orgs = false;
-				if( $_POST['recipient_orgs'] ) {
-					$orgs = array_map( 'intval', $_POST['recipient_orgs'] );
+				if( ! empty( $_POST['recipient_orgs'] ) ) {
+					$orgs = array_map( 'intval', (array) $_POST['recipient_orgs'] );
 				}
 
 				// Sanitise selected roles
-				$roles = array_map( 'esc_html', $_POST['recipient_roles'] );
+				$roles = isset( $_POST['recipient_roles'] ) ? array_map( 'esc_html', (array) $_POST['recipient_roles'] ) : array();
 
 				$recipients = $this->get_people_data( $event_id, $roles, $orgs );
 
@@ -434,73 +480,81 @@ class do_action_tools {
 			return false;
 		}
 
+		// This handler runs on admin_init, which fires for unauthenticated requests to
+		// admin-post.php. Require the tools capability and a valid nonce before doing anything.
+		if( ! current_user_can( 'use_do_action_tools' ) ) {
+			return false;
+		}
+
+		check_admin_referer( 'do_action_export_csv' );
+
 		$event_id = intval( $_POST['recipient_event'] );
+
+		// The tools capability alone does not scope an organiser to their own events, so
+		// confirm the current user may edit this specific event before exporting its PII.
+		if( $event_id && ! current_user_can( 'edit_post', $event_id ) ) {
+			return false;
+		}
 
 		if( $event_id ) {
 
 			// Get and sanitise selected organisations
 			$orgs = false;
-			if( $_POST['recipient_orgs'] ) {
-				$orgs = array_map( 'intval', $_POST['recipient_orgs'] );
+			if( ! empty( $_POST['recipient_orgs'] ) ) {
+				$orgs = array_map( 'intval', (array) $_POST['recipient_orgs'] );
 			}
 
 			// Sanitise selected roles
-			$roles = array_map( 'esc_html', $_POST['recipient_roles'] );
+			$roles = isset( $_POST['recipient_roles'] ) ? array_map( 'esc_html', (array) $_POST['recipient_roles'] ) : array();
 
 			$data = $this->get_people_data( $event_id, $roles, $orgs );
 
 			if( 0 < count( $data ) ) {
 
-			    // Open file handler
-			    $upload_dir = wp_upload_dir();
-			    $filename = 'do_action-export-' . time() . '.csv';
-			    $file_loc = trailingslashit( $upload_dir['path'] ) . $filename;
-			    $file_url = trailingslashit( $upload_dir['url'] ) . $filename;
-				$handler = fopen( $file_loc, 'w' );
+				// Stream the CSV straight to the browser. Writing it into the public uploads
+				// directory (as this previously did) left participant PII at a guessable,
+				// unauthenticated URL that is web-served regardless of the attachment's
+				// post_status, and the file was never cleaned up.
+				$filename = 'do_action-export-' . gmdate( 'Y-m-d' ) . '.csv';
+
+				nocache_headers();
+				header( 'Content-Type: text/csv; charset=utf-8' );
+				header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+
+				$handler = fopen( 'php://output', 'w' );
 
 				// Generate CSV headers
 				fputcsv( $handler, array( __( 'Name', 'do-action' ), __( 'Email', 'do-action' ), __( 'Phone', 'do-action' ), __( 'Role', 'do-action' ), __( 'Organisation', 'do-action' ) ) );
 
 				// Insert export data
 				foreach ( $data as $person ) {
-					fputcsv( $handler, $person );
+					fputcsv( $handler, array_map( array( $this, 'escape_csv_cell' ), $person ) );
 				}
 
-				// Close file handler
 				fclose( $handler );
-
-				// Get redirect URL
-				if( file_exists( $file_loc ) ) {
-
-					$redirect_url = $file_url;
-
-					// Setup attachment data and create attachment so that the file is available in the Media Library after downloading
-					$filetype = wp_check_filetype( $filename, null );
-					$attachment_args = array(
-						'guid' => $file_url,
-						'post_mime_type' => $filetype['type'],
-						'post_title' => preg_replace( '/\.[^.]+$/', '', $filename ),
-						'post_content' => '',
-						'post_status' => 'publish',
-					);
-
-					$attachment_id = wp_insert_attachment( $attachment_args, $file_loc );
-
-					require_once( ABSPATH . 'wp-admin/includes/image.php' );
-					$attachment_data = wp_generate_attachment_metadata( $attachment_id, $file_loc );
-					wp_update_attachment_metadata( $attachment_id, $attachment_data );
-
-				} else {
-					$redirect_url = add_query_arg( 'export', 'failed' );
-				}
-
-				// Download file or display error
-				wp_safe_redirect( $redirect_url );
 				exit;
 
 			}
 		}
 
+	}
+
+	/**
+	 * Neutralise spreadsheet formula injection in an exported CSV cell.
+	 *
+	 * A value starting with =, +, -, @, tab or CR is treated as a formula when the CSV is
+	 * opened in Excel/Sheets. Participant/org values come from less-trusted input, so prefix
+	 * any such cell with a single quote to force it to be read as text.
+	 *
+	 * @param  mixed  $value Cell value.
+	 * @return string
+	 */
+	private function escape_csv_cell( $value ) {
+		$value = (string) $value;
+		if ( '' !== $value && in_array( $value[0], array( '=', '+', '-', '@', "\t", "\r" ), true ) ) {
+			$value = "'" . $value;
+		}
+		return $value;
 	}
 
 	private function get_people_data ( $event_id = 0, $roles = array(), $orgs = false ) {

@@ -88,7 +88,7 @@ class do_action {
 
 		$this->post_types = array(
 			'event' => array( 'plural' => __( 'Events', 'do-action' ), 'single' => __( 'Event', 'do-action' ), 'options' => array( 'menu_icon' => 'dashicons-calendar-alt' ) ),
-			'non-profit' => array( 'plural' => __( 'Non-profits', 'do-action' ), 'single' => __( 'Non-profit', 'do-action' ), 'options' => array( 'menu_icon' => 'dashicons-store' ) ),
+			'non-profit' => array( 'plural' => __( 'Non-profits', 'do-action' ), 'single' => __( 'Non-profit', 'do-action' ), 'options' => array( 'menu_icon' => 'dashicons-store', 'show_in_rest' => false ) ),
 			'sponsor' => array( 'plural' => __( 'Sponsors', 'do-action' ), 'single' => __( 'Sponsor', 'do-action' ), 'options' => array( 'menu_icon' => 'dashicons-heart' ) ),
 		);
 
@@ -123,6 +123,10 @@ class do_action {
 		add_filter( 'request', array( $this, 'modify_admin_lists' ) );
 		add_filter( 'wp_count_posts', array( $this, 'modify_post_counts' ), 10, 3 );
 		add_filter( 'removable_query_args', array( $this, 'removable_query_args' ), 10, 1 );
+
+		// Require edit rights on Polylang's untranslated-posts REST endpoint, which otherwise
+		// leaks raw (unprotected) titles of password-protected posts to anonymous users.
+		add_filter( 'rest_pre_dispatch', array( $this, 'restrict_polylang_untranslated_posts' ), 10, 3 );
 
 		// Register custom sidebars
 		add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
@@ -251,7 +255,7 @@ class do_action {
 	    <script>
 	      function initMap() {
 
-	      	var latlng = {lat: <?php echo $lat; ?>, lng: <?php echo $lng; ?>};
+	      	var latlng = {lat: <?php echo floatval( $lat ); ?>, lng: <?php echo floatval( $lng ); ?>};
 
 	        var map = new google.maps.Map(document.getElementById('event-map'), {
 	          center: latlng,
@@ -261,13 +265,13 @@ class do_action {
 	        var marker_image = 'https://doaction.org/wp-content/uploads/2016/05/do_action-map-pin.png';
 
 	        var infowindow = new google.maps.InfoWindow({
-				content: '<?php echo $infowindow; ?>'
+				content: '<?php echo esc_js( $infowindow ); ?>'
 			});
 
 	        var marker = new google.maps.Marker({
 				position: latlng,
 				map: map,
-				title: '<?php echo $post->post_title; ?>',
+				title: '<?php echo esc_js( $post->post_title ); ?>',
 				icon: marker_image
 			});
 
@@ -312,8 +316,8 @@ class do_action {
 					$url = get_permalink( $id );
 					?>
 					<li>
-						<a href="<?php echo $url; ?>" title="<?php echo $title; ?>">
-							<img src="<?php echo $logo; ?>" alt="<?php echo $title; ?>" class="sponsor-image" />
+						<a href="<?php echo esc_url( $url ); ?>" title="<?php echo esc_attr( $title ); ?>">
+							<img src="<?php echo esc_url( $logo ); ?>" alt="<?php echo esc_attr( $title ); ?>" class="sponsor-image" />
 						</a>
 					</li>
 					<?php
@@ -412,6 +416,7 @@ class do_action {
 					<span class="form-description"><?php _e( 'This will be the primary contact email address between us and your organisation.', 'do-action' ); ?></span>
 				</p>
 
+				<?php wp_nonce_field( 'doaction_application', 'doaction_application_nonce' ); ?>
 				<input type="hidden" name="doaction_application_sent" value="true" />
 				<input type="submit" disabled value="<?php esc_attr_e( 'Apply!', 'do-action' ); ?>" id="application-form-submit" />
 			</form>
@@ -566,6 +571,7 @@ class do_action {
 
 					<div id="form-submit-row">
 						<p class="form-description"><?php printf( __( 'By submitting this form you are confirming that you will attend the event on the listed date and that you have read through the %1$sparticipant\'s guide%2$s.', 'do-action' ), '<a href="' . get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/">', '</a>' ); ?></p>
+						<?php wp_nonce_field( 'doaction_signup', 'doaction_signup_nonce' ); ?>
 						<input type="hidden" name="doaction_signed_up" value="true" />
 						<input type="submit" disabled value="<?php esc_attr_e( 'Sign up!', 'do-action' ); ?>" id="participant-form-submit" />
 					</div>
@@ -580,6 +586,11 @@ class do_action {
 		global $post;
 
 		if( isset( $_POST['doaction_signed_up'] ) && 'true' == $_POST['doaction_signed_up'] ) {
+
+			// Require a valid nonce from the sign-up form before doing any work.
+			if( ! isset( $_POST['doaction_signup_nonce'] ) || ! wp_verify_nonce( $_POST['doaction_signup_nonce'], 'doaction_signup' ) ) {
+				return;
+			}
 
 			$signed_up = $this->process_signup_form_submission( $_POST, $post );
 
@@ -597,10 +608,41 @@ class do_action {
 
 	private function process_signup_form_submission ( $post = array(), $event = false ) {
 
+		// The submission must be against a real event that is currently accepting sign-ups.
+		if( ! $event || 'event' !== get_post_type( $event ) ) {
+			return false;
+		}
+
+		if( 'accepting_signups' !== get_post_meta( $event->ID, 'event_status', true ) ) {
+			return false;
+		}
+
 		$org = get_post( intval( $post['nonprofit'] ) );
 		$role = get_term( intval( $post['role'] ), 'role' );
 
-		if( ! $org || ! $event || ! $role || is_wp_error( $role ) ) {
+		if( ! $org || ! $role || is_wp_error( $role ) ) {
+			return false;
+		}
+
+		// The target must be a non-profit that this event actually selected. This stops the
+		// handler from writing meta or rotating the password on arbitrary posts.
+		if( 'non-profit' !== $org->post_type ) {
+			return false;
+		}
+
+		$event_nonprofits = get_post_meta( $event->ID, 'nonprofits', true );
+		if( ! is_array( $event_nonprofits ) || ! in_array( $org->ID, array_map( 'intval', $event_nonprofits ), true ) ) {
+			return false;
+		}
+
+		// The chosen role must be one of the roles available on this non-profit.
+		$org_roles = get_the_terms( $org->ID, 'role' );
+		if( ! $org_roles || is_wp_error( $org_roles ) ) {
+			return false;
+		}
+
+		$org_role_ids = array_map( 'intval', wp_list_pluck( $org_roles, 'term_id' ) );
+		if( ! in_array( (int) $role->term_id, $org_role_ids, true ) ) {
 			return false;
 		}
 
@@ -669,10 +711,10 @@ class do_action {
 		return true;
 	}
 
-	public function random_password( $length = 10 ) {
-	    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%?";
-	    $password = substr( str_shuffle( $chars ), 0, $length );
-	    return $password;
+	public function random_password( $length = 24 ) {
+	    // Use WordPress' CSPRNG-backed generator. str_shuffle() is not cryptographically
+	    // secure and only permutes a fixed 65-character alphabet, making its output guessable.
+	    return wp_generate_password( $length, false );
 	}
 
 	private function send_signup_email ( $email = '', $name = '', $org = false, $role = false, $event = false ) {
@@ -718,6 +760,11 @@ class do_action {
 
 		if( isset( $_POST['doaction_application_sent'] ) && 'true' == $_POST['doaction_application_sent'] ) {
 
+			// Require a valid nonce from the application form before doing any work.
+			if( ! isset( $_POST['doaction_application_nonce'] ) || ! wp_verify_nonce( $_POST['doaction_application_nonce'], 'doaction_application' ) ) {
+				return;
+			}
+
 			$signed_up = $this->process_application_form_submission( $_POST, $post );
 
 			if( $signed_up ) {
@@ -728,13 +775,19 @@ class do_action {
 
 			$redirect_url = add_query_arg( 'application', $signup_result, get_permalink( $post->ID ) );
 			wp_safe_redirect( $redirect_url );
+			exit;
 
 		}
 	}
 
 	private function process_application_form_submission ( $post = array(), $event = false ) {
 
-		if( ! $event  ) {
+		// The submission must be against a real event that is currently accepting applications.
+		if( ! $event || 'event' !== get_post_type( $event ) ) {
+			return false;
+		}
+
+		if( 'accepting_applications' !== get_post_meta( $event->ID, 'event_status', true ) ) {
 			return false;
 		}
 
@@ -756,7 +809,7 @@ class do_action {
 			'post_type' => 'non-profit',
 			'post_status' => 'publish',
 			'post_excerpt' => $org_description,
-			'post_password' => 'do_action',
+			'post_password' => $this->random_password(),
 		);
 
 		// Check for spam submissions
@@ -874,9 +927,10 @@ class do_action {
             	'post_status' => 'publish',
         	);
 
-            // Only set the post password if one does not already exist
+            // Only set the post password if one does not already exist. Use a unique,
+            // unguessable password per post rather than the shared plugin-default string.
         	if( ! $post->post_password ) {
-        		$args['post_password'] = 'do_action';
+        		$args['post_password'] = $this->random_password();
         	}
 
             wp_update_post( $args );
@@ -1485,6 +1539,51 @@ class do_action {
 	public function removable_query_args( $args = array() ) {
 		$args['mail_sent'] = true;
 		return $args;
+	}
+
+	/**
+	 * Block unauthenticated access to Polylang's untranslated-posts REST route.
+	 *
+	 * Polylang's `pll/v1/untranslated-posts` endpoint returns edit-context data (including
+	 * the raw, unprotected titles of password-protected posts) without enforcing an edit
+	 * capability, so anonymous users can enumerate protected non-profit titles. We can't patch
+	 * Polylang itself, so short-circuit the request here unless the caller can edit the
+	 * requested post type.
+	 *
+	 * @param  mixed           $result  Response to replace the requested version with, or null.
+	 * @param  WP_REST_Server  $server  Server instance.
+	 * @param  WP_REST_Request $request Request used to generate the response.
+	 * @return mixed
+	 */
+	public function restrict_polylang_untranslated_posts( $result, $server, $request ) {
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		if ( false === strpos( (string) $request->get_route(), 'pll/v1/untranslated-posts' ) ) {
+			return $result;
+		}
+
+		// Use the edit capability for the requested post type, falling back to edit_posts.
+		$cap  = 'edit_posts';
+		$type = $request->get_param( 'type' );
+		if ( $type && post_type_exists( $type ) ) {
+			$post_type_object = get_post_type_object( $type );
+			if ( isset( $post_type_object->cap->edit_posts ) ) {
+				$cap = $post_type_object->cap->edit_posts;
+			}
+		}
+
+		if ( ! current_user_can( $cap ) ) {
+			return new WP_Error(
+				'rest_forbidden',
+				__( 'Sorry, you are not allowed to view untranslated posts.', 'do-action' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		return $result;
 	}
 
 	public function glance_items( $items = array() ) {
