@@ -1,4 +1,4 @@
-<?
+<?php
 // Fuspam 1.3
 // F-U-Spam!
 // This script is light on documentation on purpose. Go to it's home for more info on how to use it:
@@ -47,7 +47,7 @@ function fuspam( $comment , $type , $key )
 			break;
 		}
 
-	$curl = curl_init("http://$key.rest.akismet.com/$call");
+	$curl = curl_init("https://$key.rest.akismet.com/$call");
 
 	curl_setopt($curl,CURLOPT_USERAGENT,"Fuspam/1.3 | Akismet/1.11");
 	curl_setopt($curl,CURLOPT_TIMEOUT,5);

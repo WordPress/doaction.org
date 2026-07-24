@@ -95,7 +95,7 @@ class do_action_Admin_API {
 			break;
 
 			case 'textarea':
-				$html .= '<br/><textarea id="' . esc_attr( $field['id'] ) . '" rows="5" cols="50" name="' . esc_attr( $option_name ) . '" placeholder="' . esc_attr( $field['placeholder'] ) . '">' . $data . '</textarea><br/>'. "\n";
+				$html .= '<br/><textarea id="' . esc_attr( $field['id'] ) . '" rows="5" cols="50" name="' . esc_attr( $option_name ) . '" placeholder="' . esc_attr( $field['placeholder'] ) . '">' . esc_textarea( $data ) . '</textarea><br/>'. "\n";
 			break;
 
 			case 'checkbox':
@@ -112,7 +112,7 @@ class do_action_Admin_API {
 					if ( in_array( $k, $data ) ) {
 						$checked = true;
 					}
-					$html .= '<label for="' . esc_attr( $field['id'] . '_' . $k ) . '" class="checkbox_multi"><input type="checkbox" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $option_name ) . '[]" value="' . esc_attr( $k ) . '" id="' . esc_attr( $field['id'] . '_' . $k ) . '" /> ' . $v . '</label> ';
+					$html .= '<label for="' . esc_attr( $field['id'] . '_' . $k ) . '" class="checkbox_multi"><input type="checkbox" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $option_name ) . '[]" value="' . esc_attr( $k ) . '" id="' . esc_attr( $field['id'] . '_' . $k ) . '" /> ' . esc_html( $v ) . '</label> ';
 				}
 			break;
 
@@ -122,7 +122,7 @@ class do_action_Admin_API {
 					if ( $k == $data ) {
 						$checked = true;
 					}
-					$html .= '<label for="' . esc_attr( $field['id'] . '_' . $k ) . '"><input type="radio" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $k ) . '" id="' . esc_attr( $field['id'] . '_' . $k ) . '" /> ' . $v . '</label> ';
+					$html .= '<label for="' . esc_attr( $field['id'] . '_' . $k ) . '"><input type="radio" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $k ) . '" id="' . esc_attr( $field['id'] . '_' . $k ) . '" /> ' . esc_html( $v ) . '</label> ';
 				}
 			break;
 
@@ -133,7 +133,7 @@ class do_action_Admin_API {
 					if ( $k == $data ) {
 						$selected = true;
 					}
-					$html .= '<option ' . selected( $selected, true, false ) . ' value="' . esc_attr( $k ) . '">' . $v . '</option>';
+					$html .= '<option ' . selected( $selected, true, false ) . ' value="' . esc_attr( $k ) . '">' . esc_html( $v ) . '</option>';
 				}
 				$html .= '</select> ';
 			break;
@@ -148,7 +148,7 @@ class do_action_Admin_API {
 					if ( in_array( $k, $data ) ) {
 						$selected = true;
 					}
-					$html .= '<option ' . selected( $selected, true, false ) . ' value="' . esc_attr( $k ) . '">' . $v . '</option>';
+					$html .= '<option ' . selected( $selected, true, false ) . ' value="' . esc_attr( $k ) . '">' . esc_html( $v ) . '</option>';
 				}
 				$html .= '</select> ';
 			break;
@@ -158,10 +158,10 @@ class do_action_Admin_API {
 				if ( $data ) {
 					$image_thumb = wp_get_attachment_thumb_url( $data );
 				}
-				$html .= '<img id="' . $option_name . '_preview" class="image_preview" src="' . $image_thumb . '" /><br/>' . "\n";
-				$html .= '<input id="' . $option_name . '_button" type="button" data-uploader_title="' . __( 'Upload an image' , 'do-action' ) . '" data-uploader_button_text="' . __( 'Use image' , 'do-action' ) . '" class="image_upload_button button" value="'. __( 'Upload new image' , 'do-action' ) . '" />' . "\n";
-				$html .= '<input id="' . $option_name . '_delete" type="button" class="image_delete_button button" value="'. __( 'Remove image' , 'do-action' ) . '" />' . "\n";
-				$html .= '<input id="' . $option_name . '" class="image_data_field" type="hidden" name="' . $option_name . '" value="' . $data . '"/><br/>' . "\n";
+				$html .= '<img id="' . esc_attr( $option_name ) . '_preview" class="image_preview" src="' . esc_url( $image_thumb ) . '" /><br/>' . "\n";
+				$html .= '<input id="' . esc_attr( $option_name ) . '_button" type="button" data-uploader_title="' . __( 'Upload an image' , 'do-action' ) . '" data-uploader_button_text="' . __( 'Use image' , 'do-action' ) . '" class="image_upload_button button" value="'. __( 'Upload new image' , 'do-action' ) . '" />' . "\n";
+				$html .= '<input id="' . esc_attr( $option_name ) . '_delete" type="button" class="image_delete_button button" value="'. __( 'Remove image' , 'do-action' ) . '" />' . "\n";
+				$html .= '<input id="' . esc_attr( $option_name ) . '" class="image_data_field" type="hidden" name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $data ) . '"/><br/>' . "\n";
 			break;
 
 			case 'color':
@@ -192,7 +192,7 @@ class do_action_Admin_API {
 			case 'checkbox_multi':
 			case 'radio':
 			case 'select_multi':
-				$html .= '<br/><span class="description">' . $field['description'] . '</span>';
+				$html .= '<br/><span class="description">' . wp_kses_post( $field['description'] ) . '</span>';
 			break;
 
 			case 'hidden':
@@ -204,7 +204,7 @@ class do_action_Admin_API {
 				}
 
 				if( isset( $field['description'] ) ) {
-					$html .= '<span class="description">' . $field['description'] . '</span>' . "\n";
+					$html .= '<span class="description">' . wp_kses_post( $field['description'] ) . '</span>' . "\n";
 				}
 
 				if ( ! $post ) {
@@ -276,6 +276,8 @@ class do_action_Admin_API {
 
 		echo '<div class="custom-field-panel">' . "\n";
 
+		wp_nonce_field( 'do_action_save_meta_' . $post->ID, 'do_action_meta_nonce' );
+
 		foreach ( $fields as $field ) {
 
 			if ( ! isset( $field['metabox'] ) ) continue;
@@ -307,7 +309,7 @@ class do_action_Admin_API {
 		if( 'hidden' == $field['type'] ) {
 			$field = $this->display_field( $field, $post, false ) . "\n";
 		} else {
-			$field = '<p class="form-field"><label for="' . $field['id'] . '">' . $field['label'] . '</label>' . $this->display_field( $field, $post, false ) . '</p>' . "\n";
+			$field = '<p class="form-field"><label for="' . esc_attr( $field['id'] ) . '">' . esc_html( $field['label'] ) . '</label>' . $this->display_field( $field, $post, false ) . '</p>' . "\n";
 		}
 
 		echo $field;
@@ -321,6 +323,20 @@ class do_action_Admin_API {
 	public function save_meta_boxes ( $post_id = 0 ) {
 
 		if ( ! $post_id ) return;
+
+		// Don't clobber meta on autosaves/revisions, and require our nonce so a forged
+		// request can't set the plugin's meta keys or wipe them by omitting the fields.
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+		if ( wp_is_post_revision( $post_id ) ) return;
+
+		if ( ! isset( $_POST['do_action_meta_nonce'] ) || ! wp_verify_nonce( $_POST['do_action_meta_nonce'], 'do_action_save_meta_' . $post_id ) ) {
+			return;
+		}
+
+		// The current user must be allowed to edit this specific post.
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
 
 		$post_type = get_post_type( $post_id );
 		$field_post_type = str_replace( '-', '_', $post_type );
