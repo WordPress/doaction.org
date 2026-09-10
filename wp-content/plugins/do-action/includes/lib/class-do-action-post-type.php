@@ -130,6 +130,7 @@ class do_action_Post_Type {
 	    2 => __( 'Custom field updated.' , 'do-action' ),
 	    3 => __( 'Custom field deleted.' , 'do-action' ),
 	    4 => sprintf( __( '%1$s updated.' , 'do-action' ), $this->single ),
+	    // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only display the revision referenced by the redirect.
 	    5 => isset( $_GET['revision'] ) ? sprintf( __( '%1$s restored to revision from %2$s.' , 'do-action' ), $this->single, wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
 	    6 => sprintf( __( '%1$s published. %2$sView %3$s%4s.' , 'do-action' ), $this->single, '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">', $this->single, '</a>' ),
 	    7 => sprintf( __( '%1$s saved.' , 'do-action' ), $this->single ),

@@ -160,7 +160,7 @@ class do_action {
 
 		ob_start();
 		?>
-		<h2><?php _e( 'Upcoming Events', 'do-action' ); ?></h2>
+		<h2><?php esc_html_e( 'Upcoming Events', 'do-action' ); ?></h2>
 
 		<ul class="upcoming-events">
 		<?php
@@ -194,14 +194,14 @@ class do_action {
 						$image_url = $image_array[0];
 					?>
 					<a href="<?php echo esc_url( get_permalink( $event->ID ) ); ?>">
-						<img src="<?php echo $image_url; ?>" />
+						<img src="<?php echo esc_url( $image_url ); ?>" />
 					</a>
 					<?php } ?>
 				</span>
 				<span class="event-details">
 					<a href="<?php echo esc_url( get_permalink( $event->ID ) ); ?>">
-						<span class="event-title"><?php echo $event->post_title; ?></span>
-						<span class="event-date"><?php echo date( 'j F Y', strtotime( get_post_meta( $event->ID, 'date', true ) ) ); ?></span>
+						<span class="event-title"><?php echo esc_html( $event->post_title ); ?></span>
+						<span class="event-date"><?php echo esc_html( gmdate( 'j F Y', strtotime( get_post_meta( $event->ID, 'date', true ) ) ) ); ?></span>
 					</a>
 					<?php
 					$status = get_post_meta( $event->ID, 'event_status', true );
@@ -301,7 +301,7 @@ class do_action {
 		ob_start();
 
 		?>
-		<h3 class="widget-title"><?php _e( 'Sponsors', 'do-action' ); ?></h3>
+		<h3 class="widget-title"><?php esc_html_e( 'Sponsors', 'do-action' ); ?></h3>
 		<ul id="event_sponsors">
 			<li>
 				<a href="https://doaction.org/sponsor/wordpress-foundation/" title="WordPress Foundation">
@@ -350,8 +350,8 @@ class do_action {
 
 			case 'selecting_nonprofits':
 				?>
-				<h2><?php _e( 'Non-profit applications are now closed', 'do-action' ); ?></h2>
-				<p><?php _e( 'We are now deciding on the final list of organisations for this hackathon - once we have finalised the list, we will be in touch with all of the applications to let them know. We will then open up participant sign-ups for the event.', 'do-action' ); ?></p>
+				<h2><?php esc_html_e( 'Non-profit applications are now closed', 'do-action' ); ?></h2>
+				<p><?php esc_html_e( 'We are now deciding on the final list of organisations for this hackathon - once we have finalised the list, we will be in touch with all of the applications to let them know. We will then open up participant sign-ups for the event.', 'do-action' ); ?></p>
 				<?php
 			break;
 
@@ -361,8 +361,8 @@ class do_action {
 
 			case 'completed':
 				?>
-				<h2><?php _e( 'This hackathon has ended', 'do-action' ); ?></h2>
-				<p><?php _e( 'Thank you to everyone who was involved!', 'do-action' ); ?></p>
+				<h2><?php esc_html_e( 'This hackathon has ended', 'do-action' ); ?></h2>
+				<p><?php esc_html_e( 'Thank you to everyone who was involved!', 'do-action' ); ?></p>
 				<?php
 			break;
 		}
@@ -378,42 +378,42 @@ class do_action {
 		<div id="event-application-form">
 			<form name="event-application-form" action="" method="post">
 
-				<h2><?php _e( 'Apply for your organisation to be a part of this hackathon', 'do-action' ); ?></h2>
-				<p><?php _e( 'Fill in the form below in order for your non-profit organisation to be a part of this event and to potentially be one of the organiseations that receives a brand new website.', 'do-action' ); ?></p>
+				<h2><?php esc_html_e( 'Apply for your organisation to be a part of this hackathon', 'do-action' ); ?></h2>
+				<p><?php esc_html_e( 'Fill in the form below in order for your non-profit organisation to be a part of this event and to potentially be one of the organiseations that receives a brand new website.', 'do-action' ); ?></p>
 
 				<p>
-					<label for="org_name"><?php _e( 'What is the name of your organisation?', 'do-action' ); ?></label>
+					<label for="org_name"><?php esc_html_e( 'What is the name of your organisation?', 'do-action' ); ?></label>
 					<input id="org_name" type="text" name="org_name" value="" />
 				</p>
 
 				<p>
-					<label for="org_url"><?php _e( 'What is your organisation\'s website address?', 'do-action' ); ?></label>
+					<label for="org_url"><?php esc_html_e( 'What is your organisation\'s website address?', 'do-action' ); ?></label>
 					<input id="org_url" type="text" name="org_url" value="" /><br/>
-					<span class="form-description"><?php _e( 'This is the address for your current website, Facebook page, or any other page that tells us a bit about your organisation.', 'do-action' ); ?></span>
+					<span class="form-description"><?php esc_html_e( 'This is the address for your current website, Facebook page, or any other page that tells us a bit about your organisation.', 'do-action' ); ?></span>
 				</p>
 
 				<p>
-					<label for="org_description"><?php _e( 'What is your organisation all about?', 'do-action' ); ?></label>
+					<label for="org_description"><?php esc_html_e( 'What is your organisation all about?', 'do-action' ); ?></label>
 					<textarea id="org_description" name="org_description"></textarea><br/>
-					<span class="form-description"><?php _e( 'Tell us what your organisation does, how you work, what your mission statement is, or anything else that you feel is relevant.', 'do-action' ); ?></span>
+					<span class="form-description"><?php esc_html_e( 'Tell us what your organisation does, how you work, what your mission statement is, or anything else that you feel is relevant.', 'do-action' ); ?></span>
 				</p>
 
 				<p>
-					<label for="org_achieve"><?php _e( 'What do you hope to achieve with a new website for your organisation?', 'do-action' ); ?></label>
+					<label for="org_achieve"><?php esc_html_e( 'What do you hope to achieve with a new website for your organisation?', 'do-action' ); ?></label>
 					<textarea id="org_achieve" name="org_achieve"></textarea><br/>
-					<span class="form-description"><?php _e( 'Be as descriptive as you like - this is to give us an idea of what you are looking for and is not a final analysis of your needs.', 'do-action' ); ?></span>
+					<span class="form-description"><?php esc_html_e( 'Be as descriptive as you like - this is to give us an idea of what you are looking for and is not a final analysis of your needs.', 'do-action' ); ?></span>
 				</p>
 
 				<p>
-					<label for="contact_name"><?php _e( 'What is your name?', 'do-action' ); ?></label>
+					<label for="contact_name"><?php esc_html_e( 'What is your name?', 'do-action' ); ?></label>
 					<input id="contact_name" type="text" name="contact_name" value="" /><br/>
-					<span class="form-description"><?php _e( 'This individual will be the primary contact between us and your organisation.', 'do-action' ); ?></span>
+					<span class="form-description"><?php esc_html_e( 'This individual will be the primary contact between us and your organisation.', 'do-action' ); ?></span>
 				</p>
 
 				<p>
-					<label for="contact_email"><?php _e( 'What is your email address?', 'do-action' ); ?></label>
+					<label for="contact_email"><?php esc_html_e( 'What is your email address?', 'do-action' ); ?></label>
 					<input id="contact_email" type="email" name="contact_email" value="" /><br/>
-					<span class="form-description"><?php _e( 'This will be the primary contact email address between us and your organisation.', 'do-action' ); ?></span>
+					<span class="form-description"><?php esc_html_e( 'This will be the primary contact email address between us and your organisation.', 'do-action' ); ?></span>
 				</p>
 
 				<?php wp_nonce_field( 'doaction_application', 'doaction_application_nonce' ); ?>
@@ -499,11 +499,16 @@ class do_action {
 			?>
 			<div id="event-sign-up-form">
 				<form name="event-sign-up-form" action="" method="post">
-					<h2><?php _e( 'Sign up as a participant for this hackathon', 'do-action' ); ?></h2>
-					<p><?php printf( __( 'To be a part of this event, simply fill in the form below and your participation will be final. Read our %1$sparticipant\'s guide%2$s for more details on what is expected of you when you sign up.', 'do-action' ), '<a href="' . get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/">', '</a>' ); ?></p>
+					<h2><?php esc_html_e( 'Sign up as a participant for this hackathon', 'do-action' ); ?></h2>
+					<p>
+						<?php
+						/* translators: 1: Opening link tag for the participant guide, 2: Closing link tag. */
+						printf( esc_html__( 'To be a part of this event, simply fill in the form below and your participation will be final. Read our %1$sparticipant\'s guide%2$s for more details on what is expected of you when you sign up.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/' ) . '">', '</a>' );
+						?>
+					</p>
 
-					<h3><?php _e( 'Select an organisation', 'do-action' ); ?></h3>
-					<p class="form-description"><?php _e( 'Click on a non-profit organisation to select it and, once you have done so, you will be able to select your role on the build team for that organisation. If an organisation is faded out, then it has no roles available.', 'do-action' ); ?></p>
+					<h3><?php esc_html_e( 'Select an organisation', 'do-action' ); ?></h3>
+					<p class="form-description"><?php esc_html_e( 'Click on a non-profit organisation to select it and, once you have done so, you will be able to select your role on the build team for that organisation. If an organisation is faded out, then it has no roles available.', 'do-action' ); ?></p>
 
 					<ul class="non-profit-options">
 						<?php
@@ -532,16 +537,17 @@ class do_action {
 									<?php // if( $available ) { ?>
 										<input type="radio" class="non-profit-selector" value="<?php esc_attr_e( $id ); ?>" name="nonprofit" id="nonprofit-<?php esc_attr_e( $id ); ?>" />
 									<?php // } ?>
-									<span class="nonprofit-title"><?php esc_html_e( $org->post_title ); ?> <em><?php echo $positions; ?></em></span>
+									<span class="nonprofit-title"><?php echo esc_html( $org->post_title ); ?> <em><?php echo esc_html( $positions ); ?></em></span>
 									<?php
 									if( $url ) {
 										echo '<span class="nonprofit-url">';
-										printf( __( '%1$sWebsite%2$s', 'do-action' ), '<a href="' . esc_url( $url ) . '" target="_blank">', '</a>' );
+										/* translators: 1: Opening website link tag, 2: Closing link tag. */
+										printf( esc_html__( '%1$sWebsite%2$s', 'do-action' ), '<a href="' . esc_url( $url ) . '" target="_blank">', '</a>' );
 										echo '</span><br/>';
 									}
 									?>
-									<span class="nonprofit-excerpt"><?php echo wpautop( $org->post_excerpt ); ?></span>
-									<p style="text-align:center;"><a class="button"><?php _e( 'Select', 'do-action' ); ?></a></p>
+									<span class="nonprofit-excerpt"><?php echo wp_kses_post( wpautop( $org->post_excerpt ) ); ?></span>
+									<p style="text-align:center;"><a class="button"><?php esc_html_e( 'Select', 'do-action' ); ?></a></p>
 								</label>
 							</li>
 							<?php
@@ -550,8 +556,8 @@ class do_action {
 					</ul>
 
 					<div id="non-profit-role-wrapper">
-						<h3><?php _e( 'Select your role', 'do-action' ); ?></h3>
-						<p class="form-description"><?php _e( 'Each build team has a selection of roles available - select the one that suits you the best. If a role is greyed out, then it has already been filled.', 'do-action' ); ?></p>
+						<h3><?php esc_html_e( 'Select your role', 'do-action' ); ?></h3>
+						<p class="form-description"><?php esc_html_e( 'Each build team has a selection of roles available - select the one that suits you the best. If a role is greyed out, then it has already been filled.', 'do-action' ); ?></p>
 
 						<?php
 						foreach ( $orgs as $id ) {
@@ -595,7 +601,7 @@ class do_action {
 							}
 							?>
 							<p class="role-description" id="role-description-<?php esc_attr_e( $role->term_id ); ?>">
-								<strong><?php echo $role_name; ?>:</strong> <?php echo $role->description; ?>
+								<strong><?php echo esc_html( $role_name ); ?>:</strong> <?php echo wp_kses_post( $role->description ); ?>
 							</p>
 							<?php
 						}
@@ -604,22 +610,27 @@ class do_action {
 					</div>
 
 					<div id="participant-details-wrapper">
-						<h3><?php _e( 'Fill in your details', 'do-action' ); ?></h3>
-						<p class="form-description"><?php _e( 'All we need from you now are your details so we can provide you with further information about the event.', 'do-action' ); ?></p>
+						<h3><?php esc_html_e( 'Fill in your details', 'do-action' ); ?></h3>
+						<p class="form-description"><?php esc_html_e( 'All we need from you now are your details so we can provide you with further information about the event.', 'do-action' ); ?></p>
 
 						<p>
-							<label for="participant-name"><?php _e( 'Name:', 'do-action' ); ?></label><br/><input type="text" id="participant-name" name="participant_name" />
+							<label for="participant-name"><?php esc_html_e( 'Name:', 'do-action' ); ?></label><br/><input type="text" id="participant-name" name="participant_name" />
 						</p>
 						<p>
-							<label for="participant-email"><?php _e( 'Email address:', 'do-action' ); ?></label><br/><input type="email" id="participant-email" name="participant_email" />
+							<label for="participant-email"><?php esc_html_e( 'Email address:', 'do-action' ); ?></label><br/><input type="email" id="participant-email" name="participant_email" />
 						</p>
 						<p>
-							<label for="participant-number"><?php _e( 'Phone number:', 'do-action' ); ?></label><br/><input type="text" id="participant-number" name="participant_number" />
+							<label for="participant-number"><?php esc_html_e( 'Phone number:', 'do-action' ); ?></label><br/><input type="text" id="participant-number" name="participant_number" />
 						</p>
 					</div>
 
 					<div id="form-submit-row">
-						<p class="form-description"><?php printf( __( 'By submitting this form you are confirming that you will attend the event on the listed date and that you have read through the %1$sparticipant\'s guide%2$s.', 'do-action' ), '<a href="' . get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/">', '</a>' ); ?></p>
+						<p class="form-description">
+							<?php
+							/* translators: 1: Opening link tag for the participant guide, 2: Closing link tag. */
+							printf( esc_html__( 'By submitting this form you are confirming that you will attend the event on the listed date and that you have read through the %1$sparticipant\'s guide%2$s.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/' ) . '">', '</a>' );
+							?>
+						</p>
 						<?php wp_nonce_field( 'doaction_signup', 'doaction_signup_nonce' ); ?>
 						<input type="hidden" name="doaction_signed_up" value="true" />
 						<input type="submit" disabled value="<?php esc_attr_e( 'Sign up!', 'do-action' ); ?>" id="participant-form-submit" />
@@ -637,7 +648,7 @@ class do_action {
 		if( isset( $_POST['doaction_signed_up'] ) && 'true' == $_POST['doaction_signed_up'] ) {
 
 			// Require a valid nonce from the sign-up form before doing any work.
-			if( ! isset( $_POST['doaction_signup_nonce'] ) || ! wp_verify_nonce( $_POST['doaction_signup_nonce'], 'doaction_signup' ) ) {
+			if ( ! isset( $_POST['doaction_signup_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['doaction_signup_nonce'] ) ), 'doaction_signup' ) ) {
 				return;
 			}
 
@@ -718,13 +729,13 @@ class do_action {
 			getenv('HTTP_FORWARDED')?:
 			getenv('REMOTE_ADDR');
 
-			$data['blog'] = 'https://doaction.org/';
-			$data['user_ip'] = $user_ip;
-			$data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-			$data['referrer'] = $_SERVER['HTTP_REFERER'];
-			$data['permalink'] = get_post_permalink( $event->ID );
-			$data['comment_type'] = 'registration';
-			$data['comment_author'] = $participant_name;
+			$data['blog']                 = 'https://doaction.org/';
+			$data['user_ip']              = $user_ip;
+			$data['user_agent']           = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+			$data['referrer']             = isset( $_SERVER['HTTP_REFERER'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
+			$data['permalink']            = get_post_permalink( $event->ID );
+			$data['comment_type']         = 'registration';
+			$data['comment_author']       = $participant_name;
 			$data['comment_author_email'] = $participant_email;
 			$data['comment_author_url'] = '';
 			$data['comment_content'] = '';
@@ -782,21 +793,51 @@ class do_action {
 		ob_start();
 
 		?>
-		<p><?php printf( __( 'Hi %s,', 'do-action' ), $name ); ?></p>
+		<p>
+			<?php
+			/* translators: %s: Recipient name. */
+			printf( esc_html__( 'Hi %s,', 'do-action' ), esc_html( $name ) );
+			?>
+		</p>
 
-		<p><?php printf( __( 'Thank you for signing up as %1$s for %2$s at the %3$s do_action hackathon. You have been added to the build team and we will be in touch with more details in the coming weeks.', 'do-action' ), $role->name, $org->post_title, $event->post_title ); ?></p>
+		<p>
+			<?php
+			/* translators: 1: Role name, 2: Nonprofit name, 3: Event name. */
+			printf( esc_html__( 'Thank you for signing up as %1$s for %2$s at the %3$s do_action hackathon. You have been added to the build team and we will be in touch with more details in the coming weeks.', 'do-action' ), esc_html( $role->name ), esc_html( $org->post_title ), esc_html( $event->post_title ) );
+			?>
+		</p>
 
 		<?php if( 'project-manager' == $role->slug ) { ?>
-			<p><?php printf( __( 'As the Project Manager you will need to be in touch with your chosen non-profit organisation before the event. To that end, you will find the non-profit contact details as well as your team\'s contact details %1$sright here%2$s. The password to view the info on that page is "%3$s" (without the quotation marks) and the team list will be filled up there as participants sign up.', 'do-action' ), '<a href="' . esc_url( get_permalink( $org->ID ) ) . '">', '</a>', $org->post_password ); ?></p>
+			<p>
+				<?php
+				/* translators: 1: Opening team-page link tag, 2: Closing link tag, 3: Page password. */
+				printf( esc_html__( 'As the Project Manager you will need to be in touch with your chosen non-profit organisation before the event. To that end, you will find the non-profit contact details as well as your team\'s contact details %1$sright here%2$s. The password to view the info on that page is "%3$s" (without the quotation marks) and the team list will be filled up there as participants sign up.', 'do-action' ), '<a href="' . esc_url( get_permalink( $org->ID ) ) . '">', '</a>', esc_html( $org->post_password ) );
+				?>
+			</p>
 		<?php } else { ?>
-			<p><?php _e( 'Your team\'s Project Manager will also be in touch with you closer to the time regarding the non-profit you have chosen as well as any pre-planning you can do before the event.', 'do-action' ); ?></p>
+			<p><?php esc_html_e( 'Your team\'s Project Manager will also be in touch with you closer to the time regarding the non-profit you have chosen as well as any pre-planning you can do before the event.', 'do-action' ); ?></p>
 		<?php } ?>
 
-		<p><?php printf( __( 'Please make sure that you read our %1$sparticipant\'s guide%2$s for more details on what is expected of you now that you have signed up. You will also find vital information there explaining how the day will work and what you need to bring with you.', 'do-action' ), '<a href="' . get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/">', '</a>' ); ?></p>
+		<p>
+			<?php
+			/* translators: 1: Opening link tag for the participant guide, 2: Closing link tag. */
+			printf( esc_html__( 'Please make sure that you read our %1$sparticipant\'s guide%2$s for more details on what is expected of you now that you have signed up. You will also find vital information there explaining how the day will work and what you need to bring with you.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/' ) . '">', '</a>' );
+			?>
+		</p>
 
-		<p><?php printf( __( 'It would be really helpful if you sent %1$sthe sign up link%2$s to anyone that you know who might also be interested in participating in the day.', 'do-action' ), '<a href="' . esc_url( get_permalink( $event->ID ) ) . '">', '</a>' ); ?></p>
+		<p>
+			<?php
+			/* translators: 1: Opening signup link tag, 2: Closing link tag. */
+			printf( esc_html__( 'It would be really helpful if you sent %1$sthe sign up link%2$s to anyone that you know who might also be interested in participating in the day.', 'do-action' ), '<a href="' . esc_url( get_permalink( $event->ID ) ) . '">', '</a>' );
+			?>
+		</p>
 
-		<p><?php printf( __( 'Cheers,%sThe do_action team', 'do-action' ), '<br/>' ); ?></p>
+		<p>
+			<?php
+			/* translators: %s: Line break. */
+			printf( esc_html__( 'Cheers,%sThe do_action team', 'do-action' ), '<br/>' );
+			?>
+		</p>
 		<?php
 
 		$message = ob_get_clean();
@@ -810,7 +851,7 @@ class do_action {
 		if( isset( $_POST['doaction_application_sent'] ) && 'true' == $_POST['doaction_application_sent'] ) {
 
 			// Require a valid nonce from the application form before doing any work.
-			if( ! isset( $_POST['doaction_application_nonce'] ) || ! wp_verify_nonce( $_POST['doaction_application_nonce'], 'doaction_application' ) ) {
+			if ( ! isset( $_POST['doaction_application_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['doaction_application_nonce'] ) ), 'doaction_application' ) ) {
 				return;
 			}
 
@@ -874,13 +915,13 @@ class do_action {
 			getenv('HTTP_FORWARDED')?:
 			getenv('REMOTE_ADDR');
 
-			$data['blog'] = 'https://doaction.org/';
-			$data['user_ip'] = $user_ip;
-			$data['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-			$data['referrer'] = $_SERVER['HTTP_REFERER'];
-			$data['permalink'] = get_post_permalink( $event->ID );
-			$data['comment_type'] = 'application';
-			$data['comment_author'] = $contact_name;
+			$data['blog']                 = 'https://doaction.org/';
+			$data['user_ip']              = $user_ip;
+			$data['user_agent']           = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+			$data['referrer']             = isset( $_SERVER['HTTP_REFERER'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
+			$data['permalink']            = get_post_permalink( $event->ID );
+			$data['comment_type']         = 'application';
+			$data['comment_author']       = $contact_name;
 			$data['comment_author_email'] = $contact_email;
 			$data['comment_author_url'] = $url;
 			$data['comment_content'] = $org_achieve;
@@ -945,15 +986,40 @@ class do_action {
 		ob_start();
 
 		?>
-		<p><?php printf( __( 'Hi %s,', 'do-action' ), $name ); ?></p>
+		<p>
+			<?php
+			/* translators: %s: Recipient name. */
+			printf( esc_html__( 'Hi %s,', 'do-action' ), esc_html( $name ) );
+			?>
+		</p>
 
-		<p><?php printf( __( 'Thank you for applying for %1$s to be a part of the %2$s do_action hackathon. Your application has been received and we will be in touch once we have decided on the final list of non-profit organisations.', 'do-action' ), $org->post_title, $event->post_title ); ?></p>
+		<p>
+			<?php
+			/* translators: 1: Nonprofit name, 2: Event name. */
+			printf( esc_html__( 'Thank you for applying for %1$s to be a part of the %2$s do_action hackathon. Your application has been received and we will be in touch once we have decided on the final list of non-profit organisations.', 'do-action' ), esc_html( $org->post_title ), esc_html( $event->post_title ) );
+			?>
+		</p>
 
-		<p><?php printf( __( 'If you would like to know more about do_action and what it\'s all about, then you can find out more %1$shere%2$s.', 'do-action' ), '<a href="' . get_site_url() . $this->get_pll_current_language_path() . '/about/">', '</a>' ); ?></p>
+		<p>
+			<?php
+			/* translators: 1: Opening about-page link tag, 2: Closing link tag. */
+			printf( esc_html__( 'If you would like to know more about do_action and what it\'s all about, then you can find out more %1$shere%2$s.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/about/' ) . '">', '</a>' );
+			?>
+		</p>
 
-		<p><?php printf( __( 'If you know of any other non-profit organisation that could benefit from this event, then it would be great if you sent %1$sthe application link%2$s to them. The more the merrier!', 'do-action' ), '<a href="' . esc_url( get_permalink( $event->ID ) ) . '">', '</a>' ); ?></p>
+		<p>
+			<?php
+			/* translators: 1: Opening application link tag, 2: Closing link tag. */
+			printf( esc_html__( 'If you know of any other non-profit organisation that could benefit from this event, then it would be great if you sent %1$sthe application link%2$s to them. The more the merrier!', 'do-action' ), '<a href="' . esc_url( get_permalink( $event->ID ) ) . '">', '</a>' );
+			?>
+		</p>
 
-		<p><?php printf( __( 'Cheers,%sThe do_action team', 'do-action' ), '<br/>' ); ?></p>
+		<p>
+			<?php
+			/* translators: %s: Line break. */
+			printf( esc_html__( 'Cheers,%sThe do_action team', 'do-action' ), '<br/>' );
+			?>
+		</p>
 		<?php
 
 		$message = ob_get_clean();
@@ -1000,15 +1066,17 @@ class do_action {
 		$about = $org->post_excerpt;
 		if( $about ) {
 			?>
-			<h3><?php _e( 'A bit about the organisation:', 'do-action' ); ?></h3>
-			<?php echo wpautop( $about );
+			<h3><?php esc_html_e( 'A bit about the organisation:', 'do-action' ); ?></h3>
+			<?php
+			echo wp_kses_post( wpautop( $about ) );
 		}
 
 		$org_achieve = get_post_meta( $org->ID, 'org_achieve', true );
 		if( $org_achieve ) {
 			?>
-			<h3><?php _e( 'What the organisation hopes to achieve with a new website:', 'do-action' ); ?></h3>
-			<?php echo wpautop( esc_html( $org_achieve ) );
+			<h3><?php esc_html_e( 'What the organisation hopes to achieve with a new website:', 'do-action' ); ?></h3>
+			<?php
+			echo wp_kses_post( wpautop( esc_html( $org_achieve ) ) );
 		}
 
 		$website = get_post_meta( $org->ID, 'url', true );
@@ -1016,10 +1084,15 @@ class do_action {
 		$contact_email = get_post_meta( $org->ID, 'contact_email', true );
 		$contact_number = get_post_meta( $org->ID, 'contact_number', true );
 		?>
-		<h3><?php _e( 'Contact Details', 'do-action' ); ?></h3>
+		<h3><?php esc_html_e( 'Contact Details', 'do-action' ); ?></h3>
 		<ul>
 			<?php if( $website ) { ?>
-				<li><?php printf( __( '%1$sWebsite%2$s', 'do-action' ), '<a href="' . esc_url( $website ) . '">', '</a>' ); ?></li>
+				<li>
+					<?php
+					/* translators: 1: Opening website link tag, 2: Closing link tag. */
+					printf( esc_html__( '%1$sWebsite%2$s', 'do-action' ), '<a href="' . esc_url( $website ) . '">', '</a>' );
+					?>
+				</li>
 			<?php } ?>
 			<li>
 				<?php
@@ -1041,7 +1114,7 @@ class do_action {
 			</li>
 		</ul>
 
-		<h3><?php _e( 'Build Team', 'do-action' ); ?></h3>
+		<h3><?php esc_html_e( 'Build Team', 'do-action' ); ?></h3>
 		<?php
 
 		$roles = get_the_terms( $org->ID, 'role' );
@@ -1120,16 +1193,16 @@ class do_action {
 						$image_url = $image_array[0];
 					?>
 					<a href="<?php echo esc_url( get_permalink( $event->ID ) ); ?>">
-						<img src="<?php echo $image_url; ?>" />
+						<img src="<?php echo esc_url( $image_url ); ?>" />
 					</a>
 					<?php } ?>
 				</span>
 				<span class="event-details">
 					<a href="<?php echo esc_url( get_permalink( $event->ID ) ); ?>">
-						<span class="event-title"><?php echo $event->post_title; ?></span>
-						<span class="event-date"><?php echo date( 'j F Y', strtotime( get_post_meta( $event->ID, 'date', true ) ) ); ?></span>
+						<span class="event-title"><?php echo esc_html( $event->post_title ); ?></span>
+						<span class="event-date"><?php echo esc_html( gmdate( 'j F Y', strtotime( get_post_meta( $event->ID, 'date', true ) ) ) ); ?></span>
 					</a>
-					<a class="event-button button" href="<?php echo esc_url( get_permalink( $event->ID ) ); ?>"><?php _e( 'Read more', 'do-action' ); ?></a>
+					<a class="event-button button" href="<?php echo esc_url( get_permalink( $event->ID ) ); ?>"><?php esc_html_e( 'Read more', 'do-action' ); ?></a>
 				</span>
 			</li>
 			<?php
@@ -1157,10 +1230,12 @@ class do_action {
 			return $request;
 		}
 
-		if( isset( $_GET['event-select'] ) && $_GET['event-select'] ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This only filters the visible list.
+		$selected_event = isset( $_GET['event-select'] ) ? absint( $_GET['event-select'] ) : 0;
+		if ( $selected_event ) {
 			$request['meta_query'][] = array(
-				'key' => 'event',
-				'value' => intval( $_GET['event-select'] ),
+				'key'     => 'event',
+				'value'   => $selected_event,
 				'compare' => '=',
 			);
 		}
@@ -1232,7 +1307,7 @@ class do_action {
 		} elseif( 'sponsor' == get_post_type() ) {
 			$url = get_post_meta( get_the_ID(), 'url', true );
 			if( $url ) {
-				echo '<span class="sponsor-meta"><a href="' . esc_url( $url ) . '" title="' . get_the_title() . '" target="_blank">' . __( 'Visit website', 'do-action' ) . '</a></span>';
+				echo '<span class="sponsor-meta"><a href="' . esc_url( $url ) . '" title="' . esc_attr( get_the_title() ) . '" target="_blank">' . esc_html__( 'Visit website', 'do-action' ) . '</a></span>';
 			}
 		}
 
@@ -1493,7 +1568,7 @@ class do_action {
 
 					if( $roles && 0 < count( $roles ) ) {
 
-						foreach( $roles as $role ) {
+						foreach ( $roles as $role ) {
 							$this->admin->add_meta_box( $field_type . '_role_' . $role->slug, sprintf( __( 'Role: %s' , 'do-action' ), $role->name ), array( 'non-profit' ), 'advanced', 'high' );
 						}
 					}
@@ -1553,10 +1628,8 @@ class do_action {
 
 			$events = get_posts( $event_args );
 
-			$selected_event = 0;
-			if( isset( $_GET['event-select'] ) && $_GET['event-select'] ) {
-				$selected_event = intval( $_GET['event-select'] );
-			}
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This only selects the visible list filter.
+			$selected_event = isset( $_GET['event-select'] ) ? absint( $_GET['event-select'] ) : 0;
 
 			$html = '<select name="event-select" id="event-select">';
 				$html .= '<option value="0" ' . selected( 0, $selected_event, false ) . '>' . __( 'All events', 'do-action' ) . '</option>';
@@ -1566,7 +1639,19 @@ class do_action {
 				}
 			$html .= '</select>';
 
-			echo $html;
+			echo wp_kses(
+				$html,
+				array(
+					'select' => array(
+						'name' => true,
+						'id'   => true,
+					),
+					'option' => array(
+						'value'    => true,
+						'selected' => true,
+					),
+				)
+			);
 
 		}
 	}
@@ -1783,7 +1868,7 @@ class do_action {
 		wp_register_script( $this->_token . '-google-places', '//maps.googleapis.com/maps/api/js?key=AIzaSyAqRmSdBU_mA94UejB5Of4iQLlGlEXbGow&libraries=places', array(), '4.0.2' );
 		wp_register_script( $this->_token . '-geocomplete', esc_url( $this->assets_url ) . 'js/jquery.geocomplete' . $this->script_suffix . '.js', array( 'jquery', $this->_token . '-google-places' ), '1.7.0' );
 
-		wp_register_script( $this->_token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', $this->_token . '-geocomplete' ), $this->_version );
+		wp_register_script( $this->_token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', $this->_token . '-geocomplete' ), $this->_version . '.' . filemtime( $this->assets_dir . '/js/admin' . $this->script_suffix . '.js' ), false );
 		wp_enqueue_script( $this->_token . '-admin' );
 
 	} // End admin_enqueue_scripts ()
@@ -1811,7 +1896,7 @@ class do_action {
 	 * @since 1.0.0
 	 */
 	public function __clone () {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->_version );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->_version ) );
 	} // End __clone ()
 
 	/**
@@ -1820,7 +1905,7 @@ class do_action {
 	 * @since 1.0.0
 	 */
 	public function __wakeup () {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->_version );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->_version ) );
 	} // End __wakeup ()
 
 	/**

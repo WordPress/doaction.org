@@ -324,4 +324,120 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( '<img src=x', $html );
 		$this->assertSame( 6, substr_count( $html, '&lt;img src=x' ) );
 	}
+
+	/**
+	 * Preview bodies retain rich text and literal backslashes without active HTML.
+	 *
+	 * @return void
+	 */
+	public function test_email_preview_filters_html_after_substitution(): void {
+		$method = new ReflectionMethod( do_action_tools::class, 'format_email' );
+		$html   = $method->invoke(
+			do_action_functions()->tools,
+			'<strong>Hello {{NAME}}</strong><script>alert(1)</script><a href="javascript:alert(1)">Link</a><img src=x onerror=alert(1)> C:\\team',
+			array( 'name' => '<svg onload=alert(1)>' ),
+			'body'
+		);
+		$this->assertStringNotContainsString( '<script', $html );
+		$this->assertStringNotContainsString( 'javascript:', $html );
+		$this->assertStringNotContainsString( 'onerror=', $html );
+		$this->assertStringNotContainsString( '<svg', $html );
+		$this->assertStringContainsString( '<strong>Hello &lt;svg', $html );
+		$this->assertStringContainsString( 'C:\\team', $html );
+	}
+
+	/**
+	 * Public descriptions preserve paragraphs and emphasis while filtering scripts.
+	 *
+	 * @return void
+	 */
+	public function test_nonprofit_description_filters_active_html(): void {
+		$org               = get_post( $this->ids['own'] );
+		$org->post_excerpt = '<strong>Our mission</strong><img src=x onerror=alert(1)><script>alert(1)</script>';
+		ob_start();
+		do_action_functions()->nonprofit_team( $org );
+		$html = ob_get_clean();
+		$this->assertStringContainsString( '<strong>Our mission</strong>', $html );
+		$this->assertStringNotContainsString( 'onerror=', $html );
+		$this->assertStringNotContainsString( '<script', $html );
+	}
+
+	/**
+	 * Saving text fields preserves literal backslashes and quotation marks.
+	 *
+	 * @return void
+	 */
+	public function test_metadata_round_trip_preserves_text(): void {
+		$_POST['do_action_meta_nonce'] = wp_create_nonce( 'do_action_save_meta_' . $this->ids['event'] );
+		$_REQUEST['venue_name']        = wp_slash( 'The "Hall" C:\\venue <script>alert(1)</script>' );
+		$_REQUEST['nonprofits']        = array( $this->ids['own'] );
+		$admin                         = new do_action_Admin_API();
+		$admin->save_meta_boxes( $this->ids['event'] );
+		remove_action( 'save_post', array( $admin, 'save_meta_boxes' ) );
+		$this->assertSame( 'The "Hall" C:\\venue', get_post_meta( $this->ids['event'], 'venue_name', true ) );
+	}
+
+	/**
+	 * URL fields retain encoded path characters through the metabox save handler.
+	 *
+	 * @return void
+	 */
+	public function test_metadata_preserves_encoded_urls(): void {
+		$url                           = 'https://example.org/a%20b/path%2Fpart?q=a%26b';
+		$_POST['do_action_meta_nonce'] = wp_create_nonce( 'do_action_save_meta_' . $this->ids['own'] );
+		$_REQUEST['url']               = wp_slash( $url );
+		$admin                         = new do_action_Admin_API();
+		$admin->save_meta_boxes( $this->ids['own'] );
+		remove_action( 'save_post', array( $admin, 'save_meta_boxes' ) );
+		$this->assertSame( $url, get_post_meta( $this->ids['own'], 'url', true ) );
+	}
+
+	/**
+	 * Admin field rendering keeps controls and escapes malicious attribute values.
+	 *
+	 * @return void
+	 */
+	public function test_admin_field_retains_controls_and_escapes_values(): void {
+		update_post_meta( $this->ids['event'], 'venue_name', '"><script>alert(1)</script>' );
+		$admin = new do_action_Admin_API();
+		ob_start();
+		$admin->display_meta_box_field(
+			array(
+				'id'          => 'venue_name',
+				'type'        => 'text',
+				'label'       => 'Venue',
+				'placeholder' => '',
+			),
+			get_post( $this->ids['event'] )
+		);
+		$html = ob_get_clean();
+		remove_action( 'save_post', array( $admin, 'save_meta_boxes' ) );
+		$this->assertStringContainsString( '<input', $html );
+		$this->assertStringContainsString( 'name="venue_name"', $html );
+		$this->assertStringNotContainsString( '<script', $html );
+	}
+
+	/**
+	 * Both admin script variants use the corresponding file for cache invalidation.
+	 *
+	 * @return void
+	 */
+	public function test_admin_script_versions_use_existing_assets(): void {
+		$plugin = do_action_functions();
+		$suffix = $plugin->script_suffix;
+		try {
+			foreach ( array( '', '.min' ) as $variant ) {
+				$plugin->script_suffix = $variant;
+				wp_deregister_script( 'do_action-admin' );
+				$plugin->admin_enqueue_scripts();
+				$script = wp_scripts()->registered['do_action-admin'];
+				$file   = dirname( __DIR__ ) . '/wp-content/plugins/do-action/assets/js/admin' . $variant . '.js';
+				$this->assertStringEndsWith( '.' . filemtime( $file ), $script->ver );
+				$this->assertStringEndsWith( 'admin' . $variant . '.js', $script->src );
+			}
+		} finally {
+			$plugin->script_suffix = $suffix;
+			wp_deregister_script( 'do_action-admin' );
+		}
+	}
 }
