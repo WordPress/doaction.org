@@ -542,8 +542,7 @@ class do_action {
 									<?php
 									if( $url ) {
 										echo '<span class="nonprofit-url">';
-										/* translators: 1: Opening website link tag, 2: Closing link tag. */
-										printf( esc_html__( '%1$sWebsite%2$s', 'do-action' ), '<a href="' . esc_url( $url ) . '" target="_blank">', '</a>' );
+										printf( '<a href="%1$s" target="_blank">%2$s</a>', esc_url( $url ), esc_html__( 'Website', 'do-action' ) );
 										echo '</span><br/>';
 									}
 									?>
@@ -1092,8 +1091,7 @@ class do_action {
 			<?php if( $website ) { ?>
 				<li>
 					<?php
-					/* translators: 1: Opening website link tag, 2: Closing link tag. */
-					printf( esc_html__( '%1$sWebsite%2$s', 'do-action' ), '<a href="' . esc_url( $website ) . '">', '</a>' );
+					printf( '<a href="%1$s">%2$s</a>', esc_url( $website ), esc_html__( 'Website', 'do-action' ) );
 					?>
 				</li>
 			<?php } ?>
