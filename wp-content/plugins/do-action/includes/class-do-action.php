@@ -246,11 +246,8 @@ class do_action {
 			return;
 		}
 
-		$venue_name    = esc_html( get_post_meta( $post->ID, 'venue_name', true ) );
-		$venue_address = esc_html( get_post_meta( $post->ID, 'venue_location', true ) );
-		$venue_address = str_replace( ',', "<br/>", $venue_address );
-
-		$infowindow = '<b>' . $venue_name . '</b><br/>' . $venue_address;
+		$venue_name    = get_post_meta( $post->ID, 'venue_name', true );
+		$venue_address = get_post_meta( $post->ID, 'venue_location', true );
 
 		ob_start();
 		?>
@@ -268,7 +265,7 @@ class do_action {
 	        var marker_image = 'https://doaction.org/wp-content/uploads/2016/05/do_action-map-pin.png';
 
 	        var infowindow = new google.maps.InfoWindow({
-				content: '<?php echo esc_js( $infowindow ); ?>'
+				content: '<?php echo esc_js( '<b>' . esc_html( $venue_name ) . '</b><br/>' . str_replace( ',', '<br/>', esc_html( $venue_address ) ) ); ?>'
 			});
 
 	        var marker = new google.maps.Marker({
