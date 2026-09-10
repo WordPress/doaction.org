@@ -433,6 +433,7 @@ class do_action_tools {
 
 				if( 0 < count( $recipients ) ) {
 
+					/* translators: %s: Event name. */
 					$from = sprintf( __( 'do_action %s', 'do-action' ), get_the_title( $event_id ) ) . ' <' . $organiser_email . '>';
 
 					$headers = array();
@@ -622,7 +623,9 @@ class do_action_tools {
 			return $recipients;
 		}
 
+		/* translators: %s: Event name. */
 		$event_title = sprintf( __( 'do_action %1$s', 'do-action' ), get_the_title( $event_id ) );
+		/* translators: %s: Event title, including the do_action prefix. */
 		$organiser_name = sprintf( __( '%1$s Organiser', 'do-action' ), $event_title );
 
 		$recipients[] = array(

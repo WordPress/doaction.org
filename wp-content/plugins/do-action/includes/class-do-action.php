@@ -529,6 +529,7 @@ class do_action {
 							}
 							if( $available ) {
 								$label_class = 'available';
+								/* translators: %s: Number of available positions. */
 								$positions = sprintf( _n( '(%s position available)', '(%s positions available)', $available, 'do-action' ), $available );
 							}
 							?>
@@ -785,6 +786,7 @@ class do_action {
 
 		$subject = __( 'Thank you for signing up!', 'do-action' );
 
+		/* translators: %s: Event name. */
 		$from = sprintf( __( 'do_action %s', 'do-action' ), $event->post_title ) . ' <' . get_post_meta( $event->ID, 'organiser_email', true ) . '>';
 
 		$headers[] = 'From: ' . $from;
@@ -978,6 +980,7 @@ class do_action {
 
 		$subject = __( 'Thank you for your application!', 'do-action' );
 
+		/* translators: %s: Event name. */
 		$from = sprintf( __( 'do_action %s', 'do-action' ), $event->post_title ) . ' <' . get_post_meta( $event->ID, 'organiser_email', true ) . '>';
 
 		$headers[] = 'From: ' . $from;
@@ -1560,6 +1563,7 @@ class do_action {
 			}
 
 			$field_type = str_replace( '-', '_', $type );
+			/* translators: %s: Singular post type label. */
 			$this->admin->add_meta_box( $field_type . '_details', sprintf( __( '%s Details' , 'do-action' ), $details['single'] ), array( $type ), 'normal', 'high' );
 
 			if( 'non-profit' == $post_type ) {
@@ -1569,6 +1573,7 @@ class do_action {
 					if( $roles && 0 < count( $roles ) ) {
 
 						foreach ( $roles as $role ) {
+							/* translators: %s: Participant role name. */
 							$this->admin->add_meta_box( $field_type . '_role_' . $role->slug, sprintf( __( 'Role: %s' , 'do-action' ), $role->name ), array( 'non-profit' ), 'advanced', 'high' );
 						}
 					}
@@ -1754,6 +1759,7 @@ class do_action {
 	            $published = intval( $num_posts->publish );
 	            $post_type = get_post_type_object( $type );
 
+				/* translators: %s: Published post count; the post type label follows the count. */
 	            $text = _n( '%s ' . $post_type->labels->singular_name, '%s ' . $post_type->labels->name, $published, 'your_textdomain' );
 	            $text = sprintf( $text, number_format_i18n( $published ) );
 
