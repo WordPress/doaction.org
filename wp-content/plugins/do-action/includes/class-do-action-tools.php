@@ -370,7 +370,7 @@ class do_action_tools {
 			wp_send_json( $response );
 		}
 
-		$orgs = get_post_meta( $event_id, 'nonprofits', true );
+		$orgs = $this->parent->get_event_nonprofits( $event_id );
 
 		if( ! $orgs ) {
 			$response = array(
@@ -382,6 +382,9 @@ class do_action_tools {
 		$select = '<select id="recipient_orgs" name="recipient_orgs[]" multiple="multiple">' . "\n";
 
 		foreach( $orgs as $id ) {
+			if ( ! current_user_can( 'edit_post', $id ) ) {
+				continue;
+			}
 			$select .= '<option value="' . esc_attr( $id ) . '">' . esc_html( get_the_title( $id ) ) . '</option>' . "\n";
 		}
 
@@ -424,8 +427,8 @@ class do_action_tools {
 
 				// Get selected organisations
 				$orgs = false;
-				if( ! empty( $_POST['recipient_orgs'] ) ) {
-					$orgs = array_map( 'intval', (array) $_POST['recipient_orgs'] );
+				if ( isset( $_POST['recipient_orgs'] ) ) {
+					$orgs = map_deep( wp_unslash( $_POST['recipient_orgs'] ), 'sanitize_text_field' );
 				}
 
 				// Sanitise selected roles
@@ -500,8 +503,8 @@ class do_action_tools {
 
 			// Get and sanitise selected organisations
 			$orgs = false;
-			if( ! empty( $_POST['recipient_orgs'] ) ) {
-				$orgs = array_map( 'intval', (array) $_POST['recipient_orgs'] );
+			if ( isset( $_POST['recipient_orgs'] ) ) {
+				$orgs = map_deep( wp_unslash( $_POST['recipient_orgs'] ), 'sanitize_text_field' );
 			}
 
 			// Sanitise selected roles
@@ -565,6 +568,32 @@ class do_action_tools {
 			return $recipients;
 		}
 
+		if ( 'event' !== get_post_type( $event_id ) || ! current_user_can( 'edit_post', $event_id ) ) {
+			return $recipients;
+		}
+
+		$allowed_orgs = array();
+		foreach ( $this->parent->get_event_nonprofits( $event_id ) as $org_id ) {
+			if ( current_user_can( 'edit_post', $org_id ) ) {
+				$allowed_orgs[] = $org_id;
+			}
+		}
+
+		if ( false === $orgs ) {
+			$orgs = $allowed_orgs;
+		} else {
+			if ( ! is_array( $orgs ) || ! $orgs ) {
+				return $recipients;
+			}
+			foreach ( $orgs as $org_id ) {
+				if ( ! is_scalar( $org_id ) || ! ctype_digit( (string) $org_id )
+					|| ! in_array( (int) $org_id, $allowed_orgs, true ) ) {
+					return $recipients;
+				}
+			}
+			$orgs = array_unique( array_map( 'intval', $orgs ) );
+		}
+
 		foreach( $roles as $role ) {
 			if( 'organiser' == $role ) {
 				$recipient_set = $this->get_organiser_email_recipient( $event_id );
@@ -613,16 +642,19 @@ class do_action_tools {
 
 	}
 
-	private function get_nonprofit_email_recipient ( $event_id = 0, $orgs = false ) {
+	/**
+	 * Get contact records for authorized nonprofits.
+	 *
+	 * @param int   $event_id Event ID.
+	 * @param int[] $orgs     Authorized nonprofit IDs.
+	 * @return array Contact records.
+	 */
+	private function get_nonprofit_email_recipient( $event_id = 0, $orgs = array() ) {
 
 		$recipients = array();
 
 		if( ! $event_id ) {
 			return $recipients;
-		}
-
-		if( ! $orgs ) {
-			$orgs = get_post_meta( $event_id, 'nonprofits', true );
 		}
 
 		if( $orgs && 0 < count( $orgs ) ) {
@@ -648,16 +680,20 @@ class do_action_tools {
 
 	}
 
-	private function get_participant_email_recipients ( $event_id = 0, $role = '', $orgs = false ) {
+	/**
+	 * Get participant records for authorized nonprofits.
+	 *
+	 * @param int    $event_id Event ID.
+	 * @param string $role     Participant role slug.
+	 * @param int[]  $orgs     Authorized nonprofit IDs.
+	 * @return array Participant records.
+	 */
+	private function get_participant_email_recipients( $event_id = 0, $role = '', $orgs = array() ) {
 
 		$recipients = array();
 
 		if( ! $event_id || ! $role ) {
 			return $recipients;
-		}
-
-		if( ! $orgs ) {
-			$orgs = get_post_meta( $event_id, 'nonprofits', true );
 		}
 
 		if( $orgs && 0 < count( $orgs ) ) {

@@ -109,6 +109,9 @@ class do_action {
 
 		// Register custom fields & meta boxes
 		add_action( 'init', array( $this, 'custom_fields' ) );
+		// Association changes must use the validated event selector, not native custom fields.
+		add_filter( 'auth_post_meta_nonprofits', '__return_false' );
+		add_filter( 'auth_post_meta__do_action_approved_nonprofits', '__return_false' );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
 
 		// Process the sign up form
@@ -243,8 +246,8 @@ class do_action {
 			return;
 		}
 
-		$venue_name = get_post_meta( $post->ID, 'venue_name', true );
-		$venue_address = get_post_meta( $post->ID, 'venue_location', true );
+		$venue_name    = esc_html( get_post_meta( $post->ID, 'venue_name', true ) );
+		$venue_address = esc_html( get_post_meta( $post->ID, 'venue_location', true ) );
 		$venue_address = str_replace( ',', "<br/>", $venue_address );
 
 		$infowindow = '<b>' . $venue_name . '</b><br/>' . $venue_address;
@@ -437,13 +440,62 @@ class do_action {
 		}
 	}
 
+	/**
+	 * Determine whether a nonprofit association is authorized.
+	 *
+	 * @param int        $event_id Event ID.
+	 * @param int|string $org_id   Nonprofit ID.
+	 * @return bool Whether the relationship is permitted.
+	 */
+	public function is_event_nonprofit_allowed( $event_id, $org_id ) {
+		if ( ! is_scalar( $org_id ) || ! ctype_digit( (string) $org_id ) || (int) $org_id <= 0 ) {
+			return false;
+		}
+
+		$event = get_post( $event_id );
+		$org   = get_post( (int) $org_id );
+
+		if ( ! $event || 'event' !== $event->post_type || ! $org || 'non-profit' !== $org->post_type ) {
+			return false;
+		}
+
+		$approved = get_post_meta( $event->ID, '_do_action_approved_nonprofits', true );
+
+		return user_can( $event->post_author, 'edit_post', $org->ID )
+			|| ( current_user_can( 'edit_post', $event->ID ) && current_user_can( 'edit_post', $org->ID ) )
+			|| ( is_array( $approved ) && in_array( $org->ID, $approved, true ) );
+	}
+
+	/**
+	 * Get selected nonprofits without trusting legacy or independently written references.
+	 *
+	 * @param int $event_id Event ID.
+	 * @return int[] Authorized selected nonprofits.
+	 */
+	public function get_event_nonprofits( $event_id ) {
+		$orgs    = get_post_meta( $event_id, 'nonprofits', true );
+		$allowed = array();
+
+		if ( ! is_array( $orgs ) ) {
+			return $allowed;
+		}
+
+		foreach ( $orgs as $org_id ) {
+			if ( $this->is_event_nonprofit_allowed( $event_id, $org_id ) ) {
+				$allowed[] = (int) $org_id;
+			}
+		}
+
+		return array_values( array_unique( $allowed ) );
+	}
+
 	public function event_sign_up_form ( $event = null ) {
 
 		if( ! $event ) {
 			return;
 		}
 
-		$orgs = get_post_meta( $event->ID, 'nonprofits', true );
+		$orgs = $this->get_event_nonprofits( $event->ID );
 
 		if( $orgs && 0 < count( $orgs ) ) {
 
@@ -527,7 +579,7 @@ class do_action {
 										<li class="<?php esc_attr_e( $disabled ); ?>">
 											<label for="role-<?php esc_attr_e( $id ); ?>-<?php esc_attr_e( $role->term_id ); ?>">
 												<input type="radio" class="role-selector <?php esc_attr_e( $role->slug ); ?>" value="<?php esc_attr_e( $role->term_id ); ?>" name="role" id="role-<?php esc_attr_e( $id ); ?>-<?php esc_attr_e( $role->term_id ); ?>" <?php esc_attr_e( $disabled ); ?> />
-												<?php echo $role_name . $role_tail; ?>
+												<?php echo esc_html( $role_name . $role_tail ); ?>
 											</label>
 										</li>
 										<?php
@@ -630,8 +682,8 @@ class do_action {
 			return false;
 		}
 
-		$event_nonprofits = get_post_meta( $event->ID, 'nonprofits', true );
-		if( ! is_array( $event_nonprofits ) || ! in_array( $org->ID, array_map( 'intval', $event_nonprofits ), true ) ) {
+		$event_nonprofits = $this->get_event_nonprofits( $event->ID );
+		if ( ! in_array( $org->ID, $event_nonprofits, true ) ) {
 			return false;
 		}
 
@@ -972,9 +1024,24 @@ class do_action {
 			<?php if( $website ) { ?>
 				<li><?php printf( __( '%1$sWebsite%2$s', 'do-action' ), '<a href="' . esc_url( $website ) . '">', '</a>' ); ?></li>
 			<?php } ?>
-			<li><?php printf( __( 'Contact name: %1$s', 'do-action' ), '<b>' . $contact_name . '</b>' ); ?></li>
-			<li><?php printf( __( 'Email address: %1$s', 'do-action' ), '<b>' . $contact_email . '</b>' ); ?></li>
-			<li><?php printf( __( 'Phone number: %1$s', 'do-action' ), '<b>' . $contact_number . '</b>' ); ?></li>
+			<li>
+				<?php
+				/* translators: %s: contact name wrapped in bold markup. */
+				printf( esc_html__( 'Contact name: %1$s', 'do-action' ), '<b>' . esc_html( $contact_name ) . '</b>' );
+				?>
+			</li>
+			<li>
+				<?php
+				/* translators: %s: email address wrapped in bold markup. */
+				printf( esc_html__( 'Email address: %1$s', 'do-action' ), '<b>' . esc_html( $contact_email ) . '</b>' );
+				?>
+			</li>
+			<li>
+				<?php
+				/* translators: %s: phone number wrapped in bold markup. */
+				printf( esc_html__( 'Phone number: %1$s', 'do-action' ), '<b>' . esc_html( $contact_number ) . '</b>' );
+				?>
+			</li>
 		</ul>
 
 		<h3><?php _e( 'Build Team', 'do-action' ); ?></h3>
@@ -994,9 +1061,9 @@ class do_action {
 						$participant_email = get_post_meta( $org->ID, $role->slug . '_email_address', true );
 						$participant_number = get_post_meta( $org->ID, $role->slug . '_phone_number', true );
 						if( $participant_number ) {
-							$participant_number = ' | ' . $participant_number;
+							$participant_number = ' | ' . esc_html( $participant_number );
 						}
-						$role_tail = ': <b>' . $participant_name . ' &lt;' . $participant_email . '&gt;' . $participant_number . '</b>';
+						$role_tail = ': <b>' . esc_html( $participant_name ) . ' &lt;' . esc_html( $participant_email ) . '&gt;' . $participant_number . '</b>';
 					}
 
 					$role_name = $role->name;
@@ -1004,7 +1071,7 @@ class do_action {
 						$role_name = __( 'Developer', 'do-action' );
 					}
 					?>
-					<li><?php echo $role_name . $role_tail; ?></li>
+					<li><?php echo esc_html( $role_name ) . wp_kses( $role_tail, array( 'b' => array() ) ); ?></li>
 					<?php
 				}
 				?>
@@ -1164,7 +1231,7 @@ class do_action {
 		if ( 'event' == get_post_type() ) {
 			$date = get_post_meta( get_the_ID(), 'date', true );
 			$venue = get_post_meta( get_the_ID(), 'venue_name', true );
-			echo '<span class="event-date">' . date( 'j F Y', strtotime( $date ) ) . ' ' . __( 'at', 'do-action' ) . ' ' . $venue . '</span>';
+			echo '<span class="event-date">' . esc_html( gmdate( 'j F Y', strtotime( $date ) ) ) . ' ' . esc_html__( 'at', 'do-action' ) . ' ' . esc_html( $venue ) . '</span>';
 		} elseif( 'sponsor' == get_post_type() ) {
 			$url = get_post_meta( get_the_ID(), 'url', true );
 			if( $url ) {
@@ -1435,10 +1502,13 @@ class do_action {
 					}
 				}
 			} elseif( 'event' == $post_type ) {
-				$orgs = get_post_meta( $post->ID, 'nonprofits', true );
+				$orgs = $this->get_event_nonprofits( $post->ID );
 
 				if( $orgs && 0 < count( $orgs ) ) {
 					foreach( $orgs as $id ) {
+						if ( ! current_user_can( 'edit_post', $id ) ) {
+							continue;
+						}
 						$box_title = get_the_title( $id );
 
 						$nonprofit_author = get_post_field( 'post_author', $id );
@@ -1459,7 +1529,8 @@ class do_action {
 
 		$org_id = intval( $args['args']['org_id'] );
 
-		if( ! $org_id ) {
+		if ( ! current_user_can( 'edit_post', $post->ID ) || ! current_user_can( 'edit_post', $org_id )
+			|| ! in_array( $org_id, $this->get_event_nonprofits( $post->ID ), true ) ) {
 			return;
 		}
 

@@ -347,8 +347,29 @@ class do_action_Admin_API {
 
 		foreach ( $fields as $field ) {
 			if ( isset( $_REQUEST[ $field['id'] ] ) ) {
+				if ( 'event' === $post_type && 'nonprofits' === $field['id'] ) {
+					$orgs = map_deep( wp_unslash( $_REQUEST[ $field['id'] ] ), 'sanitize_text_field' );
+					if ( ! is_array( $orgs ) ) {
+						continue;
+					}
+					foreach ( $orgs as $org_id ) {
+						if ( ! do_action_functions()->is_event_nonprofit_allowed( $post_id, $org_id )
+							|| ! current_user_can( 'edit_post', (int) $org_id )
+							|| ! isset( $field['options'][ (int) $org_id ] ) ) {
+							continue 2;
+						}
+					}
+					$orgs = array_values( array_unique( array_map( 'intval', $orgs ) ) );
+					// Preserve explicit approval when an administrator associates another organiser's nonprofit.
+					update_post_meta( $post_id, '_do_action_approved_nonprofits', $orgs );
+					update_post_meta( $post_id, $field['id'], $orgs );
+					continue;
+				}
 				update_post_meta( $post_id, $field['id'], $this->validate_field( $_REQUEST[ $field['id'] ], $field['type'] ) );
 			} else {
+				if ( 'event' === $post_type && 'nonprofits' === $field['id'] ) {
+					delete_post_meta( $post_id, '_do_action_approved_nonprofits' );
+				}
 				update_post_meta( $post_id, $field['id'], '' );
 			}
 		}
