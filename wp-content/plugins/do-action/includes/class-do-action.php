@@ -959,7 +959,7 @@ class do_action {
 		if( $org_achieve ) {
 			?>
 			<h3><?php _e( 'What the organisation hopes to achieve with a new website:', 'do-action' ); ?></h3>
-			<?php echo wpautop( $org_achieve );
+			<?php echo wpautop( esc_html( $org_achieve ) );
 		}
 
 		$website = get_post_meta( $org->ID, 'url', true );

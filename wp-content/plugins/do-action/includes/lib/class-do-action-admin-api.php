@@ -231,6 +231,7 @@ class do_action_Admin_API {
 
 		switch( $type ) {
 			case 'text': $data = esc_attr( $data ); break;
+			case 'textarea': $data = sanitize_textarea_field( $data ); break;
 			case 'url': $data = esc_url( $data ); break;
 			case 'email': $data = is_email( $data ); break;
 		}

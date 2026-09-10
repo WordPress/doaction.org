@@ -101,6 +101,7 @@ class do_action_Post_Type {
 			'can_export' => true,
 			'rewrite' => true,
 			'capability_type' => array( $this->post_type, $this->post_type . 's' ),
+			'map_meta_cap' => true,
 			'has_archive' => true,
 			'hierarchical' => true,
 			'supports' => array( 'title', 'editor', 'excerpt', 'thumbnail', 'author', 'custom-fields' ),
