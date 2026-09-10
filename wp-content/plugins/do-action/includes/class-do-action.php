@@ -387,7 +387,7 @@ class do_action {
 				</p>
 
 				<p>
-					<label for="org_url"><?php esc_html_e( 'What is your organisation\'s website address?', 'do-action' ); ?></label>
+					<label for="org_url"><?php esc_html_e( 'What is your organisation’s website address?', 'do-action' ); ?></label>
 					<input id="org_url" type="text" name="org_url" value="" /><br/>
 					<span class="form-description"><?php esc_html_e( 'This is the address for your current website, Facebook page, or any other page that tells us a bit about your organisation.', 'do-action' ); ?></span>
 				</p>
@@ -503,7 +503,7 @@ class do_action {
 					<p>
 						<?php
 						/* translators: 1: Opening link tag for the participant guide, 2: Closing link tag. */
-						printf( esc_html__( 'To be a part of this event, simply fill in the form below and your participation will be final. Read our %1$sparticipant\'s guide%2$s for more details on what is expected of you when you sign up.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/' ) . '">', '</a>' );
+						printf( esc_html__( 'To be a part of this event, simply fill in the form below and your participation will be final. Read our %1$sparticipant’s guide%2$s for more details on what is expected of you when you sign up.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/' ) . '">', '</a>' );
 						?>
 					</p>
 
@@ -628,7 +628,7 @@ class do_action {
 						<p class="form-description">
 							<?php
 							/* translators: 1: Opening link tag for the participant guide, 2: Closing link tag. */
-							printf( esc_html__( 'By submitting this form you are confirming that you will attend the event on the listed date and that you have read through the %1$sparticipant\'s guide%2$s.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/' ) . '">', '</a>' );
+							printf( esc_html__( 'By submitting this form you are confirming that you will attend the event on the listed date and that you have read through the %1$sparticipant’s guide%2$s.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/' ) . '">', '</a>' );
 							?>
 						</p>
 						<?php wp_nonce_field( 'doaction_signup', 'doaction_signup_nonce' ); ?>
@@ -811,17 +811,17 @@ class do_action {
 			<p>
 				<?php
 				/* translators: 1: Opening team-page link tag, 2: Closing link tag, 3: Page password. */
-				printf( esc_html__( 'As the Project Manager you will need to be in touch with your chosen non-profit organisation before the event. To that end, you will find the non-profit contact details as well as your team\'s contact details %1$sright here%2$s. The password to view the info on that page is "%3$s" (without the quotation marks) and the team list will be filled up there as participants sign up.', 'do-action' ), '<a href="' . esc_url( get_permalink( $org->ID ) ) . '">', '</a>', esc_html( $org->post_password ) );
+				printf( esc_html__( 'As the Project Manager you will need to be in touch with your chosen non-profit organisation before the event. To that end, you will find the non-profit contact details as well as your team’s contact details %1$sright here%2$s. The password to view the info on that page is "%3$s" (without the quotation marks) and the team list will be filled up there as participants sign up.', 'do-action' ), '<a href="' . esc_url( get_permalink( $org->ID ) ) . '">', '</a>', esc_html( $org->post_password ) );
 				?>
 			</p>
 		<?php } else { ?>
-			<p><?php esc_html_e( 'Your team\'s Project Manager will also be in touch with you closer to the time regarding the non-profit you have chosen as well as any pre-planning you can do before the event.', 'do-action' ); ?></p>
+			<p><?php esc_html_e( 'Your team’s Project Manager will also be in touch with you closer to the time regarding the non-profit you have chosen as well as any pre-planning you can do before the event.', 'do-action' ); ?></p>
 		<?php } ?>
 
 		<p>
 			<?php
 			/* translators: 1: Opening link tag for the participant guide, 2: Closing link tag. */
-			printf( esc_html__( 'Please make sure that you read our %1$sparticipant\'s guide%2$s for more details on what is expected of you now that you have signed up. You will also find vital information there explaining how the day will work and what you need to bring with you.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/' ) . '">', '</a>' );
+			printf( esc_html__( 'Please make sure that you read our %1$sparticipant’s guide%2$s for more details on what is expected of you now that you have signed up. You will also find vital information there explaining how the day will work and what you need to bring with you.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/participants-guide/' ) . '">', '</a>' );
 			?>
 		</p>
 
@@ -1003,7 +1003,7 @@ class do_action {
 		<p>
 			<?php
 			/* translators: 1: Opening about-page link tag, 2: Closing link tag. */
-			printf( esc_html__( 'If you would like to know more about do_action and what it\'s all about, then you can find out more %1$shere%2$s.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/about/' ) . '">', '</a>' );
+			printf( esc_html__( 'If you would like to know more about do_action and what it’s all about, then you can find out more %1$shere%2$s.', 'do-action' ), '<a href="' . esc_url( get_site_url() . $this->get_pll_current_language_path() . '/about/' ) . '">', '</a>' );
 			?>
 		</p>
 

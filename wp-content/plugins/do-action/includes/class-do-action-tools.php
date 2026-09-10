@@ -128,7 +128,7 @@ class do_action_tools {
 				$html         .= '<p id="recipient-org-wrapper">' . "\n";
 					$html     .= '<label for="recipient_org">' . esc_html__( 'Organisation(s):', 'do-action' ) . '</label>' . "\n";
 					$html     .= '<p>' . "\n";
-						$html .= '<em>' . esc_html__( 'If you don\'t select any organisations, then the email will be sent to the applicable recipients from all of them.', 'do-action' ) . '</em>' . "\n";
+						$html .= '<em>' . esc_html__( 'If you don’t select any organisations, then the email will be sent to the applicable recipients from all of them.', 'do-action' ) . '</em>' . "\n";
 					$html .= '</p>' . "\n";
 					$html .= '<span id="recipient-org-select-wrapper">' . "\n";
 						$html .= '<select id="recipient_orgs" name="recipient_orgs[]" multiple="multiple" disabled="disabled">' ."\n";
@@ -238,7 +238,7 @@ class do_action_tools {
 				$html         .= '<p id="recipient-org-wrapper">' . "\n";
 					$html     .= '<label for="recipient_org">' . esc_html__( 'Organisation(s):', 'do-action' ) . '</label>' . "\n";
 					$html     .= '<p>' . "\n";
-						$html .= '<em>' . esc_html__( 'If you don\'t select any organisations, then export data will include people from all of them.', 'do-action' ) . '</em>' . "\n";
+						$html .= '<em>' . esc_html__( 'If you don’t select any organisations, then export data will include people from all of them.', 'do-action' ) . '</em>' . "\n";
 					$html .= '</p>' . "\n";
 					$html .= '<span id="recipient-org-select-wrapper">' . "\n";
 						$html .= '<select id="recipient_orgs" name="recipient_orgs[]" multiple="multiple" disabled="disabled">' ."\n";
