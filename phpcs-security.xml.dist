@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<ruleset name="do_action request and output checks">
+	<file>.</file>
+	<arg name="extensions" value="php"/>
+	<rule ref="WordPress.Security"/>
+</ruleset>

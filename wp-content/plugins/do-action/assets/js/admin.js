@@ -18,6 +18,7 @@ jQuery( document ).ready( function ($) {
 		var data = {
 			'action': 'fetch_event_orgs',
 			'event_id': event_id,
+			'nonce': $( '#do_action_tools_nonce' ).val(),
 		};
 
 		$.post( ajaxurl, data, function( data ) {
@@ -43,6 +44,7 @@ jQuery( document ).ready( function ($) {
 		var data = {
 			'action': 'format_email_preview',
 			'event_id': event_id,
+			'nonce': $( '#do_action_tools_nonce' ).val(),
 			'email_subject': subject,
 			'email_body': body
 		};

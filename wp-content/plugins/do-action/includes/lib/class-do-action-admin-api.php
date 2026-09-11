@@ -159,8 +159,8 @@ class do_action_Admin_API {
 					$image_thumb = wp_get_attachment_thumb_url( $data );
 				}
 				$html .= '<img id="' . esc_attr( $option_name ) . '_preview" class="image_preview" src="' . esc_url( $image_thumb ) . '" /><br/>' . "\n";
-				$html .= '<input id="' . esc_attr( $option_name ) . '_button" type="button" data-uploader_title="' . __( 'Upload an image' , 'do-action' ) . '" data-uploader_button_text="' . __( 'Use image' , 'do-action' ) . '" class="image_upload_button button" value="'. __( 'Upload new image' , 'do-action' ) . '" />' . "\n";
-				$html .= '<input id="' . esc_attr( $option_name ) . '_delete" type="button" class="image_delete_button button" value="'. __( 'Remove image' , 'do-action' ) . '" />' . "\n";
+				$html .= '<input id="' . esc_attr( $option_name ) . '_button" type="button" data-uploader_title="' . esc_attr__( 'Upload an image', 'do-action' ) . '" data-uploader_button_text="' . esc_attr__( 'Use image', 'do-action' ) . '" class="image_upload_button button" value="' . esc_attr__( 'Upload new image', 'do-action' ) . '" />' . "\n";
+				$html .= '<input id="' . esc_attr( $option_name ) . '_delete" type="button" class="image_delete_button button" value="' . esc_attr__( 'Remove image', 'do-action' ) . '" />' . "\n";
 				$html .= '<input id="' . esc_attr( $option_name ) . '" class="image_data_field" type="hidden" name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $data ) . '"/><br/>' . "\n";
 			break;
 
@@ -217,6 +217,7 @@ class do_action_Admin_API {
 			return $html;
 		}
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Field values and attributes are escaped above; form controls must remain intact.
 		echo $html;
 
 	}
@@ -229,11 +230,19 @@ class do_action_Admin_API {
 	 */
 	public function validate_field ( $data = '', $type = 'text' ) {
 
-		switch( $type ) {
-			case 'text': $data = esc_attr( $data ); break;
-			case 'textarea': $data = sanitize_textarea_field( $data ); break;
-			case 'url': $data = esc_url( $data ); break;
-			case 'email': $data = is_email( $data ); break;
+		switch ( $type ) {
+			case 'text':
+				$data = sanitize_text_field( $data );
+				break;
+			case 'textarea':
+				$data = sanitize_textarea_field( $data );
+				break;
+			case 'url':
+				$data = esc_url_raw( $data );
+				break;
+			case 'email':
+				$data = is_email( $data );
+				break;
 		}
 
 		return $data;
@@ -313,6 +322,7 @@ class do_action_Admin_API {
 			$field = '<p class="form-field"><label for="' . esc_attr( $field['id'] ) . '">' . esc_html( $field['label'] ) . '</label>' . $this->display_field( $field, $post, false ) . '</p>' . "\n";
 		}
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- display_field() escapes its values; the surrounding label is escaped above.
 		echo $field;
 	}
 
@@ -330,7 +340,7 @@ class do_action_Admin_API {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 		if ( wp_is_post_revision( $post_id ) ) return;
 
-		if ( ! isset( $_POST['do_action_meta_nonce'] ) || ! wp_verify_nonce( $_POST['do_action_meta_nonce'], 'do_action_save_meta_' . $post_id ) ) {
+		if ( ! isset( $_POST['do_action_meta_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['do_action_meta_nonce'] ) ), 'do_action_save_meta_' . $post_id ) ) {
 			return;
 		}
 
@@ -347,8 +357,36 @@ class do_action_Admin_API {
 
 		foreach ( $fields as $field ) {
 			if ( isset( $_REQUEST[ $field['id'] ] ) ) {
-				update_post_meta( $post_id, $field['id'], $this->validate_field( $_REQUEST[ $field['id'] ], $field['type'] ) );
+				if ( 'event' === $post_type && 'nonprofits' === $field['id'] ) {
+					$orgs = map_deep( wp_unslash( $_REQUEST[ $field['id'] ] ), 'sanitize_text_field' );
+					if ( ! is_array( $orgs ) ) {
+						continue;
+					}
+					foreach ( $orgs as $org_id ) {
+						if ( ! do_action_functions()->is_event_nonprofit_allowed( $post_id, $org_id )
+							|| ! current_user_can( 'edit_post', (int) $org_id )
+							|| ! isset( $field['options'][ (int) $org_id ] ) ) {
+							continue 2;
+						}
+					}
+					$orgs = array_values( array_unique( array_map( 'intval', $orgs ) ) );
+					// Preserve explicit approval when an administrator associates another organiser's nonprofit.
+					update_post_meta( $post_id, '_do_action_approved_nonprofits', $orgs );
+					update_post_meta( $post_id, $field['id'], $orgs );
+					continue;
+				}
+				if ( 'url' === $field['type'] ) {
+					$value = is_string( $_REQUEST[ $field['id'] ] ) ? esc_url_raw( wp_unslash( $_REQUEST[ $field['id'] ] ) ) : '';
+				} elseif ( 'email' === $field['type'] ) {
+					$value = is_string( $_REQUEST[ $field['id'] ] ) ? sanitize_email( wp_unslash( $_REQUEST[ $field['id'] ] ) ) : '';
+				} else {
+					$value = map_deep( wp_unslash( $_REQUEST[ $field['id'] ] ), 'sanitize_textarea_field' );
+				}
+				update_post_meta( $post_id, $field['id'], wp_slash( $this->validate_field( $value, $field['type'] ) ) );
 			} else {
+				if ( 'event' === $post_type && 'nonprofits' === $field['id'] ) {
+					delete_post_meta( $post_id, '_do_action_approved_nonprofits' );
+				}
 				update_post_meta( $post_id, $field['id'], '' );
 			}
 		}

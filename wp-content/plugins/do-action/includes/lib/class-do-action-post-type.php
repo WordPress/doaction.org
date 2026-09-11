@@ -74,14 +74,23 @@ class do_action_Post_Type {
 			'singular_name' => $this->single,
 			'name_admin_bar' => $this->single,
 			'add_new' => __( 'Add New', 'do-action' ),
+			/* translators: %s: Singular post type label. */
 			'add_new_item' => sprintf( __( 'Add New %s' , 'do-action' ), $this->single ),
+			/* translators: %s: Singular post type label. */
 			'edit_item' => sprintf( __( 'Edit %s' , 'do-action' ), $this->single ),
+			/* translators: %s: Singular post type label. */
 			'new_item' => sprintf( __( 'New %s' , 'do-action' ), $this->single ),
+			/* translators: %s: Plural post type label. */
 			'all_items' => sprintf( __( 'All %s' , 'do-action' ), $this->plural ),
+			/* translators: %s: Singular post type label. */
 			'view_item' => sprintf( __( 'View %s' , 'do-action' ), $this->single ),
+			/* translators: %s: Plural post type label. */
 			'search_items' => sprintf( __( 'Search %s' , 'do-action' ), $this->plural ),
+			/* translators: %s: Plural post type label. */
 			'not_found' =>  sprintf( __( 'No %s Found' , 'do-action' ), $this->plural ),
+			/* translators: %s: Plural post type label. */
 			'not_found_in_trash' => sprintf( __( 'No %s Found In Trash' , 'do-action' ), $this->plural ),
+			/* translators: %s: Singular post type label. */
 			'parent_item_colon' => sprintf( __( 'Parent %s' ), $this->single ),
 			'menu_name' => $this->plural,
 		);
@@ -121,24 +130,35 @@ class do_action_Post_Type {
 	 * @param  array $messages Default message
 	 * @return array           Modified messages
 	 */
-	public function updated_messages ( $messages = array() ) {
-	  global $post, $post_ID;
+	public function updated_messages( $messages = array() ) {
+		global $post, $post_ID;
 
-	  $messages[ $this->post_type ] = array(
-	    0 => '',
-	    1 => sprintf( __( '%1$s updated. %2$sView %3$s%4$s.' , 'do-action' ), $this->single, '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">', $this->single, '</a>' ),
-	    2 => __( 'Custom field updated.' , 'do-action' ),
-	    3 => __( 'Custom field deleted.' , 'do-action' ),
-	    4 => sprintf( __( '%1$s updated.' , 'do-action' ), $this->single ),
-	    5 => isset( $_GET['revision'] ) ? sprintf( __( '%1$s restored to revision from %2$s.' , 'do-action' ), $this->single, wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-	    6 => sprintf( __( '%1$s published. %2$sView %3$s%4s.' , 'do-action' ), $this->single, '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">', $this->single, '</a>' ),
-	    7 => sprintf( __( '%1$s saved.' , 'do-action' ), $this->single ),
-	    8 => sprintf( __( '%1$s submitted. %2$sPreview post%3$s%4$s.' , 'do-action' ), $this->single, '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">', $this->single, '</a>' ),
-	    9 => sprintf( __( '%1$s scheduled for: %2$s. %3$sPreview %4$s%5$s.' , 'do-action' ), $this->single, '<strong>' . date_i18n( __( 'M j, Y @ G:i' , 'do-action' ), strtotime( $post->post_date ) ) . '</strong>', '<a target="_blank" href="' . esc_url( get_permalink( $post_ID ) ) . '">', $this->single, '</a>' ),
-	    10 => sprintf( __( '%1$s draft updated. %2$sPreview %3$s%4$s.' , 'do-action' ), $this->single, '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">', $this->single, '</a>' ),
-	  );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only display the revision referenced by the redirect.
+		$revision = isset( $_GET['revision'] ) ? absint( $_GET['revision'] ) : 0;
 
-	  return $messages;
+		$messages[ $this->post_type ] = array(
+			0  => '',
+			/* translators: 1: Singular post type label, 2: Opening post link tag, 3: Singular post type label, 4: Closing link tag. */
+			1  => sprintf( __( '%1$s updated. %2$sView %3$s%4$s.', 'do-action' ), $this->single, '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">', $this->single, '</a>' ),
+			2  => __( 'Custom field updated.', 'do-action' ),
+			3  => __( 'Custom field deleted.', 'do-action' ),
+			/* translators: %s: Singular post type label. */
+			4  => sprintf( __( '%1$s updated.', 'do-action' ), $this->single ),
+			/* translators: 1: Singular post type label, 2: Revision title and date. */
+			5  => $revision ? sprintf( __( '%1$s restored to revision from %2$s.', 'do-action' ), $this->single, wp_post_revision_title( $revision, false ) ) : false,
+			/* translators: 1: Singular post type label, 2: Opening post link tag, 3: Singular post type label, 4: Closing link tag. */
+			6  => sprintf( __( '%1$s published. %2$sView %3$s%4$s.', 'do-action' ), $this->single, '<a href="' . esc_url( get_permalink( $post_ID ) ) . '">', $this->single, '</a>' ),
+			/* translators: %s: Singular post type label. */
+			7  => sprintf( __( '%1$s saved.', 'do-action' ), $this->single ),
+			/* translators: 1: Singular post type label, 2: Opening post link tag, 3: Singular post type label, 4: Closing link tag. */
+			8  => sprintf( __( '%1$s submitted. %2$sPreview post%3$s%4$s.', 'do-action' ), $this->single, '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">', $this->single, '</a>' ),
+			/* translators: 1: Singular post type label, 2: Formatted date in bold markup, 3: Opening preview link tag, 4: Singular post type label, 5: Closing link tag. */
+			9  => sprintf( __( '%1$s scheduled for: %2$s. %3$sPreview %4$s%5$s.', 'do-action' ), $this->single, '<strong>' . date_i18n( __( 'M j, Y @ G:i', 'do-action' ), strtotime( $post->post_date ) ) . '</strong>', '<a target="_blank" href="' . esc_url( get_permalink( $post_ID ) ) . '">', $this->single, '</a>' ),
+			/* translators: 1: Singular post type label, 2: Opening post link tag, 3: Singular post type label, 4: Closing link tag. */
+			10 => sprintf( __( '%1$s draft updated. %2$sPreview %3$s%4$s.', 'do-action' ), $this->single, '<a target="_blank" href="' . esc_url( add_query_arg( 'preview', 'true', get_permalink( $post_ID ) ) ) . '">', $this->single, '</a>' ),
+		);
+
+		return $messages;
 	}
 
 	/**
@@ -150,10 +170,15 @@ class do_action_Post_Type {
 	public function bulk_updated_messages ( $bulk_messages = array(), $bulk_counts = array() ) {
 
 		$bulk_messages[ $this->post_type ] = array(
+			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
 	        'updated'   => sprintf( _n( '%1$s %2$s updated.', '%1$s %3$s updated.', $bulk_counts['updated'], 'do-action' ), $bulk_counts['updated'], $this->single, $this->plural ),
+			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
 	        'locked'    => sprintf( _n( '%1$s %2$s not updated, somebody is editing it.', '%1$s %3$s not updated, somebody is editing them.', $bulk_counts['locked'], 'do-action' ), $bulk_counts['locked'], $this->single, $this->plural ),
+			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
 	        'deleted'   => sprintf( _n( '%1$s %2$s permanently deleted.', '%1$s %3$s permanently deleted.', $bulk_counts['deleted'], 'do-action' ), $bulk_counts['deleted'], $this->single, $this->plural ),
+			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
 	        'trashed'   => sprintf( _n( '%1$s %2$s moved to the Trash.', '%1$s %3$s moved to the Trash.', $bulk_counts['trashed'], 'do-action' ), $bulk_counts['trashed'], $this->single, $this->plural ),
+			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
 	        'untrashed' => sprintf( _n( '%1$s %2$s restored from the Trash.', '%1$s %3$s restored from the Trash.', $bulk_counts['untrashed'], 'do-action' ), $bulk_counts['untrashed'], $this->single, $this->plural ),
 	    );
 

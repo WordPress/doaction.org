@@ -14,15 +14,16 @@ get_header(); ?>
 
 			do_action( 'storefront_single_post_before' );
 
-			if( isset( $_GET['signup'] ) ) {
-
-				$signed_up = esc_html( $_GET['signup'] );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Display a redirect notice without changing state.
+			$signed_up = isset( $_GET['signup'] ) ? sanitize_key( wp_unslash( $_GET['signup'] ) ) : '';
+			if ( $signed_up ) {
 
 				if( 'success' == $signed_up ) {
 					?>
 					<div class="form-success-box">
 						<?php
-						printf( __( 'Thank you for signing up! You will receive an email shortly confirming your participation in this event and the organisers will be in touch with you closer to the time with further details. %sPlease check your spam folder if you do not see the email in your inbox.%s', 'do-action' ), '<u><em>', '</em></u>' );
+						/* translators: 1: Opening emphasis tags, 2: Closing emphasis tags. */
+						printf( esc_html__( 'Thank you for signing up! You will receive an email shortly confirming your participation in this event and the organisers will be in touch with you closer to the time with further details. %1$sPlease check your spam folder if you do not see the email in your inbox.%2$s', 'do-action' ), '<u><em>', '</em></u>' );
 						?>
 					</div>
 					<?php
@@ -30,7 +31,7 @@ get_header(); ?>
 					?>
 					<div class="form-error-box">
 						<?php
-						_e( 'There was an error with your submission - please try again.', 'do-action' );
+						esc_html_e( 'There was an error with your submission - please try again.', 'do-action' );
 						?>
 					</div>
 					<?php
@@ -38,15 +39,15 @@ get_header(); ?>
 
 			}
 
-			if( isset( $_GET['application'] ) ) {
-
-				$applied = esc_html( $_GET['application'] );
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Display a redirect notice without changing state.
+			$applied = isset( $_GET['application'] ) ? sanitize_key( wp_unslash( $_GET['application'] ) ) : '';
+			if ( $applied ) {
 
 				if( 'success' == $applied ) {
 					?>
 					<div class="form-success-box">
 						<?php
-						_e( 'Thank you for applying! You will receive an email shortly confirming your application for this event and the organisers will be in touch with you closer to the time with further details.', 'do-action' );
+						esc_html_e( 'Thank you for applying! You will receive an email shortly confirming your application for this event and the organisers will be in touch with you closer to the time with further details.', 'do-action' );
 						?>
 					</div>
 					<?php
@@ -54,7 +55,7 @@ get_header(); ?>
 					?>
 					<div class="form-error-box">
 						<?php
-						_e( 'There was an error with your submission - please try again.', 'do-action' );
+						esc_html_e( 'There was an error with your submission - please try again.', 'do-action' );
 						?>
 					</div>
 					<?php

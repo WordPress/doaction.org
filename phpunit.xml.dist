@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<phpunit bootstrap="tests/bootstrap.php" colors="true" cacheResult="false">
+	<testsuites>
+		<testsuite name="do_action">
+			<directory suffix=".php">tests</directory>
+			<exclude>tests/bootstrap.php</exclude>
+		</testsuite>
+	</testsuites>
+</phpunit>

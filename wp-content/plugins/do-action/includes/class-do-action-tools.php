@@ -33,78 +33,70 @@ class do_action_tools {
 	public function tools_page() {
 
 	    // Build page HTML
-		$html = '<div class="wrap" id="' . $this->parent->_token . '_tools">' . "\n";
-			$html .= '<h2>' . __( 'do_action Tools', 'do-action' ) . '</h2>' . "\n";
-
-			$tab = 'email';
-			if ( isset( $_GET['tab'] ) && $_GET['tab'] ) {
-				$tab = $_GET['tab'];
-			}
+		$html      = '<div class="wrap" id="' . esc_attr( $this->parent->_token ) . '_tools">' . "\n";
+			$html .= '<h2>' . esc_html__( 'do_action Tools', 'do-action' ) . '</h2>' . "\n";
 
 			$tabs = array(
-				'email' => __( 'Email', 'do-action' ),
+				'email'  => __( 'Email', 'do-action' ),
 				'export' => __( 'Export', 'do-action' ),
 			);
 
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation does not change state.
+			$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+			if ( ! isset( $tabs[ $tab ] ) ) {
+				$tab = 'email';
+			}
+
 			$html .= '<h2 class="nav-tab-wrapper">' . "\n";
 
-			$c = 0;
 			foreach ( $tabs as $id => $label ) {
 
 				// Set tab class
 				$class = 'nav-tab';
-				if ( ! isset( $_GET['tab'] ) ) {
-					if ( 0 == $c ) {
-						$class .= ' nav-tab-active';
-					}
-				} else {
-					if ( isset( $_GET['tab'] ) && $id == $_GET['tab'] ) {
-						$class .= ' nav-tab-active';
-					}
+				if ( $id === $tab ) {
+					$class .= ' nav-tab-active';
 				}
 
 				// Set tab link
 				$tab_link = add_query_arg( array( 'tab' => $id ) );
-				if ( isset( $_GET['settings-updated'] ) ) {
-					$tab_link = remove_query_arg( 'settings-updated', $tab_link );
-				}
-
-				if ( isset( $_GET['mail_sent'] ) ) {
-					$tab_link = remove_query_arg( 'mail_sent', $tab_link );
-				}
+				$tab_link = remove_query_arg( array( 'settings-updated', 'mail_sent' ), $tab_link );
 
 				// Output tab
 				$html .= '<a href="' . esc_url( $tab_link ) . '" class="' . esc_attr( $class ) . '">' . esc_html( $label ) . '</a>' . "\n";
 
-				++$c;
 			}
 
 			$html .= '</h2>' . "\n";
 
 			$message_class = $message_note = '';
 
-			if( isset( $_GET['mail_sent'] ) ) {
-				switch( esc_html( $_GET['mail_sent'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only display the result of a prior request.
+			$mail_sent = isset( $_GET['mail_sent'] ) ? sanitize_key( wp_unslash( $_GET['mail_sent'] ) ) : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only display the result of a prior request.
+			$export = isset( $_GET['export'] ) ? sanitize_key( wp_unslash( $_GET['export'] ) ) : '';
+			if ( $mail_sent ) {
+				switch ( $mail_sent ) {
 					case 'success':
 						$message_class = 'updated';
-						$message_note = __( 'Email sent successfully.', 'do-action' );
+						$message_note  = __( 'Email sent successfully.', 'do-action' );
 					break;
 					case 'error':
 						$message_class = 'error';
-						$message_note = __( 'There was an error sending your email - please try again.', 'do-action' );
+						$message_note  = __( 'There was an error sending your email - please try again.', 'do-action' );
 					break;
 				}
-			} elseif( isset( $_GET['export'] ) && 'failed' == $_GET['export'] ) {
+			} elseif ( 'failed' === $export ) {
 				$message_class = 'error';
-				$message_note = __( 'There was an error exporting the data - please try again.', 'do-action' );
+				$message_note  = __( 'There was an error exporting the data - please try again.', 'do-action' );
 			}
 
 			if( $message_class && $message_note ) {
 				$html .= '<div class="' . esc_attr( $message_class ) . ' notice is-dismissible">' . "\n";
-					$html .= '<p>' . $message_note . '</p>' . "\n";
+					$html .= '<p>' . esc_html( $message_note ) . '</p>' . "\n";
 				$html .= '</div>' . "\n";
 			}
 
+			$html .= wp_nonce_field( 'do_action_tools_ajax', 'do_action_tools_nonce', false, false );
 			$html .= '<form method="post" id="poststuff" action="" enctype="multipart/form-data" name="do-action-tools">' . "\n";
 
 			if( 'email' == $tab ) {
@@ -125,10 +117,10 @@ class do_action_tools {
 				$events = get_posts( $event_args );
 
 				// Select recipient event
-				$html .= '<p>' . "\n";
-					$html .= '<label for="recipient_event">' . __( 'Event:', 'do-action' ) . '</label>' . "\n";
-					$html .= '<select id="recipient_event" name="recipient_event">' . "\n";
-						$html .= '<option value="0">' . __( '-- Select event --', 'do-action' ) . '</option>' . "\n";
+				$html         .= '<p>' . "\n";
+					$html     .= '<label for="recipient_event">' . esc_html__( 'Event:', 'do-action' ) . '</label>' . "\n";
+					$html     .= '<select id="recipient_event" name="recipient_event">' . "\n";
+						$html .= '<option value="0">' . esc_html__( '-- Select event --', 'do-action' ) . '</option>' . "\n";
 						foreach( $events as $event_id ) {
 							$html .= '<option value="' . intval( $event_id ) . '">' . esc_html( get_the_title( $event_id ) ) . '</option>' . "\n";
 						}
@@ -136,10 +128,10 @@ class do_action_tools {
 				$html .= '</p>' . "\n";
 
 				// Select recipient organisation
-				$html .= '<p id="recipient-org-wrapper">' . "\n";
-					$html .= '<label for="recipient_org">' . __( 'Organisation(s):', 'do-action' ) . '</label>' . "\n";
-					$html .= '<p>' . "\n";
-						$html .= '<em>' . __( 'If you don\'t select any organisations, then the email will be sent to the applicable recipients from all of them.', 'do-action' ) . '</em>' . "\n";
+				$html         .= '<p id="recipient-org-wrapper">' . "\n";
+					$html     .= '<label for="recipient_org">' . esc_html__( 'Organisation(s):', 'do-action' ) . '</label>' . "\n";
+					$html     .= '<p>' . "\n";
+						$html .= '<em>' . esc_html__( 'If you don’t select any organisations, then the email will be sent to the applicable recipients from all of them.', 'do-action' ) . '</em>' . "\n";
 					$html .= '</p>' . "\n";
 					$html .= '<span id="recipient-org-select-wrapper">' . "\n";
 						$html .= '<select id="recipient_orgs" name="recipient_orgs[]" multiple="multiple" disabled="disabled">' ."\n";
@@ -148,11 +140,11 @@ class do_action_tools {
 				$html .= '</p>' . "\n";
 
 				// Select recipient roles
-				$html .= '<p>' . "\n";
-					$html .= '<label for="recipient_roles">' . __( 'Recipient roles:', 'do-action' ) . '</label>' . "\n";
-					$html .= '<ul>' . "\n";
-						$html .= '<li><label for="recipient-organiser"><input type="checkbox" name="recipient_roles[]" id="recipient-organiser" value="organiser" checked="checked" />' . __( 'Event organiser', 'do-action' ) . '</label></li>' . "\n";
-						$html .= '<li><label for="recipient-npo"><input type="checkbox" name="recipient_roles[]" id="recipient-npo" value="npo" checked="checked" />' . __( 'Non-profit organisation', 'do-action' ) . '</label></li>' . "\n";
+				$html         .= '<p>' . "\n";
+					$html     .= '<label for="recipient_roles">' . esc_html__( 'Recipient roles:', 'do-action' ) . '</label>' . "\n";
+					$html     .= '<ul>' . "\n";
+						$html .= '<li><label for="recipient-organiser"><input type="checkbox" name="recipient_roles[]" id="recipient-organiser" value="organiser" checked="checked" />' . esc_html__( 'Event organiser', 'do-action' ) . '</label></li>' . "\n";
+						$html .= '<li><label for="recipient-npo"><input type="checkbox" name="recipient_roles[]" id="recipient-npo" value="npo" checked="checked" />' . esc_html__( 'Non-profit organisation', 'do-action' ) . '</label></li>' . "\n";
 
 						$all_roles = get_terms( array( 'taxonomy' => 'role', 'hide_empty' => false ) );
 						$dev_done = false;
@@ -176,18 +168,19 @@ class do_action_tools {
 				$html .= '<hr/>' . "\n";
 
 				$html .= '<p>' . "\n";
-					$html .= '<em>' . sprintf( __( 'The following placeholders are available for the email subject and body: %1$s, %2$s, %3$s and %4$s', 'do-action' ), '<code>{{NAME}}</code>', '<code>{{EMAILADDRESS}}</code>', '<code>{{NONPROFIT}}</code>', '<code>{{ROLE}}</code>' ) . '</em>' . "\n";
+					/* translators: 1-4: Supported email placeholder names. */
+					$html .= '<em>' . sprintf( esc_html__( 'The following placeholders are available for the email subject and body: %1$s, %2$s, %3$s and %4$s', 'do-action' ), '<code>{{NAME}}</code>', '<code>{{EMAILADDRESS}}</code>', '<code>{{NONPROFIT}}</code>', '<code>{{ROLE}}</code>' ) . '</em>' . "\n";
 				$html .= '</p>' . "\n";
 
 				// Set email subject
 				$html .= '<p>' . "\n";
-					$html .= '<label for="email_subject">' . __( 'Email subject:', 'do-action' ) . '</label>' . "\n";
+					$html .= '<label for="email_subject">' . esc_html__( 'Email subject:', 'do-action' ) . '</label>' . "\n";
 					$html .= '<input type="text" class="large-text" id="email_subject" name="email_subject" />' . "\n";
 				$html .= '</p>' . "\n";
 
 				// Set email body
 				$html .= '<p>' . "\n";
-					$html .= '<label for="email_body">' . __( 'Email body:', 'do-action' ) . '</label>' . "\n";
+					$html .= '<label for="email_body">' . esc_html__( 'Email body:', 'do-action' ) . '</label>' . "\n";
 					ob_start();
 					wp_editor( '', 'email_body' );
 					$html .= ob_get_clean();
@@ -198,18 +191,18 @@ class do_action_tools {
 				// Send email
 				$html .= '<p class="submit">' . "\n";
 					$html .= '<input type="hidden" name="tab" value="' . esc_attr( $tab ) . '" />' . "\n";
-					$html .= '<input type="button" id="do-action-preview-email" class="button-secondary" value="' . __( 'Preview', 'do-action' ) . '" />' . "\n";
-					$html .= '<input name="Submit" type="submit" class="button-primary" value="' . __( 'Send', 'do-action' ) . '" />' . "\n";
+					$html .= '<input type="button" id="do-action-preview-email" class="button-secondary" value="' . esc_attr__( 'Preview', 'do-action' ) . '" />' . "\n";
+					$html .= '<input name="Submit" type="submit" class="button-primary" value="' . esc_attr__( 'Send', 'do-action' ) . '" />' . "\n";
 				$html .= '</p>' . "\n";
 
-				$html .= '<div id="do-action-email-preview-wrapper">' . "\n";
-					$html .= '<p>' . "\n";
-						$html .= '<em>' . __( 'Note that email previews use demo data taken from the entire database to replace the placeholders, so they may not reflect data from the selected event/roles.', 'do-action' ) . '</em>' . "\n";
-					$html .= '</p>' . "\n";
-					$html .= '<div id="do-action-email-preview" class="postbox-container">' . "\n";
-						$html .= '<div class="postbox">' . "\n";
-							$html .= '<h2 class="hndle"><span>' . __( 'Email preview', 'do-action' ) . '</span></h2>' . "\n";
-							$html .= '<div class="inside">' . "\n";
+				$html                 .= '<div id="do-action-email-preview-wrapper">' . "\n";
+					$html             .= '<p>' . "\n";
+						$html         .= '<em>' . esc_html__( 'Note that email previews use demo data taken from the entire database to replace the placeholders, so they may not reflect data from the selected event/roles.', 'do-action' ) . '</em>' . "\n";
+					$html             .= '</p>' . "\n";
+					$html             .= '<div id="do-action-email-preview" class="postbox-container">' . "\n";
+						$html         .= '<div class="postbox">' . "\n";
+							$html     .= '<h2 class="hndle"><span>' . esc_html__( 'Email preview', 'do-action' ) . '</span></h2>' . "\n";
+							$html     .= '<div class="inside">' . "\n";
 								$html .= '<div class="spinner-wrapper"><span class="spinner is-active"></span></div>' . "\n";
 							$html .= '</div>' . "\n";
 						$html .= '</div>' . "\n";
@@ -234,10 +227,10 @@ class do_action_tools {
 				$events = get_posts( $event_args );
 
 				// Select export event
-				$html .= '<p>' . "\n";
-					$html .= '<label for="recipient_event">' . __( 'Event:', 'do-action' ) . '</label>' . "\n";
-					$html .= '<select id="recipient_event" name="recipient_event">' . "\n";
-						$html .= '<option value="0">' . __( '-- Select event --', 'do-action' ) . '</option>' . "\n";
+				$html         .= '<p>' . "\n";
+					$html     .= '<label for="recipient_event">' . esc_html__( 'Event:', 'do-action' ) . '</label>' . "\n";
+					$html     .= '<select id="recipient_event" name="recipient_event">' . "\n";
+						$html .= '<option value="0">' . esc_html__( '-- Select event --', 'do-action' ) . '</option>' . "\n";
 						foreach( $events as $event_id ) {
 							$html .= '<option value="' . intval( $event_id ) . '">' . esc_html( get_the_title( $event_id ) ) . '</option>' . "\n";
 						}
@@ -245,10 +238,10 @@ class do_action_tools {
 				$html .= '</p>' . "\n";
 
 				// Select export organisation(s)
-				$html .= '<p id="recipient-org-wrapper">' . "\n";
-					$html .= '<label for="recipient_org">' . __( 'Organisation(s):', 'do-action' ) . '</label>' . "\n";
-					$html .= '<p>' . "\n";
-						$html .= '<em>' . __( 'If you don\'t select any organisations, then export data will include people from all of them.', 'do-action' ) . '</em>' . "\n";
+				$html         .= '<p id="recipient-org-wrapper">' . "\n";
+					$html     .= '<label for="recipient_org">' . esc_html__( 'Organisation(s):', 'do-action' ) . '</label>' . "\n";
+					$html     .= '<p>' . "\n";
+						$html .= '<em>' . esc_html__( 'If you don’t select any organisations, then export data will include people from all of them.', 'do-action' ) . '</em>' . "\n";
 					$html .= '</p>' . "\n";
 					$html .= '<span id="recipient-org-select-wrapper">' . "\n";
 						$html .= '<select id="recipient_orgs" name="recipient_orgs[]" multiple="multiple" disabled="disabled">' ."\n";
@@ -257,11 +250,11 @@ class do_action_tools {
 				$html .= '</p>' . "\n";
 
 				// Select export role(s)
-				$html .= '<p>' . "\n";
-					$html .= '<label for="recipient_roles">' . __( 'Recipient roles:', 'do-action' ) . '</label>' . "\n";
-					$html .= '<ul>' . "\n";
-						$html .= '<li><label for="recipient-organiser"><input type="checkbox" name="recipient_roles[]" id="recipient-organiser" value="organiser" checked="checked" />' . __( 'Event organiser', 'do-action' ) . '</label></li>' . "\n";
-						$html .= '<li><label for="recipient-npo"><input type="checkbox" name="recipient_roles[]" id="recipient-npo" value="npo" checked="checked" />' . __( 'Non-profit organisation', 'do-action' ) . '</label></li>' . "\n";
+				$html         .= '<p>' . "\n";
+					$html     .= '<label for="recipient_roles">' . esc_html__( 'Recipient roles:', 'do-action' ) . '</label>' . "\n";
+					$html     .= '<ul>' . "\n";
+						$html .= '<li><label for="recipient-organiser"><input type="checkbox" name="recipient_roles[]" id="recipient-organiser" value="organiser" checked="checked" />' . esc_html__( 'Event organiser', 'do-action' ) . '</label></li>' . "\n";
+						$html .= '<li><label for="recipient-npo"><input type="checkbox" name="recipient_roles[]" id="recipient-npo" value="npo" checked="checked" />' . esc_html__( 'Non-profit organisation', 'do-action' ) . '</label></li>' . "\n";
 
 						$all_roles = get_terms( array( 'taxonomy' => 'role', 'hide_empty' => false ) );
 						$dev_done = false;
@@ -287,7 +280,7 @@ class do_action_tools {
 					$html .= '<input type="hidden" name="tab" value="' . esc_attr( $tab ) . '" />' . "\n";
 					$html .= wp_nonce_field( 'do_action_export_csv', '_wpnonce', true, false ) . "\n";
 					$html .= '<input type="hidden" name="export_do_action_data" value="export" />' . "\n";
-					$html .= '<input name="Submit" type="submit" class="button-primary" value="' . __( 'Download CSV', 'do-action' ) . '" />' . "\n";
+					$html .= '<input name="Submit" type="submit" class="button-primary" value="' . esc_attr__( 'Download CSV', 'do-action' ) . '" />' . "\n";
 				$html .= '</p>' . "\n";
 
 			}
@@ -296,10 +289,13 @@ class do_action_tools {
 
 		$html .= '</div>' . "\n";
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Dynamic fragments are escaped above; retain core wp_editor() markup and form controls.
 		echo $html;
 	}
 
 	public function format_email_preview() {
+
+		check_ajax_referer( 'do_action_tools_ajax', 'nonce' );
 
 		// Only users who can use the tools may generate an email preview (which reads
 		// recipient PII out of the database).
@@ -307,7 +303,7 @@ class do_action_tools {
 			wp_send_json_error( '', 403 );
 		}
 
-		$event_id = intval( $_POST['event_id'] );
+		$event_id = ( isset( $_POST['event_id'] ) ? absint( $_POST['event_id'] ) : 0 );
 
 		// The tools capability alone does not scope an organiser to their own events, so
 		// confirm the current user may edit this specific event before reading its PII.
@@ -336,8 +332,8 @@ class do_action_tools {
 
 		$recipient = $recipients[ array_rand( $recipients, 1 ) ];
 
-		$subject = $this->format_email( $_POST['email_subject'], $recipient, 'subject' );
-		$message = $this->format_email( $_POST['email_body'], $recipient, 'body' );
+		$subject = $this->format_email( isset( $_POST['email_subject'] ) ? sanitize_text_field( wp_unslash( $_POST['email_subject'] ) ) : '', $recipient, 'subject' );
+		$message = $this->format_email( isset( $_POST['email_body'] ) ? wp_kses_post( wp_unslash( $_POST['email_body'] ) ) : '', $recipient, 'body' );
 
 		$response = array(
 			'email_subject' => $subject,
@@ -349,12 +345,14 @@ class do_action_tools {
 
 	public function fetch_event_orgs () {
 
+		check_ajax_referer( 'do_action_tools_ajax', 'nonce' );
+
 		// Only users who can use the tools may list an event's organisations.
 		if( ! current_user_can( 'use_do_action_tools' ) ) {
 			wp_send_json_error( '', 403 );
 		}
 
-		$event_id = intval( $_POST['event_id'] );
+		$event_id = ( isset( $_POST['event_id'] ) ? absint( $_POST['event_id'] ) : 0 );
 
 		// Confirm the current user may edit this specific event before listing its orgs.
 		if( $event_id && ! current_user_can( 'edit_post', $event_id ) ) {
@@ -370,7 +368,7 @@ class do_action_tools {
 			wp_send_json( $response );
 		}
 
-		$orgs = get_post_meta( $event_id, 'nonprofits', true );
+		$orgs = $this->parent->get_event_nonprofits( $event_id );
 
 		if( ! $orgs ) {
 			$response = array(
@@ -382,6 +380,9 @@ class do_action_tools {
 		$select = '<select id="recipient_orgs" name="recipient_orgs[]" multiple="multiple">' . "\n";
 
 		foreach( $orgs as $id ) {
+			if ( ! current_user_can( 'edit_post', $id ) ) {
+				continue;
+			}
 			$select .= '<option value="' . esc_attr( $id ) . '">' . esc_html( get_the_title( $id ) ) . '</option>' . "\n";
 		}
 
@@ -407,7 +408,7 @@ class do_action_tools {
 
 		check_admin_referer( 'do_action_send_email' );
 
-		$event_id = intval( $_POST['recipient_event'] );
+		$event_id = ( isset( $_POST['recipient_event'] ) ? absint( $_POST['recipient_event'] ) : 0 );
 
 		// The tools capability alone does not scope an organiser to their own events, so
 		// confirm the current user may edit this specific event before mailing its people.
@@ -424,17 +425,18 @@ class do_action_tools {
 
 				// Get selected organisations
 				$orgs = false;
-				if( ! empty( $_POST['recipient_orgs'] ) ) {
-					$orgs = array_map( 'intval', (array) $_POST['recipient_orgs'] );
+				if ( isset( $_POST['recipient_orgs'] ) ) {
+					$orgs = map_deep( wp_unslash( $_POST['recipient_orgs'] ), 'sanitize_text_field' );
 				}
 
 				// Sanitise selected roles
-				$roles = isset( $_POST['recipient_roles'] ) ? array_map( 'esc_html', (array) $_POST['recipient_roles'] ) : array();
+				$roles = isset( $_POST['recipient_roles'] ) ? map_deep( wp_unslash( (array) $_POST['recipient_roles'] ), 'sanitize_key' ) : array();
 
 				$recipients = $this->get_people_data( $event_id, $roles, $orgs );
 
 				if( 0 < count( $recipients ) ) {
 
+					/* translators: %s: Event name. */
 					$from = sprintf( __( 'do_action %s', 'do-action' ), get_the_title( $event_id ) ) . ' <' . $organiser_email . '>';
 
 					$headers = array();
@@ -448,8 +450,8 @@ class do_action_tools {
 						}
 
 						$to = $recipient['name'] . ' <' . $recipient['email'] . '>';
-						$subject = $this->format_email( $_POST['email_subject'], $recipient, 'subject' );
-						$message = $this->format_email( $_POST['email_body'], $recipient, 'body' );
+						$subject = $this->format_email( isset( $_POST['email_subject'] ) ? sanitize_text_field( wp_unslash( $_POST['email_subject'] ) ) : '', $recipient, 'subject' );
+						$message = $this->format_email( isset( $_POST['email_body'] ) ? wp_kses_post( wp_unslash( $_POST['email_body'] ) ) : '', $recipient, 'body' );
 
 						$sent = wp_mail( $to, $subject, $message, $headers );
 						if( $sent ) {
@@ -488,7 +490,7 @@ class do_action_tools {
 
 		check_admin_referer( 'do_action_export_csv' );
 
-		$event_id = intval( $_POST['recipient_event'] );
+		$event_id = ( isset( $_POST['recipient_event'] ) ? absint( $_POST['recipient_event'] ) : 0 );
 
 		// The tools capability alone does not scope an organiser to their own events, so
 		// confirm the current user may edit this specific event before exporting its PII.
@@ -500,12 +502,12 @@ class do_action_tools {
 
 			// Get and sanitise selected organisations
 			$orgs = false;
-			if( ! empty( $_POST['recipient_orgs'] ) ) {
-				$orgs = array_map( 'intval', (array) $_POST['recipient_orgs'] );
+			if ( isset( $_POST['recipient_orgs'] ) ) {
+				$orgs = map_deep( wp_unslash( $_POST['recipient_orgs'] ), 'sanitize_text_field' );
 			}
 
 			// Sanitise selected roles
-			$roles = isset( $_POST['recipient_roles'] ) ? array_map( 'esc_html', (array) $_POST['recipient_roles'] ) : array();
+			$roles = isset( $_POST['recipient_roles'] ) ? map_deep( wp_unslash( (array) $_POST['recipient_roles'] ), 'sanitize_key' ) : array();
 
 			$data = $this->get_people_data( $event_id, $roles, $orgs );
 
@@ -565,6 +567,32 @@ class do_action_tools {
 			return $recipients;
 		}
 
+		if ( 'event' !== get_post_type( $event_id ) || ! current_user_can( 'edit_post', $event_id ) ) {
+			return $recipients;
+		}
+
+		$allowed_orgs = array();
+		foreach ( $this->parent->get_event_nonprofits( $event_id ) as $org_id ) {
+			if ( current_user_can( 'edit_post', $org_id ) ) {
+				$allowed_orgs[] = $org_id;
+			}
+		}
+
+		if ( false === $orgs ) {
+			$orgs = $allowed_orgs;
+		} else {
+			if ( ! is_array( $orgs ) || ! $orgs ) {
+				return $recipients;
+			}
+			foreach ( $orgs as $org_id ) {
+				if ( ! is_scalar( $org_id ) || ! ctype_digit( (string) $org_id )
+					|| ! in_array( (int) $org_id, $allowed_orgs, true ) ) {
+					return $recipients;
+				}
+			}
+			$orgs = array_unique( array_map( 'intval', $orgs ) );
+		}
+
 		foreach( $roles as $role ) {
 			if( 'organiser' == $role ) {
 				$recipient_set = $this->get_organiser_email_recipient( $event_id );
@@ -598,7 +626,9 @@ class do_action_tools {
 			return $recipients;
 		}
 
+		/* translators: %s: Event name. */
 		$event_title = sprintf( __( 'do_action %1$s', 'do-action' ), get_the_title( $event_id ) );
+		/* translators: %s: Event title, including the do_action prefix. */
 		$organiser_name = sprintf( __( '%1$s Organiser', 'do-action' ), $event_title );
 
 		$recipients[] = array(
@@ -613,16 +643,19 @@ class do_action_tools {
 
 	}
 
-	private function get_nonprofit_email_recipient ( $event_id = 0, $orgs = false ) {
+	/**
+	 * Get contact records for authorized nonprofits.
+	 *
+	 * @param int   $event_id Event ID.
+	 * @param int[] $orgs     Authorized nonprofit IDs.
+	 * @return array Contact records.
+	 */
+	private function get_nonprofit_email_recipient( $event_id = 0, $orgs = array() ) {
 
 		$recipients = array();
 
 		if( ! $event_id ) {
 			return $recipients;
-		}
-
-		if( ! $orgs ) {
-			$orgs = get_post_meta( $event_id, 'nonprofits', true );
 		}
 
 		if( $orgs && 0 < count( $orgs ) ) {
@@ -648,16 +681,20 @@ class do_action_tools {
 
 	}
 
-	private function get_participant_email_recipients ( $event_id = 0, $role = '', $orgs = false ) {
+	/**
+	 * Get participant records for authorized nonprofits.
+	 *
+	 * @param int    $event_id Event ID.
+	 * @param string $role     Participant role slug.
+	 * @param int[]  $orgs     Authorized nonprofit IDs.
+	 * @return array Participant records.
+	 */
+	private function get_participant_email_recipients( $event_id = 0, $role = '', $orgs = array() ) {
 
 		$recipients = array();
 
 		if( ! $event_id || ! $role ) {
 			return $recipients;
-		}
-
-		if( ! $orgs ) {
-			$orgs = get_post_meta( $event_id, 'nonprofits', true );
 		}
 
 		if( $orgs && 0 < count( $orgs ) ) {
@@ -715,9 +752,9 @@ class do_action_tools {
 		$message = str_replace( array( '{{NAME}}', '{{NONPROFIT}}', '{{ROLE}}', '{{EMAILADDRESS}}' ), array( $name, $org, $role, $email ), $message );
 
 		if( 'subject' == $context ) {
-			$message = esc_html( stripslashes_deep( $message ) );
+			$message = esc_html( $message );
 		} else {
-			$message = stripslashes_deep( wp_kses_stripslashes( wpautop( $message ) ) );
+			$message = wp_kses_post( wpautop( $message ) );
 		}
 
 		return $message;
@@ -746,7 +783,7 @@ class do_action_tools {
 	 * @since 1.0.0
 	 */
 	public function __clone () {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->_version );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->_version ) );
 	} // End __clone ()
 
 	/**
@@ -755,6 +792,6 @@ class do_action_tools {
 	 * @since 1.0.0
 	 */
 	public function __wakeup () {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->_version );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->_version ) );
 	} // End __wakeup ()
 }

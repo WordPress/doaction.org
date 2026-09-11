@@ -72,19 +72,33 @@ class do_action_Taxonomy {
             'name' => $this->plural,
             'singular_name' => $this->single,
             'menu_name' => $this->plural,
+			/* translators: %s: Plural taxonomy label. */
             'all_items' => sprintf( __( 'All %s' , 'do-action' ), $this->plural ),
+			/* translators: %s: Singular taxonomy label. */
             'edit_item' => sprintf( __( 'Edit %s' , 'do-action' ), $this->single ),
+			/* translators: %s: Singular taxonomy label. */
             'view_item' => sprintf( __( 'View %s' , 'do-action' ), $this->single ),
+			/* translators: %s: Singular taxonomy label. */
             'update_item' => sprintf( __( 'Update %s' , 'do-action' ), $this->single ),
+			/* translators: %s: Singular taxonomy label. */
             'add_new_item' => sprintf( __( 'Add New %s' , 'do-action' ), $this->single ),
+			/* translators: %s: Singular taxonomy label. */
             'new_item_name' => sprintf( __( 'New %s Name' , 'do-action' ), $this->single ),
+			/* translators: %s: Singular taxonomy label. */
             'parent_item' => sprintf( __( 'Parent %s' , 'do-action' ), $this->single ),
+			/* translators: %s: Singular taxonomy label. */
             'parent_item_colon' => sprintf( __( 'Parent %s:' , 'do-action' ), $this->single ),
+			/* translators: %s: Plural taxonomy label. */
             'search_items' =>  sprintf( __( 'Search %s' , 'do-action' ), $this->plural ),
+			/* translators: %s: Plural taxonomy label. */
             'popular_items' =>  sprintf( __( 'Popular %s' , 'do-action' ), $this->plural ),
+			/* translators: %s: Plural taxonomy label. */
             'separate_items_with_commas' =>  sprintf( __( 'Separate %s with commas' , 'do-action' ), $this->plural ),
+			/* translators: %s: Plural taxonomy label. */
             'add_or_remove_items' =>  sprintf( __( 'Add or remove %s' , 'do-action' ), $this->plural ),
+			/* translators: %s: Plural taxonomy label. */
             'choose_from_most_used' =>  sprintf( __( 'Choose from the most used %s' , 'do-action' ), $this->plural ),
+			/* translators: %s: Plural taxonomy label. */
             'not_found' =>  sprintf( __( 'No %s found' , 'do-action' ), $this->plural ),
         );
 
