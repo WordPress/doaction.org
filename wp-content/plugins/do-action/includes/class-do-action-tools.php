@@ -36,13 +36,16 @@ class do_action_tools {
 		$html      = '<div class="wrap" id="' . esc_attr( $this->parent->_token ) . '_tools">' . "\n";
 			$html .= '<h2>' . esc_html__( 'do_action Tools', 'do-action' ) . '</h2>' . "\n";
 
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation does not change state.
-			$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'email';
-
 			$tabs = array(
 				'email'  => __( 'Email', 'do-action' ),
 				'export' => __( 'Export', 'do-action' ),
 			);
+
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation does not change state.
+			$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : '';
+			if ( ! isset( $tabs[ $tab ] ) ) {
+				$tab = 'email';
+			}
 
 			$html .= '<h2 class="nav-tab-wrapper">' . "\n";
 
