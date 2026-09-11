@@ -5,9 +5,9 @@
 
 ## Deployment
 
-Every change merged into `trunk` is automatically deployed to [doaction.org](https://doaction.org) on Pressable through Pressable's GitHub integration.
+Every change merged into `trunk` is automatically deployed to [doaction.org](https://doaction.org) through Pressable's GitHub integration.
 
-The site owner on Pressable is [support@wordcamp.org](mailto:support@wordcamp.org).
+The site owner is `support@wordcamp.org`.
 
 
 ## Support
