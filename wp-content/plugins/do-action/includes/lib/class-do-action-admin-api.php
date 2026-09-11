@@ -377,6 +377,8 @@ class do_action_Admin_API {
 				}
 				if ( 'url' === $field['type'] ) {
 					$value = is_string( $_REQUEST[ $field['id'] ] ) ? esc_url_raw( wp_unslash( $_REQUEST[ $field['id'] ] ) ) : '';
+				} elseif ( 'email' === $field['type'] ) {
+					$value = is_string( $_REQUEST[ $field['id'] ] ) ? sanitize_email( wp_unslash( $_REQUEST[ $field['id'] ] ) ) : '';
 				} else {
 					$value = map_deep( wp_unslash( $_REQUEST[ $field['id'] ] ), 'sanitize_textarea_field' );
 				}

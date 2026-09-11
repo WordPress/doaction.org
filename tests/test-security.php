@@ -393,6 +393,24 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Email fields preserve percent sequences in valid local parts.
+	 *
+	 * @return void
+	 */
+	public function test_metadata_preserves_email_local_parts(): void {
+		$email                         = 'team%abcd@example.org';
+		$_POST['do_action_meta_nonce'] = wp_create_nonce( 'do_action_save_meta_' . $this->ids['event'] );
+		$_REQUEST['organiser_email']   = wp_slash( $email );
+		$admin                         = new do_action_Admin_API();
+		try {
+			$admin->save_meta_boxes( $this->ids['event'] );
+			$this->assertSame( $email, get_post_meta( $this->ids['event'], 'organiser_email', true ) );
+		} finally {
+			remove_action( 'save_post', array( $admin, 'save_meta_boxes' ) );
+		}
+	}
+
+	/**
 	 * Admin field rendering keeps controls and escapes malicious attribute values.
 	 *
 	 * @return void
