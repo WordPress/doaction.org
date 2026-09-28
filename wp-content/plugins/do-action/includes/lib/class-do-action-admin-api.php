@@ -1,13 +1,15 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class do_action_Admin_API {
 
 	/**
 	 * Constructor function
 	 */
-	public function __construct () {
+	public function __construct() {
 		add_action( 'save_post', array( $this, 'save_meta_boxes' ), 10, 1 );
 	}
 
@@ -17,7 +19,7 @@ class do_action_Admin_API {
 	 * @param  boolean $echo  Whether to echo the field HTML or return it
 	 * @return void
 	 */
-	public function display_field ( $data = array(), $post = false, $echo = true ) {
+	public function display_field( $data = array(), $post = false, $echo = true ) {
 
 		// Get field info
 		if ( isset( $data['field'] ) ) {
@@ -38,24 +40,22 @@ class do_action_Admin_API {
 
 			// Get saved field data
 			$option_name .= $field['id'];
-			$option = get_post_meta( $post->ID, $field['id'], true );
+			$option       = get_post_meta( $post->ID, $field['id'], true );
 
 			// Get data to display in field
 			if ( isset( $option ) ) {
 				$data = $option;
 			}
-
 		} else {
 
 			// Get saved option
 			$option_name .= $field['id'];
-			$option = get_option( $option_name );
+			$option       = get_option( $option_name );
 
 			// Get data to display in field
 			if ( isset( $option ) ) {
 				$data = $option;
 			}
-
 		}
 
 		// Show default data if no option saved and default is supplied
@@ -67,13 +67,13 @@ class do_action_Admin_API {
 
 		$html = '';
 
-		switch( $field['type'] ) {
+		switch ( $field['type'] ) {
 
 			case 'text':
 			case 'url':
 			case 'email':
 				$html .= '<input id="' . esc_attr( $field['id'] ) . '" type="text" name="' . esc_attr( $option_name ) . '" placeholder="' . esc_attr( $field['placeholder'] ) . '" value="' . esc_attr( $data ) . '" />' . "\n";
-			break;
+				break;
 
 			case 'password':
 			case 'number':
@@ -88,15 +88,15 @@ class do_action_Admin_API {
 					$max = ' max="' . esc_attr( $field['max'] ) . '"';
 				}
 				$html .= '<input id="' . esc_attr( $field['id'] ) . '" type="' . esc_attr( $field['type'] ) . '" name="' . esc_attr( $option_name ) . '" placeholder="' . esc_attr( $field['placeholder'] ) . '" value="' . esc_attr( $data ) . '"' . $min . '' . $max . '/>' . "\n";
-			break;
+				break;
 
 			case 'text_secret':
 				$html .= '<input id="' . esc_attr( $field['id'] ) . '" type="text" name="' . esc_attr( $option_name ) . '" placeholder="' . esc_attr( $field['placeholder'] ) . '" value="" />' . "\n";
-			break;
+				break;
 
 			case 'textarea':
-				$html .= '<br/><textarea id="' . esc_attr( $field['id'] ) . '" rows="5" cols="50" name="' . esc_attr( $option_name ) . '" placeholder="' . esc_attr( $field['placeholder'] ) . '">' . esc_textarea( $data ) . '</textarea><br/>'. "\n";
-			break;
+				$html .= '<br/><textarea id="' . esc_attr( $field['id'] ) . '" rows="5" cols="50" name="' . esc_attr( $option_name ) . '" placeholder="' . esc_attr( $field['placeholder'] ) . '">' . esc_textarea( $data ) . '</textarea><br/>' . "\n";
+				break;
 
 			case 'checkbox':
 				$checked = '';
@@ -104,7 +104,7 @@ class do_action_Admin_API {
 					$checked = 'checked="checked"';
 				}
 				$html .= '<input id="' . esc_attr( $field['id'] ) . '" type="' . esc_attr( $field['type'] ) . '" name="' . esc_attr( $option_name ) . '" ' . $checked . '/>' . "\n";
-			break;
+				break;
 
 			case 'checkbox_multi':
 				foreach ( $field['options'] as $k => $v ) {
@@ -114,7 +114,7 @@ class do_action_Admin_API {
 					}
 					$html .= '<label for="' . esc_attr( $field['id'] . '_' . $k ) . '" class="checkbox_multi"><input type="checkbox" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $option_name ) . '[]" value="' . esc_attr( $k ) . '" id="' . esc_attr( $field['id'] . '_' . $k ) . '" /> ' . esc_html( $v ) . '</label> ';
 				}
-			break;
+				break;
 
 			case 'radio':
 				foreach ( $field['options'] as $k => $v ) {
@@ -124,7 +124,7 @@ class do_action_Admin_API {
 					}
 					$html .= '<label for="' . esc_attr( $field['id'] . '_' . $k ) . '"><input type="radio" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $k ) . '" id="' . esc_attr( $field['id'] . '_' . $k ) . '" /> ' . esc_html( $v ) . '</label> ';
 				}
-			break;
+				break;
 
 			case 'select':
 				$html .= '<select name="' . esc_attr( $option_name ) . '" id="' . esc_attr( $field['id'] ) . '">';
@@ -136,13 +136,13 @@ class do_action_Admin_API {
 					$html .= '<option ' . selected( $selected, true, false ) . ' value="' . esc_attr( $k ) . '">' . esc_html( $v ) . '</option>';
 				}
 				$html .= '</select> ';
-			break;
+				break;
 
 			case 'select_multi':
 				$html .= '<select name="' . esc_attr( $option_name ) . '[]" id="' . esc_attr( $field['id'] ) . '" multiple="multiple">';
 				foreach ( $field['options'] as $k => $v ) {
 					$selected = false;
-					if( ! is_array( $data ) ) {
+					if ( ! is_array( $data ) ) {
 						$data = array( $data );
 					}
 					if ( in_array( $k, $data ) ) {
@@ -151,7 +151,7 @@ class do_action_Admin_API {
 					$html .= '<option ' . selected( $selected, true, false ) . ' value="' . esc_attr( $k ) . '">' . esc_html( $v ) . '</option>';
 				}
 				$html .= '</select> ';
-			break;
+				break;
 
 			case 'image':
 				$image_thumb = '';
@@ -162,55 +162,55 @@ class do_action_Admin_API {
 				$html .= '<input id="' . esc_attr( $option_name ) . '_button" type="button" data-uploader_title="' . esc_attr__( 'Upload an image', 'do-action' ) . '" data-uploader_button_text="' . esc_attr__( 'Use image', 'do-action' ) . '" class="image_upload_button button" value="' . esc_attr__( 'Upload new image', 'do-action' ) . '" />' . "\n";
 				$html .= '<input id="' . esc_attr( $option_name ) . '_delete" type="button" class="image_delete_button button" value="' . esc_attr__( 'Remove image', 'do-action' ) . '" />' . "\n";
 				$html .= '<input id="' . esc_attr( $option_name ) . '" class="image_data_field" type="hidden" name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $data ) . '"/><br/>' . "\n";
-			break;
+				break;
 
 			case 'color':
 				?><div class="color-picker" style="position:relative;">
-			        <input type="text" name="<?php esc_attr_e( $option_name ); ?>" class="color" value="<?php esc_attr_e( $data ); ?>" />
-			        <div style="position:absolute;background:#FFF;z-index:99;border-radius:100%;" class="colorpicker"></div>
-			    </div>
-			    <?php
-			break;
+					<input type="text" name="<?php esc_attr_e( $option_name ); ?>" class="color" value="<?php esc_attr_e( $data ); ?>" />
+					<div style="position:absolute;background:#FFF;z-index:99;border-radius:100%;" class="colorpicker"></div>
+				</div>
+				<?php
+				break;
 
 			case 'datepicker':
-				if( ! $data ) {
+				if ( ! $data ) {
 					$data = date( 'Y-m-d', time() );
 				}
 				$display_date = date( 'j F Y', strtotime( $data ) );
-				$html .= '<input id="' . esc_attr( $field['id'] ) . '_display" type="text" class="datepicker" placeholder="' . esc_attr( $field['placeholder'] ) . '" value="' . esc_attr( $display_date ) . '" />' . "\n";
-				$html .= '<input id="' . esc_attr( $field['id'] ) . '_save" type="hidden" name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $data ) . '" />' . "\n";
-			break;
+				$html        .= '<input id="' . esc_attr( $field['id'] ) . '_display" type="text" class="datepicker" placeholder="' . esc_attr( $field['placeholder'] ) . '" value="' . esc_attr( $display_date ) . '" />' . "\n";
+				$html        .= '<input id="' . esc_attr( $field['id'] ) . '_save" type="hidden" name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $data ) . '" />' . "\n";
+				break;
 
 			case 'geocomplete':
 				$html .= '<input id="' . esc_attr( $field['id'] ) . '" name="' . esc_attr( $option_name ) . '" type="text" class="geocomplete" placeholder="' . esc_attr( $field['placeholder'] ) . '" value="' . esc_attr( $data ) . '" />' . "\n";
-			break;
+				break;
 
 		}
 
-		switch( $field['type'] ) {
+		switch ( $field['type'] ) {
 
 			case 'checkbox_multi':
 			case 'radio':
 			case 'select_multi':
 				$html .= '<br/><span class="description">' . wp_kses_post( $field['description'] ) . '</span>';
-			break;
+				break;
 
 			case 'hidden':
-			break;
+				break;
 
 			default:
 				if ( ! $post ) {
 					$html .= '<label for="' . esc_attr( $field['id'] ) . '">' . "\n";
 				}
 
-				if( isset( $field['description'] ) ) {
+				if ( isset( $field['description'] ) ) {
 					$html .= '<span class="description">' . wp_kses_post( $field['description'] ) . '</span>' . "\n";
 				}
 
 				if ( ! $post ) {
 					$html .= '</label>' . "\n";
 				}
-			break;
+				break;
 		}
 
 		if ( ! $echo ) {
@@ -219,7 +219,6 @@ class do_action_Admin_API {
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Field values and attributes are escaped above; form controls must remain intact.
 		echo $html;
-
 	}
 
 	/**
@@ -228,7 +227,7 @@ class do_action_Admin_API {
 	 * @param  string $type Type of field to validate
 	 * @return string       Validated value
 	 */
-	public function validate_field ( $data = '', $type = 'text' ) {
+	public function validate_field( $data = '', $type = 'text' ) {
 
 		switch ( $type ) {
 			case 'text':
@@ -258,7 +257,7 @@ class do_action_Admin_API {
 	 * @param array  $callback_args Any axtra arguments that will be passed to the display function for this metabox
 	 * @return void
 	 */
-	public function add_meta_box ( $id = '', $title = '', $post_types = array(), $context = 'advanced', $priority = 'default', $callback_args = null ) {
+	public function add_meta_box( $id = '', $title = '', $post_types = array(), $context = 'advanced', $priority = 'default', $callback_args = null ) {
 
 		// Get post type(s)
 		if ( ! is_array( $post_types ) ) {
@@ -277,12 +276,14 @@ class do_action_Admin_API {
 	 * @param  array  $args Arguments unique to this metabox
 	 * @return void
 	 */
-	public function meta_box_content ( $post, $args ) {
+	public function meta_box_content( $post, $args ) {
 
 		$field_post_type = str_replace( '-', '_', $post->post_type );
-		$fields = apply_filters( $field_post_type . '_custom_fields', array(), $post->post_type );
+		$fields          = apply_filters( $field_post_type . '_custom_fields', array(), $post->post_type );
 
-		if ( ! is_array( $fields ) || 0 == count( $fields ) ) return;
+		if ( ! is_array( $fields ) || 0 == count( $fields ) ) {
+			return;
+		}
 
 		echo '<div class="custom-field-panel">' . "\n";
 
@@ -290,7 +291,9 @@ class do_action_Admin_API {
 
 		foreach ( $fields as $field ) {
 
-			if ( ! isset( $field['metabox'] ) ) continue;
+			if ( ! isset( $field['metabox'] ) ) {
+				continue;
+			}
 
 			if ( ! is_array( $field['metabox'] ) ) {
 				$field['metabox'] = array( $field['metabox'] );
@@ -299,11 +302,9 @@ class do_action_Admin_API {
 			if ( in_array( $args['id'], $field['metabox'] ) ) {
 				$this->display_meta_box_field( $field, $post );
 			}
-
 		}
 
 		echo '</div>' . "\n";
-
 	}
 
 	/**
@@ -312,11 +313,13 @@ class do_action_Admin_API {
 	 * @param  object $post  Post object
 	 * @return void
 	 */
-	public function display_meta_box_field ( $field, $post ) {
+	public function display_meta_box_field( $field, $post ) {
 
-		if ( ! is_array( $field ) || 0 == count( $field ) ) return;
+		if ( ! is_array( $field ) || 0 == count( $field ) ) {
+			return;
+		}
 
-		if( 'hidden' == $field['type'] ) {
+		if ( 'hidden' == $field['type'] ) {
 			$field = $this->display_field( $field, $post, false ) . "\n";
 		} else {
 			$field = '<p class="form-field"><label for="' . esc_attr( $field['id'] ) . '">' . esc_html( $field['label'] ) . '</label>' . $this->display_field( $field, $post, false ) . '</p>' . "\n";
@@ -331,14 +334,20 @@ class do_action_Admin_API {
 	 * @param  integer $post_id Post ID
 	 * @return void
 	 */
-	public function save_meta_boxes ( $post_id = 0 ) {
+	public function save_meta_boxes( $post_id = 0 ) {
 
-		if ( ! $post_id ) return;
+		if ( ! $post_id ) {
+			return;
+		}
 
 		// Don't clobber meta on autosaves/revisions, and require our nonce so a forged
 		// request can't set the plugin's meta keys or wipe them by omitting the fields.
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
-		if ( wp_is_post_revision( $post_id ) ) return;
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
 
 		if ( ! isset( $_POST['do_action_meta_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['do_action_meta_nonce'] ) ), 'do_action_save_meta_' . $post_id ) ) {
 			return;
@@ -349,11 +358,13 @@ class do_action_Admin_API {
 			return;
 		}
 
-		$post_type = get_post_type( $post_id );
+		$post_type       = get_post_type( $post_id );
 		$field_post_type = str_replace( '-', '_', $post_type );
-		$fields = apply_filters( $field_post_type . '_custom_fields', array(), $post_type );
+		$fields          = apply_filters( $field_post_type . '_custom_fields', array(), $post_type );
 
-		if ( ! is_array( $fields ) || 0 == count( $fields ) ) return;
+		if ( ! is_array( $fields ) || 0 == count( $fields ) ) {
+			return;
+		}
 
 		foreach ( $fields as $field ) {
 			if ( isset( $_REQUEST[ $field['id'] ] ) ) {
@@ -391,5 +402,4 @@ class do_action_Admin_API {
 			}
 		}
 	}
-
 }

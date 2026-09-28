@@ -1,62 +1,66 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class do_action_Post_Type {
 
 	/**
 	 * The name for the custom post type.
-	 * @var 	string
+	 * @var     string
 	 * @access  public
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
 	public $post_type;
 
 	/**
 	 * The plural name for the custom post type posts.
-	 * @var 	string
+	 * @var     string
 	 * @access  public
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
 	public $plural;
 
 	/**
 	 * The singular name for the custom post type posts.
-	 * @var 	string
+	 * @var     string
 	 * @access  public
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
 	public $single;
 
 	/**
 	 * The description of the custom post type.
-	 * @var 	string
+	 * @var     string
 	 * @access  public
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
 	public $description;
 
 	/**
 	 * The options of the custom post type.
-	 * @var 	array
+	 * @var     array
 	 * @access  public
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
 	public $options;
 
-	public function __construct ( $post_type = '', $plural = '', $single = '', $description = '', $options = array() ) {
+	public function __construct( $post_type = '', $plural = '', $single = '', $description = '', $options = array() ) {
 
-		if ( ! $post_type || ! $plural || ! $single ) return;
+		if ( ! $post_type || ! $plural || ! $single ) {
+			return;
+		}
 
 		// Post type name and labels
-		$this->post_type = $post_type;
-		$this->plural = $plural;
-		$this->single = $single;
+		$this->post_type   = $post_type;
+		$this->plural      = $plural;
+		$this->single      = $single;
 		$this->description = $description;
-		$this->options = $options;
+		$this->options     = $options;
 
 		// Regsiter post type
-		add_action( 'init' , array( $this, 'register_post_type' ) );
+		add_action( 'init', array( $this, 'register_post_type' ) );
 
 		// Display custom update messages for posts edits
 		add_filter( 'post_updated_messages', array( $this, 'updated_messages' ) );
@@ -67,57 +71,57 @@ class do_action_Post_Type {
 	 * Register new post type
 	 * @return void
 	 */
-	public function register_post_type () {
+	public function register_post_type() {
 
 		$labels = array(
-			'name' => $this->plural,
-			'singular_name' => $this->single,
-			'name_admin_bar' => $this->single,
-			'add_new' => __( 'Add New', 'do-action' ),
+			'name'               => $this->plural,
+			'singular_name'      => $this->single,
+			'name_admin_bar'     => $this->single,
+			'add_new'            => __( 'Add New', 'do-action' ),
 			/* translators: %s: Singular post type label. */
-			'add_new_item' => sprintf( __( 'Add New %s' , 'do-action' ), $this->single ),
+			'add_new_item'       => sprintf( __( 'Add New %s', 'do-action' ), $this->single ),
 			/* translators: %s: Singular post type label. */
-			'edit_item' => sprintf( __( 'Edit %s' , 'do-action' ), $this->single ),
+			'edit_item'          => sprintf( __( 'Edit %s', 'do-action' ), $this->single ),
 			/* translators: %s: Singular post type label. */
-			'new_item' => sprintf( __( 'New %s' , 'do-action' ), $this->single ),
+			'new_item'           => sprintf( __( 'New %s', 'do-action' ), $this->single ),
 			/* translators: %s: Plural post type label. */
-			'all_items' => sprintf( __( 'All %s' , 'do-action' ), $this->plural ),
+			'all_items'          => sprintf( __( 'All %s', 'do-action' ), $this->plural ),
 			/* translators: %s: Singular post type label. */
-			'view_item' => sprintf( __( 'View %s' , 'do-action' ), $this->single ),
+			'view_item'          => sprintf( __( 'View %s', 'do-action' ), $this->single ),
 			/* translators: %s: Plural post type label. */
-			'search_items' => sprintf( __( 'Search %s' , 'do-action' ), $this->plural ),
+			'search_items'       => sprintf( __( 'Search %s', 'do-action' ), $this->plural ),
 			/* translators: %s: Plural post type label. */
-			'not_found' =>  sprintf( __( 'No %s Found' , 'do-action' ), $this->plural ),
+			'not_found'          => sprintf( __( 'No %s Found', 'do-action' ), $this->plural ),
 			/* translators: %s: Plural post type label. */
-			'not_found_in_trash' => sprintf( __( 'No %s Found In Trash' , 'do-action' ), $this->plural ),
+			'not_found_in_trash' => sprintf( __( 'No %s Found In Trash', 'do-action' ), $this->plural ),
 			/* translators: %s: Singular post type label. */
-			'parent_item_colon' => sprintf( __( 'Parent %s' ), $this->single ),
-			'menu_name' => $this->plural,
+			'parent_item_colon'  => sprintf( __( 'Parent %s' ), $this->single ),
+			'menu_name'          => $this->plural,
 		);
 
 		$args = array(
-			'labels' => apply_filters( $this->post_type . '_labels', $labels ),
-			'description' => $this->description,
-			'public' => true,
-			'publicly_queryable' => true,
+			'labels'              => apply_filters( $this->post_type . '_labels', $labels ),
+			'description'         => $this->description,
+			'public'              => true,
+			'publicly_queryable'  => true,
 			'exclude_from_search' => false,
-			'show_ui' => true,
-			'show_in_menu' => true,
-			'show_in_nav_menus' => true,
-			'show_in_admin_bar' => true,
-			'show_in_rest' => true,
-			'query_var' => true,
-			'can_export' => true,
-			'rewrite' => true,
-			'capability_type' => array( $this->post_type, $this->post_type . 's' ),
-			'map_meta_cap' => true,
-			'has_archive' => true,
-			'hierarchical' => true,
-			'supports' => array( 'title', 'editor', 'excerpt', 'thumbnail', 'author', 'custom-fields' ),
-			'menu_position' => 5,
-			'menu_icon' => 'dashicons-admin-post',
-			'can_export' => true,
-			'delete_with_user' => false,
+			'show_ui'             => true,
+			'show_in_menu'        => true,
+			'show_in_nav_menus'   => true,
+			'show_in_admin_bar'   => true,
+			'show_in_rest'        => true,
+			'query_var'           => true,
+			'can_export'          => true,
+			'rewrite'             => true,
+			'capability_type'     => array( $this->post_type, $this->post_type . 's' ),
+			'map_meta_cap'        => true,
+			'has_archive'         => true,
+			'hierarchical'        => true,
+			'supports'            => array( 'title', 'editor', 'excerpt', 'thumbnail', 'author', 'custom-fields' ),
+			'menu_position'       => 5,
+			'menu_icon'           => 'dashicons-admin-post',
+			'can_export'          => true,
+			'delete_with_user'    => false,
 		);
 
 		$args = array_merge( $args, $this->options );
@@ -167,22 +171,21 @@ class do_action_Post_Type {
 	 * @param  array  $bulk_counts   Counts of selected posts in each status
 	 * @return array                Modified messages
 	 */
-	public function bulk_updated_messages ( $bulk_messages = array(), $bulk_counts = array() ) {
+	public function bulk_updated_messages( $bulk_messages = array(), $bulk_counts = array() ) {
 
 		$bulk_messages[ $this->post_type ] = array(
 			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
-	        'updated'   => sprintf( _n( '%1$s %2$s updated.', '%1$s %3$s updated.', $bulk_counts['updated'], 'do-action' ), $bulk_counts['updated'], $this->single, $this->plural ),
+			'updated'   => sprintf( _n( '%1$s %2$s updated.', '%1$s %3$s updated.', $bulk_counts['updated'], 'do-action' ), $bulk_counts['updated'], $this->single, $this->plural ),
 			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
-	        'locked'    => sprintf( _n( '%1$s %2$s not updated, somebody is editing it.', '%1$s %3$s not updated, somebody is editing them.', $bulk_counts['locked'], 'do-action' ), $bulk_counts['locked'], $this->single, $this->plural ),
+			'locked'    => sprintf( _n( '%1$s %2$s not updated, somebody is editing it.', '%1$s %3$s not updated, somebody is editing them.', $bulk_counts['locked'], 'do-action' ), $bulk_counts['locked'], $this->single, $this->plural ),
 			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
-	        'deleted'   => sprintf( _n( '%1$s %2$s permanently deleted.', '%1$s %3$s permanently deleted.', $bulk_counts['deleted'], 'do-action' ), $bulk_counts['deleted'], $this->single, $this->plural ),
+			'deleted'   => sprintf( _n( '%1$s %2$s permanently deleted.', '%1$s %3$s permanently deleted.', $bulk_counts['deleted'], 'do-action' ), $bulk_counts['deleted'], $this->single, $this->plural ),
 			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
-	        'trashed'   => sprintf( _n( '%1$s %2$s moved to the Trash.', '%1$s %3$s moved to the Trash.', $bulk_counts['trashed'], 'do-action' ), $bulk_counts['trashed'], $this->single, $this->plural ),
+			'trashed'   => sprintf( _n( '%1$s %2$s moved to the Trash.', '%1$s %3$s moved to the Trash.', $bulk_counts['trashed'], 'do-action' ), $bulk_counts['trashed'], $this->single, $this->plural ),
 			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
-	        'untrashed' => sprintf( _n( '%1$s %2$s restored from the Trash.', '%1$s %3$s restored from the Trash.', $bulk_counts['untrashed'], 'do-action' ), $bulk_counts['untrashed'], $this->single, $this->plural ),
-	    );
+			'untrashed' => sprintf( _n( '%1$s %2$s restored from the Trash.', '%1$s %3$s restored from the Trash.', $bulk_counts['untrashed'], 'do-action' ), $bulk_counts['untrashed'], $this->single, $this->plural ),
+		);
 
-	    return $bulk_messages;
+		return $bulk_messages;
 	}
-
 }

@@ -1,61 +1,65 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class do_action_Taxonomy {
 
 	/**
 	 * The name for the taxonomy.
-	 * @var 	string
+	 * @var     string
 	 * @access  public
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
 	public $taxonomy;
 
 	/**
 	 * The plural name for the taxonomy terms.
-	 * @var 	string
+	 * @var     string
 	 * @access  public
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
 	public $plural;
 
 	/**
 	 * The singular name for the taxonomy terms.
-	 * @var 	string
+	 * @var     string
 	 * @access  public
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
 	public $single;
 
 	/**
 	 * The array of post types to which this taxonomy applies.
-	 * @var 	array
+	 * @var     array
 	 * @access  public
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
 	public $post_types;
 
-  /**
-	 * The array of taxonomy arguments
-	 * @var 	array
-	 * @access  public
-	 * @since 	1.0.0
-	 */
+	/**
+		* The array of taxonomy arguments
+		* @var     array
+		* @access  public
+		* @since   1.0.0
+		*/
 	public $taxonomy_args;
 
-	public function __construct ( $taxonomy = '', $plural = '', $single = '', $post_types = array(), $tax_args = array() ) {
+	public function __construct( $taxonomy = '', $plural = '', $single = '', $post_types = array(), $tax_args = array() ) {
 
-		if ( ! $taxonomy || ! $plural || ! $single ) return;
+		if ( ! $taxonomy || ! $plural || ! $single ) {
+			return;
+		}
 
 		// Post type name and labels
 		$this->taxonomy = $taxonomy;
-		$this->plural = $plural;
-		$this->single = $single;
+		$this->plural   = $plural;
+		$this->single   = $single;
 		if ( ! is_array( $post_types ) ) {
 			$post_types = array( $post_types );
 		}
-		$this->post_types = $post_types;
+		$this->post_types    = $post_types;
 		$this->taxonomy_args = $tax_args;
 
 		// Register taxonomy
@@ -66,61 +70,60 @@ class do_action_Taxonomy {
 	 * Register new taxonomy
 	 * @return void
 	 */
-	public function register_taxonomy () {
+	public function register_taxonomy() {
 
-        $labels = array(
-            'name' => $this->plural,
-            'singular_name' => $this->single,
-            'menu_name' => $this->plural,
+		$labels = array(
+			'name'                       => $this->plural,
+			'singular_name'              => $this->single,
+			'menu_name'                  => $this->plural,
 			/* translators: %s: Plural taxonomy label. */
-            'all_items' => sprintf( __( 'All %s' , 'do-action' ), $this->plural ),
+			'all_items'                  => sprintf( __( 'All %s', 'do-action' ), $this->plural ),
 			/* translators: %s: Singular taxonomy label. */
-            'edit_item' => sprintf( __( 'Edit %s' , 'do-action' ), $this->single ),
+			'edit_item'                  => sprintf( __( 'Edit %s', 'do-action' ), $this->single ),
 			/* translators: %s: Singular taxonomy label. */
-            'view_item' => sprintf( __( 'View %s' , 'do-action' ), $this->single ),
+			'view_item'                  => sprintf( __( 'View %s', 'do-action' ), $this->single ),
 			/* translators: %s: Singular taxonomy label. */
-            'update_item' => sprintf( __( 'Update %s' , 'do-action' ), $this->single ),
+			'update_item'                => sprintf( __( 'Update %s', 'do-action' ), $this->single ),
 			/* translators: %s: Singular taxonomy label. */
-            'add_new_item' => sprintf( __( 'Add New %s' , 'do-action' ), $this->single ),
+			'add_new_item'               => sprintf( __( 'Add New %s', 'do-action' ), $this->single ),
 			/* translators: %s: Singular taxonomy label. */
-            'new_item_name' => sprintf( __( 'New %s Name' , 'do-action' ), $this->single ),
+			'new_item_name'              => sprintf( __( 'New %s Name', 'do-action' ), $this->single ),
 			/* translators: %s: Singular taxonomy label. */
-            'parent_item' => sprintf( __( 'Parent %s' , 'do-action' ), $this->single ),
+			'parent_item'                => sprintf( __( 'Parent %s', 'do-action' ), $this->single ),
 			/* translators: %s: Singular taxonomy label. */
-            'parent_item_colon' => sprintf( __( 'Parent %s:' , 'do-action' ), $this->single ),
+			'parent_item_colon'          => sprintf( __( 'Parent %s:', 'do-action' ), $this->single ),
 			/* translators: %s: Plural taxonomy label. */
-            'search_items' =>  sprintf( __( 'Search %s' , 'do-action' ), $this->plural ),
+			'search_items'               => sprintf( __( 'Search %s', 'do-action' ), $this->plural ),
 			/* translators: %s: Plural taxonomy label. */
-            'popular_items' =>  sprintf( __( 'Popular %s' , 'do-action' ), $this->plural ),
+			'popular_items'              => sprintf( __( 'Popular %s', 'do-action' ), $this->plural ),
 			/* translators: %s: Plural taxonomy label. */
-            'separate_items_with_commas' =>  sprintf( __( 'Separate %s with commas' , 'do-action' ), $this->plural ),
+			'separate_items_with_commas' => sprintf( __( 'Separate %s with commas', 'do-action' ), $this->plural ),
 			/* translators: %s: Plural taxonomy label. */
-            'add_or_remove_items' =>  sprintf( __( 'Add or remove %s' , 'do-action' ), $this->plural ),
+			'add_or_remove_items'        => sprintf( __( 'Add or remove %s', 'do-action' ), $this->plural ),
 			/* translators: %s: Plural taxonomy label. */
-            'choose_from_most_used' =>  sprintf( __( 'Choose from the most used %s' , 'do-action' ), $this->plural ),
+			'choose_from_most_used'      => sprintf( __( 'Choose from the most used %s', 'do-action' ), $this->plural ),
 			/* translators: %s: Plural taxonomy label. */
-            'not_found' =>  sprintf( __( 'No %s found' , 'do-action' ), $this->plural ),
-        );
+			'not_found'                  => sprintf( __( 'No %s found', 'do-action' ), $this->plural ),
+		);
 
-        $args = array(
-        	'label' => $this->plural,
-        	'labels' => apply_filters( $this->taxonomy . '_labels', $labels ),
-        	'hierarchical' => true,
-            'public' => true,
-            'show_ui' => true,
-            'show_in_nav_menus' => true,
-            'show_tagcloud' => true,
-            'meta_box_cb' => null,
-            'show_admin_column' => true,
-            'update_count_callback' => '',
-            'query_var' => $this->taxonomy,
-            'rewrite' => true,
-            'sort' => '',
-        );
+		$args = array(
+			'label'                 => $this->plural,
+			'labels'                => apply_filters( $this->taxonomy . '_labels', $labels ),
+			'hierarchical'          => true,
+			'public'                => true,
+			'show_ui'               => true,
+			'show_in_nav_menus'     => true,
+			'show_tagcloud'         => true,
+			'meta_box_cb'           => null,
+			'show_admin_column'     => true,
+			'update_count_callback' => '',
+			'query_var'             => $this->taxonomy,
+			'rewrite'               => true,
+			'sort'                  => '',
+		);
 
-        $args = array_merge($args, $this->taxonomy_args);
+		$args = array_merge( $args, $this->taxonomy_args );
 
-        register_taxonomy( $this->taxonomy, $this->post_types, apply_filters( $this->taxonomy . '_register_args', $args, $this->taxonomy, $this->post_types ) );
-    }
-
+		register_taxonomy( $this->taxonomy, $this->post_types, apply_filters( $this->taxonomy . '_register_args', $args, $this->taxonomy, $this->post_types ) );
+	}
 }
