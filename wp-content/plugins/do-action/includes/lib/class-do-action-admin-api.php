@@ -312,7 +312,7 @@ class do_action_Admin_API {
 	 * @param  object $post  Post object
 	 * @return void
 	 */
-	public function display_meta_box_field ( $field = array(), $post ) {
+	public function display_meta_box_field ( $field, $post ) {
 
 		if ( ! is_array( $field ) || 0 == count( $field ) ) return;
 

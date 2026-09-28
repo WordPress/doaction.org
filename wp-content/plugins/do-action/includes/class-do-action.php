@@ -69,6 +69,46 @@ class do_action {
 	public $script_suffix;
 
 	/**
+	 * Akismet API key.
+	 * @var     string
+	 * @access  public
+	 * @since   1.0.0
+	 */
+	public $akismet_api_key;
+
+	/**
+	 * Custom post types and their labels.
+	 * @var     array
+	 * @access  public
+	 * @since   1.0.0
+	 */
+	public $post_types = array();
+
+	/**
+	 * Custom taxonomies and their labels.
+	 * @var     array
+	 * @access  public
+	 * @since   1.0.0
+	 */
+	public $taxonomies = array();
+
+	/**
+	 * Admin API instance.
+	 * @var     do_action_Admin_API|null
+	 * @access  public
+	 * @since   1.0.0
+	 */
+	public $admin;
+
+	/**
+	 * Tools instance.
+	 * @var     do_action_tools|null
+	 * @access  public
+	 * @since   1.0.0
+	 */
+	public $tools;
+
+	/**
 	 * Constructor function.
 	 * @access  public
 	 * @since   1.0.0
@@ -86,21 +126,12 @@ class do_action {
 
 		$this->akismet_api_key = '98e6b103f2e3';
 
-		$this->post_types = array(
-			'event' => array( 'plural' => __( 'Events', 'do-action' ), 'single' => __( 'Event', 'do-action' ), 'options' => array( 'menu_icon' => 'dashicons-calendar-alt' ) ),
-			'non-profit' => array( 'plural' => __( 'Non-profits', 'do-action' ), 'single' => __( 'Non-profit', 'do-action' ), 'options' => array( 'menu_icon' => 'dashicons-store', 'show_in_rest' => false ) ),
-			'sponsor' => array( 'plural' => __( 'Sponsors', 'do-action' ), 'single' => __( 'Sponsor', 'do-action' ), 'options' => array( 'menu_icon' => 'dashicons-heart' ) ),
-		);
-
-		$this->taxonomies = array(
-			'role' => array( 'plural' => __( 'Roles', 'do-action' ), 'single' => __( 'Role', 'do-action' ), 'post_types' => array( 'non-profit' ), 'args' => array() ),
-		);
-
 		$this->script_suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		register_activation_hook( $this->file, array( $this, 'install' ) );
 
 		// Set up post types & taxonomies
+		add_action( 'init', array( $this, 'define_content_types' ), 0 );
 		add_action( 'init', array( $this, 'register_post_types' ), 1 );
 		add_action( 'init', array( $this, 'register_taxonomies' ), 1 );
 		add_filter( 'dashboard_glance_items', array( $this, 'glance_items' ), 10, 1 );
@@ -1678,6 +1709,27 @@ class do_action {
 			remove_menu_page( 'edit-comments.php' );
 			remove_menu_page( 'tools.php' );
 		}
+	}
+
+	/**
+	 * Define post types and taxonomies with their translated labels.
+	 *
+	 * Runs on init so translations aren't loaded too early.
+	 *
+	 * @access  public
+	 * @since   1.0.0
+	 * @return  void
+	 */
+	public function define_content_types () {
+		$this->post_types = array(
+			'event' => array( 'plural' => __( 'Events', 'do-action' ), 'single' => __( 'Event', 'do-action' ), 'options' => array( 'menu_icon' => 'dashicons-calendar-alt' ) ),
+			'non-profit' => array( 'plural' => __( 'Non-profits', 'do-action' ), 'single' => __( 'Non-profit', 'do-action' ), 'options' => array( 'menu_icon' => 'dashicons-store', 'show_in_rest' => false ) ),
+			'sponsor' => array( 'plural' => __( 'Sponsors', 'do-action' ), 'single' => __( 'Sponsor', 'do-action' ), 'options' => array( 'menu_icon' => 'dashicons-heart' ) ),
+		);
+
+		$this->taxonomies = array(
+			'role' => array( 'plural' => __( 'Roles', 'do-action' ), 'single' => __( 'Role', 'do-action' ), 'post_types' => array( 'non-profit' ), 'args' => array() ),
+		);
 	}
 
 	public function register_post_types () {
