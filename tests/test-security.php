@@ -33,6 +33,27 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 	private array $ids = array();
 
 	/**
+	 * Shared organiser user ID.
+	 *
+	 * @var int
+	 */
+	private static int $organiser_id;
+
+	/**
+	 * Shared administrator user ID.
+	 *
+	 * @var int
+	 */
+	private static int $administrator_id;
+
+	/**
+	 * Shared event and nonprofit IDs.
+	 *
+	 * @var int[]
+	 */
+	private static array $fixture_ids = array();
+
+	/**
 	 * Original request superglobals.
 	 *
 	 * @var array
@@ -40,56 +61,54 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 	private array $request = array();
 
 	/**
-	 * Build two organisers' isolated event data.
+	 * Build two organisers' isolated event data once for the class.
 	 *
+	 * @param WP_UnitTest_Factory $factory Test data factory.
 	 * @return void
 	 */
-	public function set_up(): void {
-		parent::set_up();
-		// phpcs:ignore WordPress.Security.NonceVerification -- Preserve the test process request state.
-		$this->request       = array( $_POST, $_REQUEST );
-		$this->organiser     = self::factory()->user->create_and_get();
-		$other               = self::factory()->user->create_and_get();
-		$this->administrator = self::factory()->user->create_and_get( array( 'role' => 'administrator' ) );
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ): void {
+		$organiser     = $factory->user->create_and_get();
+		$other         = $factory->user->create_and_get();
+		$administrator = $factory->user->create_and_get( array( 'role' => 'administrator' ) );
 
-		foreach ( array( $this->organiser, $other ) as $user ) {
+		foreach ( array( $organiser, $other ) as $user ) {
 			foreach ( array( 'read', 'organiser', 'use_do_action_tools', 'edit_events', 'edit_published_events', 'edit_non-profits', 'edit_published_non-profits' ) as $cap ) {
 				$user->add_cap( $cap );
 			}
 		}
 		foreach ( array( 'event', 'non-profit' ) as $type ) {
 			foreach ( get_post_type_object( $type )->cap as $cap ) {
-				$this->administrator->add_cap( $cap );
+				$administrator->add_cap( $cap );
 			}
 		}
-		$this->administrator->add_cap( 'use_do_action_tools' );
-		wp_set_current_user( $this->administrator->ID );
+		$administrator->add_cap( 'use_do_action_tools' );
+		wp_set_current_user( $administrator->ID );
 
-		$this->ids['event']      = self::factory()->post->create(
+		self::$fixture_ids['event']      = $factory->post->create(
 			array(
 				'post_type'   => 'event',
-				'post_author' => $this->organiser->ID,
+				'post_author' => $organiser->ID,
 			)
 		);
-		$this->ids['own']        = self::factory()->post->create(
+		self::$fixture_ids['own']        = $factory->post->create(
 			array(
 				'post_type'   => 'non-profit',
-				'post_author' => $this->organiser->ID,
+				'post_author' => $organiser->ID,
 			)
 		);
-		$this->ids['other']      = self::factory()->post->create(
+		self::$fixture_ids['other']      = $factory->post->create(
 			array(
 				'post_type'   => 'non-profit',
 				'post_author' => $other->ID,
 			)
 		);
-		$this->ids['unselected'] = self::factory()->post->create(
+		self::$fixture_ids['unselected'] = $factory->post->create(
 			array(
 				'post_type'   => 'non-profit',
-				'post_author' => $this->organiser->ID,
+				'post_author' => $organiser->ID,
 			)
 		);
-		$role                    = self::factory()->term->create(
+		$role                            = $factory->term->create(
 			array(
 				'taxonomy' => 'role',
 				'slug'     => 'designer',
@@ -98,7 +117,7 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 		);
 
 		foreach ( array( 'own', 'other', 'unselected' ) as $label ) {
-			$id = $this->ids[ $label ];
+			$id = self::$fixture_ids[ $label ];
 			wp_set_object_terms( $id, array( $role ), 'role' );
 			update_post_meta( $id, 'contact_name', $label . ' contact' );
 			update_post_meta( $id, 'contact_email', $label . '@example.org' );
@@ -107,8 +126,25 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 			update_post_meta( $id, 'designer_email_address', $label . '-participant@example.org' );
 			update_post_meta( $id, 'designer_phone_number', '67890' );
 		}
-		update_post_meta( $this->ids['event'], 'nonprofits', array( $this->ids['own'] ) );
-		update_post_meta( $this->ids['event'], 'event_status', 'accepting_signups' );
+		update_post_meta( self::$fixture_ids['event'], 'nonprofits', array( self::$fixture_ids['own'] ) );
+		update_post_meta( self::$fixture_ids['event'], 'event_status', 'accepting_signups' );
+		self::$organiser_id     = $organiser->ID;
+		self::$administrator_id = $administrator->ID;
+		wp_set_current_user( 0 );
+	}
+
+	/**
+	 * Load the shared users and act as the organiser.
+	 *
+	 * @return void
+	 */
+	public function set_up(): void {
+		parent::set_up();
+		// phpcs:ignore WordPress.Security.NonceVerification -- Preserve the test process request state.
+		$this->request       = array( $_POST, $_REQUEST );
+		$this->organiser     = get_user_by( 'id', self::$organiser_id );
+		$this->administrator = get_user_by( 'id', self::$administrator_id );
+		$this->ids           = self::$fixture_ids;
 		wp_set_current_user( $this->organiser->ID );
 	}
 

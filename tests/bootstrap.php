@@ -34,4 +34,16 @@ tests_add_filter(
 	}
 );
 
+tests_add_filter(
+	'pre_http_request',
+	/**
+	 * Keep tests off the network, such as core's update checks on admin_init.
+	 *
+	 * @return WP_Error
+	 */
+	static function (): WP_Error {
+		return new WP_Error( 'http_request_blocked', 'External HTTP requests are disabled in tests.' );
+	}
+);
+
 require $do_action_tests_dir . '/includes/bootstrap.php';
