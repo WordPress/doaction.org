@@ -17,91 +17,91 @@ class Do_Action {
 	/**
 	 * The single instance of do_action.
 	 *
-	 * @var     object
+	 * @var object
 	 */
 	private static $instance = null;
 
 	/**
 	 * The version number.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $version;
 
 	/**
 	 * The token.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $token;
 
 	/**
 	 * The main plugin file.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $file;
 
 	/**
 	 * The main plugin directory.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $dir;
 
 	/**
 	 * The plugin assets directory.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $assets_dir;
 
 	/**
 	 * The plugin assets URL.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $assets_url;
 
 	/**
 	 * Suffix for Javascripts.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $script_suffix;
 
 	/**
 	 * Akismet API key.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $akismet_api_key;
 
 	/**
 	 * Custom post types and their labels.
 	 *
-	 * @var     array
+	 * @var array
 	 */
 	public $post_types = array();
 
 	/**
 	 * Custom taxonomies and their labels.
 	 *
-	 * @var     array
+	 * @var array
 	 */
 	public $taxonomies = array();
 
 	/**
 	 * Admin API instance.
 	 *
-	 * @var     Do_Action_Admin_API|null
+	 * @var Do_Action_Admin_API|null
 	 */
 	public $admin;
 
 	/**
 	 * Tools instance.
 	 *
-	 * @var     Do_Action_Tools|null
+	 * @var Do_Action_Tools|null
 	 */
 	public $tools;
 

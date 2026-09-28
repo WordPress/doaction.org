@@ -16,14 +16,14 @@ class Do_Action_Tools {
 	/**
 	 * The single instance of do_action.
 	 *
-	 * @var     object
+	 * @var object
 	 */
 	private static $instance = null;
 
 	/**
 	 * The main plugin instance.
 	 *
-	 * @var     Do_Action|null
+	 * @var Do_Action|null
 	 */
 	public $parent;
 

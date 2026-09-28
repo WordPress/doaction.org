@@ -17,35 +17,35 @@ class Do_Action_Taxonomy {
 	/**
 	 * The name for the taxonomy.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $taxonomy;
 
 	/**
 	 * The plural name for the taxonomy terms.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $plural;
 
 	/**
 	 * The singular name for the taxonomy terms.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $single;
 
 	/**
 	 * The array of post types to which this taxonomy applies.
 	 *
-	 * @var     array
+	 * @var array
 	 */
 	public $post_types;
 
 	/**
 	 * The array of taxonomy arguments
 	 *
-	 * @var     array
+	 * @var array
 	 */
 	public $taxonomy_args;
 

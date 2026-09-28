@@ -17,35 +17,35 @@ class Do_Action_Post_Type {
 	/**
 	 * The name for the custom post type.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $post_type;
 
 	/**
 	 * The plural name for the custom post type posts.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $plural;
 
 	/**
 	 * The singular name for the custom post type posts.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $single;
 
 	/**
 	 * The description of the custom post type.
 	 *
-	 * @var     string
+	 * @var string
 	 */
 	public $description;
 
 	/**
 	 * The options of the custom post type.
 	 *
-	 * @var     array
+	 * @var array
 	 */
 	public $options;
 
