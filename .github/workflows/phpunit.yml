@@ -6,9 +6,14 @@ jobs:
   phpunit:
     runs-on: ubuntu-latest
     steps:
-      - run: sudo systemctl start mysql
-      - uses: actions/checkout@v7
-      - uses: actions/checkout@v7
+      - name: Start MySQL
+        run: sudo systemctl start mysql
+
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Check out WordPress and its test library
+        uses: actions/checkout@v7
         with:
           repository: WordPress/wordpress-develop
           path: wordpress-develop
@@ -16,15 +21,23 @@ jobs:
             src
             tests/phpunit/data
             tests/phpunit/includes
-      - uses: shivammathur/setup-php@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
-      - run: composer global require phpunit/phpunit:^9.6 yoast/phpunit-polyfills:^2
-      - run: |
+
+      - name: Install PHPUnit and polyfills
+        run: composer global require phpunit/phpunit:^9.6 yoast/phpunit-polyfills:^2
+
+      - name: Configure test database
+        run: |
           mysql -uroot -proot -e 'CREATE DATABASE wordpress_test'
           cp wordpress-develop/wp-tests-config-sample.php wordpress-develop/wp-tests-config.php
           sed -i 's/youremptytestdbnamehere/wordpress_test/; s/yourusernamehere/root/; s/yourpasswordhere/root/; s/localhost/127.0.0.1/' wordpress-develop/wp-tests-config.php
-      - run: phpunit
+
+      - name: Run PHPUnit
+        run: phpunit
         env:
           WP_TESTS_DIR: ${{ github.workspace }}/wordpress-develop/tests/phpunit
           WP_TESTS_PHPUNIT_POLYFILLS_PATH: /home/runner/.composer/vendor/yoast/phpunit-polyfills

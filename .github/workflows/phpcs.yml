@@ -6,11 +6,18 @@ jobs:
   phpcs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: shivammathur/setup-php@v2
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
-      - run: |
+
+      - name: Install WordPress coding standards
+        run: |
           composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
           composer global require wp-coding-standards/wpcs
-      - run: phpcs
+
+      - name: Run PHPCS
+        run: phpcs
