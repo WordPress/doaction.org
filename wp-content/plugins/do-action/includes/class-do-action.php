@@ -108,11 +108,11 @@ class Do_Action {
 	/**
 	 * Constructor function.
 	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @param   string $file    Main plugin file.
-	 * @param   string $version Plugin version.
-	 * @return  void
+	 * @access public
+	 * @since  1.0.0
+	 * @param  string $file    Main plugin file.
+	 * @param  string $version Plugin version.
+	 * @return void
 	 */
 	public function __construct( $file = '', $version = '1.0.0' ) {
 		$this->version = $version;
@@ -188,8 +188,8 @@ class Do_Action {
 	/**
 	 * Render the list of upcoming events for the [upcoming_events] shortcode.
 	 *
-	 * @since   1.0.0
-	 * @return  string
+	 * @since  1.0.0
+	 * @return string
 	 */
 	public function upcoming_events() {
 		$output = '';
@@ -273,8 +273,8 @@ class Do_Action {
 	/**
 	 * Render the Google map for the current event for the [event_map] shortcode.
 	 *
-	 * @since   1.0.0
-	 * @return  string|null
+	 * @since  1.0.0
+	 * @return string|null
 	 */
 	public function event_map() {
 		global $post;
@@ -332,8 +332,8 @@ class Do_Action {
 	/**
 	 * Render the sponsor logos for the current event for the [event_sponsors] shortcode.
 	 *
-	 * @since   1.0.0
-	 * @return  string|null
+	 * @since  1.0.0
+	 * @return string|null
 	 */
 	public function event_sponsors() {
 		global $post;
@@ -383,8 +383,8 @@ class Do_Action {
 	/**
 	 * Output the form or notice matching the current event's status.
 	 *
-	 * @since   1.0.0
-	 * @return  void
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function event_form() {
 		global $post;
@@ -427,9 +427,9 @@ class Do_Action {
 	/**
 	 * Output the non-profit application form for an event.
 	 *
-	 * @since   1.0.0
-	 * @param   WP_Post|null $event Event post object.
-	 * @return  void
+	 * @since  1.0.0
+	 * @param  WP_Post|null $event Event post object.
+	 * @return void
 	 */
 	public function event_application_form( $event = null ) {
 
@@ -490,8 +490,8 @@ class Do_Action {
 	/**
 	 * Get the URL path prefix for the current Polylang language.
 	 *
-	 * @since   1.0.0
-	 * @return  string|null
+	 * @since  1.0.0
+	 * @return string|null
 	 */
 	public function get_pll_current_language_path() {
 		if ( function_exists( 'pll_current_language' ) ) {
@@ -557,9 +557,9 @@ class Do_Action {
 	/**
 	 * Output the participant sign-up form for an event.
 	 *
-	 * @since   1.0.0
-	 * @param   WP_Post|null $event Event post object.
-	 * @return  void
+	 * @since  1.0.0
+	 * @param  WP_Post|null $event Event post object.
+	 * @return void
 	 */
 	public function event_sign_up_form( $event = null ) {
 
@@ -724,8 +724,8 @@ class Do_Action {
 	/**
 	 * Handle a submitted participant sign-up form and redirect back to the event.
 	 *
-	 * @since   1.0.0
-	 * @return  void
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function check_signup_form() {
 		global $post;
@@ -754,10 +754,10 @@ class Do_Action {
 	/**
 	 * Validate and save a participant sign-up submission.
 	 *
-	 * @since   1.0.0
-	 * @param   array         $post  Submitted form data.
-	 * @param   WP_Post|false $event Event post object.
-	 * @return  bool
+	 * @since  1.0.0
+	 * @param  array         $post  Submitted form data.
+	 * @param  WP_Post|false $event Event post object.
+	 * @return bool
 	 */
 	private function process_signup_form_submission( $post = array(), $event = false ) {
 
@@ -864,9 +864,9 @@ class Do_Action {
 	/**
 	 * Generate a random password.
 	 *
-	 * @since   1.0.0
-	 * @param   int $length Password length.
-	 * @return  string
+	 * @since  1.0.0
+	 * @param  int $length Password length.
+	 * @return string
 	 */
 	public function random_password( $length = 24 ) {
 		// Use WordPress' CSPRNG-backed generator. str_shuffle() is not cryptographically
@@ -877,9 +877,9 @@ class Do_Action {
 	/**
 	 * Get the most accurate IP address for the current user.
 	 *
-	 * @access  private
-	 * @since   1.0.0
-	 * @return  string|false IP address, or false if none is set.
+	 * @access private
+	 * @since  1.0.0
+	 * @return string|false IP address, or false if none is set.
 	 */
 	private function get_user_ip() {
 		foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
@@ -895,13 +895,13 @@ class Do_Action {
 	/**
 	 * Send the sign-up confirmation email to a participant.
 	 *
-	 * @since   1.0.0
-	 * @param   string        $email Participant email address.
-	 * @param   string        $name  Participant name.
-	 * @param   WP_Post|false $org   Non-profit post object.
-	 * @param   WP_Term|false $role  Role term object.
-	 * @param   WP_Post|false $event Event post object.
-	 * @return  bool
+	 * @since  1.0.0
+	 * @param  string        $email Participant email address.
+	 * @param  string        $name  Participant name.
+	 * @param  WP_Post|false $org   Non-profit post object.
+	 * @param  WP_Term|false $role  Role term object.
+	 * @param  WP_Post|false $event Event post object.
+	 * @return bool
 	 */
 	private function send_signup_email( $email = '', $name = '', $org = false, $role = false, $event = false ) {
 
@@ -975,8 +975,8 @@ class Do_Action {
 	/**
 	 * Handle a submitted non-profit application form and redirect back to the event.
 	 *
-	 * @since   1.0.0
-	 * @return  void
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function check_application_form() {
 		global $post;
@@ -1006,10 +1006,10 @@ class Do_Action {
 	/**
 	 * Validate a non-profit application and create the non-profit post.
 	 *
-	 * @since   1.0.0
-	 * @param   array         $post  Submitted form data.
-	 * @param   WP_Post|false $event Event post object.
-	 * @return  bool
+	 * @since  1.0.0
+	 * @param  array         $post  Submitted form data.
+	 * @param  WP_Post|false $event Event post object.
+	 * @return bool
 	 */
 	private function process_application_form_submission( $post = array(), $event = false ) {
 
@@ -1112,12 +1112,12 @@ class Do_Action {
 	/**
 	 * Send the application confirmation email to a non-profit contact.
 	 *
-	 * @since   1.0.0
-	 * @param   string        $email Contact email address.
-	 * @param   string        $name  Contact name.
-	 * @param   WP_Post|false $org   Non-profit post object.
-	 * @param   WP_Post|false $event Event post object.
-	 * @return  bool
+	 * @since  1.0.0
+	 * @param  string        $email Contact email address.
+	 * @param  string        $name  Contact name.
+	 * @param  WP_Post|false $org   Non-profit post object.
+	 * @param  WP_Post|false $event Event post object.
+	 * @return bool
 	 */
 	private function send_application_email( $email = '', $name = '', $org = false, $event = false ) {
 
@@ -1180,10 +1180,10 @@ class Do_Action {
 	/**
 	 * Keep non-profits published and password protected on save.
 	 *
-	 * @since   1.0.0
-	 * @param   int     $post_id Post ID.
-	 * @param   WP_Post $post    Post object.
-	 * @return  void
+	 * @since  1.0.0
+	 * @param  int     $post_id Post ID.
+	 * @param  WP_Post $post    Post object.
+	 * @return void
 	 */
 	public function set_nonprofits_private( $post_id, $post ) {
 
@@ -1216,9 +1216,9 @@ class Do_Action {
 	/**
 	 * Output a non-profit's details, contacts and build team.
 	 *
-	 * @since   1.0.0
-	 * @param   int|WP_Post $org Non-profit post ID or object.
-	 * @return  void
+	 * @since  1.0.0
+	 * @param  int|WP_Post $org Non-profit post ID or object.
+	 * @return void
 	 */
 	public function nonprofit_team( $org ) {
 
@@ -1315,8 +1315,8 @@ class Do_Action {
 	/**
 	 * Render the list of completed past events for the [past_events] shortcode.
 	 *
-	 * @since   1.0.0
-	 * @return  string
+	 * @since  1.0.0
+	 * @return string
 	 */
 	public function past_events() {
 
@@ -1387,9 +1387,9 @@ class Do_Action {
 	/**
 	 * Filter admin event and non-profit lists by selected event and organiser.
 	 *
-	 * @since   1.0.0
-	 * @param   array $request Query variables.
-	 * @return  array
+	 * @since  1.0.0
+	 * @param  array $request Query variables.
+	 * @return array
 	 */
 	public function modify_admin_lists( $request ) {
 		global $pagenow, $typenow;
@@ -1428,10 +1428,10 @@ class Do_Action {
 	/**
 	 * Limit admin post counts to the current organiser's posts.
 	 *
-	 * @since   1.0.0
-	 * @param   object $counts Post counts by status.
-	 * @param   string $type   Post type.
-	 * @return  object
+	 * @since  1.0.0
+	 * @param  object $counts Post counts by status.
+	 * @param  string $type   Post type.
+	 * @return object
 	 */
 	public function modify_post_counts( $counts, $type ) {
 		global $pagenow, $typenow;
@@ -1470,8 +1470,8 @@ class Do_Action {
 	/**
 	 * Output the Storefront entry header with event and sponsor meta.
 	 *
-	 * @since   1.0.0
-	 * @return  void
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function storefront_post_header() {
 		?>
@@ -1509,8 +1509,8 @@ class Do_Action {
 	/**
 	 * Hook up the custom field definitions for each post type.
 	 *
-	 * @since   1.0.0
-	 * @return  void
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function custom_fields() {
 		foreach ( $this->post_types as $type => $details ) {
@@ -1522,9 +1522,9 @@ class Do_Action {
 	/**
 	 * Define the custom fields for events.
 	 *
-	 * @since   1.0.0
-	 * @param   array $fields Existing fields.
-	 * @return  array
+	 * @since  1.0.0
+	 * @param  array $fields Existing fields.
+	 * @return array
 	 */
 	public function event_custom_fields( $fields ) {
 
@@ -1652,9 +1652,9 @@ class Do_Action {
 	/**
 	 * Define the custom fields for non-profits, including per-role fields.
 	 *
-	 * @since   1.0.0
-	 * @param   array $fields Existing fields.
-	 * @return  array
+	 * @since  1.0.0
+	 * @param  array $fields Existing fields.
+	 * @return array
 	 */
 	public function non_profit_custom_fields( $fields ) {
 		global $post;
@@ -1741,9 +1741,9 @@ class Do_Action {
 	/**
 	 * Define the custom fields for sponsors.
 	 *
-	 * @since   1.0.0
-	 * @param   array $fields Existing fields.
-	 * @return  array
+	 * @since  1.0.0
+	 * @param  array $fields Existing fields.
+	 * @return array
 	 */
 	public function sponsor_custom_fields( $fields ) {
 
@@ -1772,10 +1772,10 @@ class Do_Action {
 	/**
 	 * Register the meta boxes for the plugin's post types.
 	 *
-	 * @since   1.0.0
-	 * @param   string  $post_type Post type.
-	 * @param   WP_Post $post      Post object.
-	 * @return  void
+	 * @since  1.0.0
+	 * @param  string  $post_type Post type.
+	 * @param  WP_Post $post      Post object.
+	 * @return void
 	 */
 	public function add_meta_boxes( $post_type, $post ) {
 		foreach ( $this->post_types as $type => $details ) {
@@ -1827,10 +1827,10 @@ class Do_Action {
 	/**
 	 * Output the non-profit team meta box on an event.
 	 *
-	 * @since   1.0.0
-	 * @param   WP_Post $post Event post object.
-	 * @param   array   $args Meta box arguments.
-	 * @return  void
+	 * @since  1.0.0
+	 * @param  WP_Post $post Event post object.
+	 * @param  array   $args Meta box arguments.
+	 * @return void
 	 */
 	public function event_nonprofit_metabox_content( $post, $args ) {
 
@@ -1847,9 +1847,9 @@ class Do_Action {
 	/**
 	 * Output an event filter dropdown on the non-profits list table.
 	 *
-	 * @since   1.0.0
-	 * @param   string $post_type Post type.
-	 * @return  void
+	 * @since  1.0.0
+	 * @param  string $post_type Post type.
+	 * @return void
 	 */
 	public function filter_non_profits_list_table( $post_type ) {
 
@@ -1901,8 +1901,8 @@ class Do_Action {
 	/**
 	 * Redirect organisers from the dashboard to the events list.
 	 *
-	 * @since   1.0.0
-	 * @return  void
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function redirect_dashboard() {
 		global $pagenow;
@@ -1916,8 +1916,8 @@ class Do_Action {
 	/**
 	 * Remove unneeded admin menu items for organisers.
 	 *
-	 * @since   1.0.0
-	 * @return  void
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function modify_admin_menu() {
 		if ( current_user_can( 'organiser' ) ) {
@@ -1935,9 +1935,9 @@ class Do_Action {
 	 *
 	 * Runs on init so translations aren't loaded too early.
 	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
+	 * @access public
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function define_content_types() {
 		$this->post_types = array(
@@ -1974,8 +1974,8 @@ class Do_Action {
 	/**
 	 * Register the plugin's custom post types.
 	 *
-	 * @since   1.0.0
-	 * @return  void
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function register_post_types() {
 		foreach ( $this->post_types as $type => $details ) {
@@ -1986,8 +1986,8 @@ class Do_Action {
 	/**
 	 * Register the plugin's custom taxonomies.
 	 *
-	 * @since   1.0.0
-	 * @return  void
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function register_taxonomies() {
 		foreach ( $this->taxonomies as $tax => $details ) {
@@ -1998,9 +1998,9 @@ class Do_Action {
 	/**
 	 * Add the plugin's query args to the removable list.
 	 *
-	 * @since   1.0.0
-	 * @param   array $args Removable query args.
-	 * @return  array
+	 * @since  1.0.0
+	 * @param  array $args Removable query args.
+	 * @return array
 	 */
 	public function removable_query_args( $args = array() ) {
 		$args['mail_sent'] = true;
@@ -2055,9 +2055,9 @@ class Do_Action {
 	/**
 	 * Add the plugin's post type counts to the At a Glance widget.
 	 *
-	 * @since   1.0.0
-	 * @param   array $items At a Glance items.
-	 * @return  array
+	 * @since  1.0.0
+	 * @param  array $items At a Glance items.
+	 * @return array
 	 */
 	public function glance_items( $items = array() ) {
 
@@ -2090,8 +2090,8 @@ class Do_Action {
 	/**
 	 * Register the plugin's sidebars.
 	 *
-	 * @since   1.0.0
-	 * @return  void
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function register_sidebars() {
 		register_sidebar(
@@ -2152,8 +2152,8 @@ class Do_Action {
 	/**
 	 * Load frontend CSS.
 	 *
-	 * @access  public
-	 * @since   1.0.0
+	 * @access public
+	 * @since  1.0.0
 	 * @return void
 	 */
 	public function enqueue_styles() {
@@ -2164,9 +2164,9 @@ class Do_Action {
 	/**
 	 * Load frontend Javascript.
 	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
+	 * @access public
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function enqueue_scripts() {
 
@@ -2179,9 +2179,9 @@ class Do_Action {
 	/**
 	 * Load admin CSS.
 	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
+	 * @access public
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function admin_enqueue_styles() {
 
@@ -2196,9 +2196,9 @@ class Do_Action {
 	/**
 	 * Load admin Javascript.
 	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
+	 * @access public
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function admin_enqueue_scripts() {
 
@@ -2249,9 +2249,9 @@ class Do_Action {
 	/**
 	 * Installation. Runs on activation.
 	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
+	 * @access public
+	 * @since  1.0.0
+	 * @return void
 	 */
 	public function install() {
 		$this->log_version_number();
@@ -2260,9 +2260,9 @@ class Do_Action {
 	/**
 	 * Log the plugin version number.
 	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
+	 * @access public
+	 * @since  1.0.0
+	 * @return void
 	 */
 	private function log_version_number() {
 		update_option( $this->token . '_version', $this->version );
