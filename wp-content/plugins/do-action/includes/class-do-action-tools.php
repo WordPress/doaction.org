@@ -7,14 +7,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Do_Action_Tools {
 	/**
 	 * The single instance of do_action.
+	 *
 	 * @var     object
 	 * @access  private
 	 * @since   1.0.0
 	 */
-	private static $_instance = null;
+	private static $instance = null;
 
 	/**
 	 * The main plugin instance.
+	 *
 	 * @var     Do_Action|null
 	 * @access  public
 	 * @since   1.0.0
@@ -43,7 +45,7 @@ class Do_Action_Tools {
 	public function tools_page() {
 
 		// Build page HTML
-		$html      = '<div class="wrap" id="' . esc_attr( $this->parent->_token ) . '_tools">' . "\n";
+		$html      = '<div class="wrap" id="' . esc_attr( $this->parent->token ) . '_tools">' . "\n";
 			$html .= '<h2>' . esc_html__( 'do_action Tools', 'do-action' ) . '</h2>' . "\n";
 
 			$tabs = array(
@@ -561,7 +563,7 @@ class Do_Action_Tools {
 					fputcsv( $handler, array_map( array( $this, 'escape_csv_cell' ), $person ) );
 				}
 
-				fclose( $handler );
+				fclose( $handler ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Closes the php://output stream.
 				exit;
 
 			}
@@ -575,7 +577,7 @@ class Do_Action_Tools {
 	 * opened in Excel/Sheets. Participant/org values come from less-trusted input, so prefix
 	 * any such cell with a single quote to force it to be read as text.
 	 *
-	 * @param  mixed  $value Cell value.
+	 * @param  mixed $value Cell value.
 	 * @return string
 	 */
 	private function escape_csv_cell( $value ) {
@@ -794,10 +796,10 @@ class Do_Action_Tools {
 	 * @return Main Do_Action_Tools instance
 	 */
 	public static function instance( $file = '', $version = '1.0.0' ) {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self( $file, $version );
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self( $file, $version );
 		}
-		return self::$_instance;
+		return self::$instance;
 	} // End instance ()
 
 	/**
@@ -806,7 +808,7 @@ class Do_Action_Tools {
 	 * @since 1.0.0
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->_version ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->parent->version ) );
 	} // End __clone ()
 
 	/**
@@ -815,6 +817,6 @@ class Do_Action_Tools {
 	 * @since 1.0.0
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->_version ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->parent->version ) );
 	} // End __wakeup ()
 }

@@ -8,6 +8,7 @@ class Do_Action_Post_Type {
 
 	/**
 	 * The name for the custom post type.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -16,6 +17,7 @@ class Do_Action_Post_Type {
 
 	/**
 	 * The plural name for the custom post type posts.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -24,6 +26,7 @@ class Do_Action_Post_Type {
 
 	/**
 	 * The singular name for the custom post type posts.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -32,6 +35,7 @@ class Do_Action_Post_Type {
 
 	/**
 	 * The description of the custom post type.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -40,6 +44,7 @@ class Do_Action_Post_Type {
 
 	/**
 	 * The options of the custom post type.
+	 *
 	 * @var     array
 	 * @access  public
 	 * @since   1.0.0
@@ -69,6 +74,7 @@ class Do_Action_Post_Type {
 
 	/**
 	 * Register new post type
+	 *
 	 * @return void
 	 */
 	public function register_post_type() {
@@ -111,7 +117,6 @@ class Do_Action_Post_Type {
 			'show_in_admin_bar'   => true,
 			'show_in_rest'        => true,
 			'query_var'           => true,
-			'can_export'          => true,
 			'rewrite'             => true,
 			'capability_type'     => array( $this->post_type, $this->post_type . 's' ),
 			'map_meta_cap'        => true,
@@ -131,6 +136,7 @@ class Do_Action_Post_Type {
 
 	/**
 	 * Set up admin messages for post type
+	 *
 	 * @param  array $messages Default message
 	 * @return array           Modified messages
 	 */
@@ -167,8 +173,9 @@ class Do_Action_Post_Type {
 
 	/**
 	 * Set up bulk admin messages for post type
-	 * @param  array  $bulk_messages Default bulk messages
-	 * @param  array  $bulk_counts   Counts of selected posts in each status
+	 *
+	 * @param  array $bulk_messages Default bulk messages
+	 * @param  array $bulk_counts   Counts of selected posts in each status
 	 * @return array                Modified messages
 	 */
 	public function bulk_updated_messages( $bulk_messages = array(), $bulk_counts = array() ) {

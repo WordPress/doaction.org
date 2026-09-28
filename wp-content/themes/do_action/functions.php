@@ -6,7 +6,7 @@ function storefront_post_header() {
 
 load_theme_textdomain( 'do-action' );
 
-/** STRING TRANSLATIONS **/
+/** STRING TRANSLATIONS */
 
 add_filter( 'theme_mod_sph_hero_text', 'doaction_sph_hero_text', 10, 1 );
 function doaction_sph_hero_text( $text ) {

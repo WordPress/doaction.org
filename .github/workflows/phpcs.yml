@@ -10,5 +10,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
-          tools: phpcs, wp-coding-standards/wpcs
+      - run: |
+          composer global config allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+          composer global require wp-coding-standards/wpcs
       - run: phpcs

@@ -8,6 +8,7 @@ class Do_Action_Taxonomy {
 
 	/**
 	 * The name for the taxonomy.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -16,6 +17,7 @@ class Do_Action_Taxonomy {
 
 	/**
 	 * The plural name for the taxonomy terms.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -24,6 +26,7 @@ class Do_Action_Taxonomy {
 
 	/**
 	 * The singular name for the taxonomy terms.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -32,6 +35,7 @@ class Do_Action_Taxonomy {
 
 	/**
 	 * The array of post types to which this taxonomy applies.
+	 *
 	 * @var     array
 	 * @access  public
 	 * @since   1.0.0
@@ -39,11 +43,12 @@ class Do_Action_Taxonomy {
 	public $post_types;
 
 	/**
-		* The array of taxonomy arguments
-		* @var     array
-		* @access  public
-		* @since   1.0.0
-		*/
+	 * The array of taxonomy arguments
+	 *
+	 * @var     array
+	 * @access  public
+	 * @since   1.0.0
+	 */
 	public $taxonomy_args;
 
 	public function __construct( $taxonomy = '', $plural = '', $single = '', $post_types = array(), $tax_args = array() ) {
@@ -68,6 +73,7 @@ class Do_Action_Taxonomy {
 
 	/**
 	 * Register new taxonomy
+	 *
 	 * @return void
 	 */
 	public function register_taxonomy() {

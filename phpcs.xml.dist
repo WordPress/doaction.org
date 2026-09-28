@@ -3,9 +3,21 @@
 	<file>.</file>
 	<arg name="extensions" value="php"/>
 
-	<rule ref="WordPress-Core">
-		<!-- Bundled third-party library. -->
-		<exclude-pattern>*/akismet.fuspam.php</exclude-pattern>
+	<!-- Show sniff codes in all reports -->
+	<arg value="ps"/>
+	<arg name="colors"/>
+
+	<!-- Bundled third-party library. -->
+	<exclude-pattern>*/akismet.fuspam.php</exclude-pattern>
+
+	<rule ref="WordPress"/>
+
+	<rule ref="WordPress.WP.Capabilities">
+		<properties>
+			<property name="custom_capabilities" type="array">
+				<element value="organiser"/>
+				<element value="use_do_action_tools"/>
+			</property>
+		</properties>
 	</rule>
-	<rule ref="WordPress.Security"/>
 </ruleset>

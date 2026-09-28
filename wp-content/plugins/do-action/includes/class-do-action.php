@@ -8,30 +8,34 @@ class Do_Action {
 
 	/**
 	 * The single instance of do_action.
+	 *
 	 * @var     object
 	 * @access  private
 	 * @since   1.0.0
 	 */
-	private static $_instance = null;
+	private static $instance = null;
 
 	/**
 	 * The version number.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
 	 */
-	public $_version;
+	public $version;
 
 	/**
 	 * The token.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
 	 */
-	public $_token;
+	public $token;
 
 	/**
 	 * The main plugin file.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -40,6 +44,7 @@ class Do_Action {
 
 	/**
 	 * The main plugin directory.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -48,6 +53,7 @@ class Do_Action {
 
 	/**
 	 * The plugin assets directory.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -56,6 +62,7 @@ class Do_Action {
 
 	/**
 	 * The plugin assets URL.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -64,6 +71,7 @@ class Do_Action {
 
 	/**
 	 * Suffix for Javascripts.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -72,6 +80,7 @@ class Do_Action {
 
 	/**
 	 * Akismet API key.
+	 *
 	 * @var     string
 	 * @access  public
 	 * @since   1.0.0
@@ -80,6 +89,7 @@ class Do_Action {
 
 	/**
 	 * Custom post types and their labels.
+	 *
 	 * @var     array
 	 * @access  public
 	 * @since   1.0.0
@@ -88,6 +98,7 @@ class Do_Action {
 
 	/**
 	 * Custom taxonomies and their labels.
+	 *
 	 * @var     array
 	 * @access  public
 	 * @since   1.0.0
@@ -96,6 +107,7 @@ class Do_Action {
 
 	/**
 	 * Admin API instance.
+	 *
 	 * @var     Do_Action_Admin_API|null
 	 * @access  public
 	 * @since   1.0.0
@@ -104,6 +116,7 @@ class Do_Action {
 
 	/**
 	 * Tools instance.
+	 *
 	 * @var     Do_Action_Tools|null
 	 * @access  public
 	 * @since   1.0.0
@@ -112,13 +125,14 @@ class Do_Action {
 
 	/**
 	 * Constructor function.
+	 *
 	 * @access  public
 	 * @since   1.0.0
 	 * @return  void
 	 */
 	public function __construct( $file = '', $version = '1.0.0' ) {
-		$this->_version = $version;
-		$this->_token   = 'do_action';
+		$this->version = $version;
+		$this->token   = 'do_action';
 
 		// Load plugin environment variables
 		$this->file       = $file;
@@ -138,7 +152,7 @@ class Do_Action {
 		add_action( 'init', array( $this, 'register_taxonomies' ), 1 );
 		add_filter( 'dashboard_glance_items', array( $this, 'glance_items' ), 10, 1 );
 		add_action( 'save_post', array( $this, 'set_nonprofits_private' ), 10, 2 );
-		add_action( 'restrict_manage_posts', array( $this, 'filter_non_profits_list_table' ), 10, 2 );
+		add_action( 'restrict_manage_posts', array( $this, 'filter_non_profits_list_table' ) );
 
 		// Register custom fields & meta boxes
 		add_action( 'init', array( $this, 'custom_fields' ) );
@@ -157,7 +171,7 @@ class Do_Action {
 		add_action( 'admin_init', array( $this, 'redirect_dashboard' ) );
 		add_action( 'admin_menu', array( $this, 'modify_admin_menu' ), 999 );
 		add_filter( 'request', array( $this, 'modify_admin_lists' ) );
-		add_filter( 'wp_count_posts', array( $this, 'modify_post_counts' ), 10, 3 );
+		add_filter( 'wp_count_posts', array( $this, 'modify_post_counts' ), 10, 2 );
 		add_filter( 'removable_query_args', array( $this, 'removable_query_args' ), 10, 1 );
 
 		// Require edit rights on Polylang's untranslated-posts REST endpoint, which otherwise
@@ -178,8 +192,8 @@ class Do_Action {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
 
 		// Load admin JS & CSS
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10, 1 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ), 10, 1 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ) );
 
 		// Load API for generic admin functions
 		if ( is_admin() ) {
@@ -201,7 +215,7 @@ class Do_Action {
 
 		$args = array(
 			'post_type'      => 'event',
-			'meta_query'     => array(
+			'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Events are filtered by date meta.
 				array(
 					'key'     => 'date',
 					'value'   => $today,
@@ -209,7 +223,7 @@ class Do_Action {
 					'type'    => 'date',
 				),
 			),
-			'meta_key'       => 'date',
+			'meta_key'       => 'date', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Events are sorted by date meta.
 			'orderby'        => 'meta_value',
 			'order'          => 'ASC',
 			'lang'           => '', // Show events from all locales
@@ -568,9 +582,7 @@ class Do_Action {
 							?>
 							<li>
 								<label for="nonprofit-<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $label_class ); ?>">
-									<?php // if( $available ) { ?>
 										<input type="radio" class="non-profit-selector" value="<?php echo esc_attr( $id ); ?>" name="nonprofit" id="nonprofit-<?php echo esc_attr( $id ); ?>" />
-									<?php // } ?>
 									<span class="nonprofit-title"><?php echo esc_html( $org->post_title ); ?> <em><?php echo esc_html( $positions ); ?></em></span>
 									<?php
 									if ( $url ) {
@@ -1107,8 +1119,6 @@ class Do_Action {
 			add_action( 'save_post', array( $this, 'set_nonprofits_private' ), 10, 2 );
 
 		}
-
-		return;
 	}
 
 	public function nonprofit_team( $org ) {
@@ -1203,7 +1213,7 @@ class Do_Action {
 		}
 	}
 
-	public function past_events( $params = array() ) {
+	public function past_events() {
 
 		ob_start();
 
@@ -1215,7 +1225,7 @@ class Do_Action {
 
 		$args = array(
 			'post_type'      => 'event',
-			'meta_query'     => array(
+			'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Events are filtered by date meta.
 				array(
 					'key'     => 'date',
 					'value'   => $today,
@@ -1228,7 +1238,7 @@ class Do_Action {
 					'compare' => '=',
 				),
 			),
-			'meta_key'       => 'date',
+			'meta_key'       => 'date', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Events are sorted by date meta.
 			'orderby'        => 'meta_value',
 			'order'          => 'DESC',
 			'lang'           => '', // Show events from all locales
@@ -1303,7 +1313,7 @@ class Do_Action {
 		return $request;
 	}
 
-	public function modify_post_counts( $counts, $type, $perm ) {
+	public function modify_post_counts( $counts, $type ) {
 		global $pagenow, $typenow;
 
 		if ( ! current_user_can( 'organiser' ) ) {
@@ -1373,11 +1383,11 @@ class Do_Action {
 	public function custom_fields() {
 		foreach ( $this->post_types as $type => $details ) {
 			$type = str_replace( '-', '_', $type );
-			add_filter( $type . '_custom_fields', array( $this, $type . '_custom_fields' ), 10, 2 );
+			add_filter( $type . '_custom_fields', array( $this, $type . '_custom_fields' ) );
 		}
 	}
 
-	public function event_custom_fields( $fields, $post_type ) {
+	public function event_custom_fields( $fields ) {
 
 		$org_args = array(
 			'post_type'      => 'non-profit',
@@ -1500,7 +1510,7 @@ class Do_Action {
 		return $fields;
 	}
 
-	public function non_profit_custom_fields( $fields, $post_type ) {
+	public function non_profit_custom_fields( $fields ) {
 		global $post;
 
 		$fields = array(
@@ -1582,7 +1592,7 @@ class Do_Action {
 		return $fields;
 	}
 
-	public function sponsor_custom_fields( $fields, $post_type ) {
+	public function sponsor_custom_fields( $fields ) {
 
 		$fields = array(
 			array(
@@ -1641,7 +1651,7 @@ class Do_Action {
 
 						$nonprofit_author = get_post_field( 'post_author', $id );
 
-						if ( current_user_can( 'administrator' ) || current_user_can( 'editor' ) || (int) $nonprofit_author === (int) $post->post_author ) {
+						if ( current_user_can( 'edit_others_posts' ) || (int) $nonprofit_author === (int) $post->post_author ) {
 							$edit_url   = admin_url( 'post.php?post=' . $id . '&action=edit' );
 							$box_title .= '&nbsp;<a href="' . $edit_url . '"><span class="dashicons dashicons-edit edit-non-profit-from-event"></span></a>';
 						}
@@ -1665,7 +1675,7 @@ class Do_Action {
 		$this->nonprofit_team( $org_id );
 	}
 
-	public function filter_non_profits_list_table( $post_type, $which ) {
+	public function filter_non_profits_list_table( $post_type ) {
 
 		if ( 'non-profit' === $post_type ) {
 
@@ -1879,6 +1889,7 @@ class Do_Action {
 
 	/**
 	 * Wrapper function to register a new post type
+	 *
 	 * @param  string $post_type   Post type name
 	 * @param  string $plural      Post type item plural name
 	 * @param  string $single      Post type item single name
@@ -1898,6 +1909,7 @@ class Do_Action {
 
 	/**
 	 * Wrapper function to register a new taxonomy
+	 *
 	 * @param  string $taxonomy   Taxonomy name
 	 * @param  string $plural     Taxonomy single name
 	 * @param  string $single     Taxonomy plural name
@@ -1917,58 +1929,62 @@ class Do_Action {
 
 	/**
 	 * Load frontend CSS.
+	 *
 	 * @access  public
 	 * @since   1.0.0
 	 * @return void
 	 */
 	public function enqueue_styles() {
-		wp_register_style( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'css/frontend.css', array(), $this->_version );
-		wp_enqueue_style( $this->_token . '-frontend' );
+		wp_register_style( $this->token . '-frontend', esc_url( $this->assets_url ) . 'css/frontend.css', array(), $this->version );
+		wp_enqueue_style( $this->token . '-frontend' );
 	} // End enqueue_styles ()
 
 	/**
 	 * Load frontend Javascript.
+	 *
 	 * @access  public
 	 * @since   1.0.0
 	 * @return  void
 	 */
 	public function enqueue_scripts() {
 
-		wp_register_script( $this->_token . '-google-maps', '//maps.googleapis.com/maps/api/js?key=AIzaSyAqRmSdBU_mA94UejB5Of4iQLlGlEXbGow&callback=initMap', array(), '4.0.2', true );
+		wp_register_script( $this->token . '-google-maps', '//maps.googleapis.com/maps/api/js?key=AIzaSyAqRmSdBU_mA94UejB5Of4iQLlGlEXbGow&callback=initMap', array(), '4.0.2', true );
 
-		wp_register_script( $this->_token . '-frontend', esc_url( $this->assets_url ) . 'js/frontend' . $this->script_suffix . '.js', array( 'jquery', $this->_token . '-google-maps' ), $this->_version, true );
-		wp_enqueue_script( $this->_token . '-frontend' );
+		wp_register_script( $this->token . '-frontend', esc_url( $this->assets_url ) . 'js/frontend' . $this->script_suffix . '.js', array( 'jquery', $this->token . '-google-maps' ), $this->version, true );
+		wp_enqueue_script( $this->token . '-frontend' );
 	} // End enqueue_scripts ()
 
 	/**
 	 * Load admin CSS.
+	 *
 	 * @access  public
 	 * @since   1.0.0
 	 * @return  void
 	 */
-	public function admin_enqueue_styles( $hook = '' ) {
+	public function admin_enqueue_styles() {
 
-		wp_register_style( $this->_token . '-jqeury-ui', '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css', array(), '1.11.4' );
+		wp_register_style( $this->token . '-jqeury-ui', '//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css', array(), '1.11.4' );
 
-		wp_register_style( $this->_token . '-admin', esc_url( $this->assets_url ) . 'css/admin.css', array( $this->_token . '-jqeury-ui' ), $this->_version );
-		wp_enqueue_style( $this->_token . '-admin' );
+		wp_register_style( $this->token . '-admin', esc_url( $this->assets_url ) . 'css/admin.css', array( $this->token . '-jqeury-ui' ), $this->version );
+		wp_enqueue_style( $this->token . '-admin' );
 
-		wp_enqueue_style( $this->_token . '-jquery-ui-datepicker', esc_url( $this->assets_url ) . 'css/datepicker.css', false, false, false );
+		wp_enqueue_style( $this->token . '-jquery-ui-datepicker', esc_url( $this->assets_url ) . 'css/datepicker.css', array(), $this->version );
 	} // End admin_enqueue_styles ()
 
 	/**
 	 * Load admin Javascript.
+	 *
 	 * @access  public
 	 * @since   1.0.0
 	 * @return  void
 	 */
-	public function admin_enqueue_scripts( $hook = '' ) {
+	public function admin_enqueue_scripts() {
 
-		wp_register_script( $this->_token . '-google-places', '//maps.googleapis.com/maps/api/js?key=AIzaSyAqRmSdBU_mA94UejB5Of4iQLlGlEXbGow&libraries=places', array(), '4.0.2' );
-		wp_register_script( $this->_token . '-geocomplete', esc_url( $this->assets_url ) . 'js/jquery.geocomplete' . $this->script_suffix . '.js', array( 'jquery', $this->_token . '-google-places' ), '1.7.0' );
+		wp_register_script( $this->token . '-google-places', '//maps.googleapis.com/maps/api/js?key=AIzaSyAqRmSdBU_mA94UejB5Of4iQLlGlEXbGow&libraries=places', array(), '4.0.2', false );
+		wp_register_script( $this->token . '-geocomplete', esc_url( $this->assets_url ) . 'js/jquery.geocomplete' . $this->script_suffix . '.js', array( 'jquery', $this->token . '-google-places' ), '1.7.0', false );
 
-		wp_register_script( $this->_token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', $this->_token . '-geocomplete' ), $this->_version . '.' . filemtime( $this->assets_dir . '/js/admin' . $this->script_suffix . '.js' ), false );
-		wp_enqueue_script( $this->_token . '-admin' );
+		wp_register_script( $this->token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery', 'jquery-ui-datepicker', $this->token . '-geocomplete' ), $this->version . '.' . filemtime( $this->assets_dir . '/js/admin' . $this->script_suffix . '.js' ), false );
+		wp_enqueue_script( $this->token . '-admin' );
 	} // End admin_enqueue_scripts ()
 
 	/**
@@ -1982,10 +1998,10 @@ class Do_Action {
 	 * @return Main Do_Action instance
 	 */
 	public static function instance( $file = '', $version = '1.0.0' ) {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self( $file, $version );
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self( $file, $version );
 		}
-		return self::$_instance;
+		return self::$instance;
 	} // End instance ()
 
 	/**
@@ -1994,7 +2010,7 @@ class Do_Action {
 	 * @since 1.0.0
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->_version ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->version ) );
 	} // End __clone ()
 
 	/**
@@ -2003,26 +2019,28 @@ class Do_Action {
 	 * @since 1.0.0
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->_version ) );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'do-action' ), esc_html( $this->version ) );
 	} // End __wakeup ()
 
 	/**
 	 * Installation. Runs on activation.
+	 *
 	 * @access  public
 	 * @since   1.0.0
 	 * @return  void
 	 */
 	public function install() {
-		$this->_log_version_number();
+		$this->log_version_number();
 	} // End install ()
 
 	/**
 	 * Log the plugin version number.
+	 *
 	 * @access  public
 	 * @since   1.0.0
 	 * @return  void
 	 */
-	private function _log_version_number() {
-		update_option( $this->_token . '_version', $this->_version );
-	} // End _log_version_number ()
+	private function log_version_number() {
+		update_option( $this->token . '_version', $this->version );
+	} // End log_version_number ()
 }

@@ -15,6 +15,7 @@ class Do_Action_Admin_API {
 
 	/**
 	 * Generate HTML for displaying fields
+	 *
 	 * @param  array   $field Field data
 	 * @param  boolean $display Whether to echo the field HTML or return it
 	 * @return void
@@ -222,6 +223,7 @@ class Do_Action_Admin_API {
 
 	/**
 	 * Validate form field
+	 *
 	 * @param  string $data Submitted value
 	 * @param  string $type Type of field to validate
 	 * @return string       Validated value
@@ -248,6 +250,7 @@ class Do_Action_Admin_API {
 
 	/**
 	 * Add meta box to the dashboard
+	 *
 	 * @param string $id            Unique ID for metabox
 	 * @param string $title         Display title of metabox
 	 * @param array  $post_types    Post types to which this metabox applies
@@ -271,6 +274,7 @@ class Do_Action_Admin_API {
 
 	/**
 	 * Display metabox content
+	 *
 	 * @param  object $post Post object
 	 * @param  array  $args Arguments unique to this metabox
 	 * @return void
@@ -308,6 +312,7 @@ class Do_Action_Admin_API {
 
 	/**
 	 * Dispay field in metabox
+	 *
 	 * @param  array  $field Field data
 	 * @param  object $post  Post object
 	 * @return void
@@ -330,6 +335,7 @@ class Do_Action_Admin_API {
 
 	/**
 	 * Save metabox fields
+	 *
 	 * @param  integer $post_id Post ID
 	 * @return void
 	 */
