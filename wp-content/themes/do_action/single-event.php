@@ -10,7 +10,9 @@ get_header(); ?>
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
 
-		<?php while ( have_posts() ) : the_post();
+		<?php
+		while ( have_posts() ) :
+			the_post();
 
 			do_action( 'storefront_single_post_before' );
 
@@ -18,7 +20,7 @@ get_header(); ?>
 			$signed_up = isset( $_GET['signup'] ) ? sanitize_key( wp_unslash( $_GET['signup'] ) ) : '';
 			if ( $signed_up ) {
 
-				if( 'success' == $signed_up ) {
+				if ( 'success' == $signed_up ) {
 					?>
 					<div class="form-success-box">
 						<?php
@@ -36,14 +38,13 @@ get_header(); ?>
 					</div>
 					<?php
 				}
-
 			}
 
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Display a redirect notice without changing state.
 			$applied = isset( $_GET['application'] ) ? sanitize_key( wp_unslash( $_GET['application'] ) ) : '';
 			if ( $applied ) {
 
-				if( 'success' == $applied ) {
+				if ( 'success' == $applied ) {
 					?>
 					<div class="form-success-box">
 						<?php
@@ -60,12 +61,12 @@ get_header(); ?>
 					</div>
 					<?php
 				}
-
 			}
 
 			get_template_part( 'content', 'single' );
 
-		endwhile; // End of the loop. ?>
+		endwhile; // End of the loop.
+		?>
 
 		</main><!-- #main -->
 	</div><!-- #primary -->

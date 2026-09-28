@@ -1,14 +1,14 @@
 /*
-Theme Name:   	do_action
-Theme URI:    	https://doaction.org
-Author:       	WooThemes
-Author URI:	    http://hughlashbrooke.com
-Description:  	Storefront child theme for doaction.org
-Version:      	1.0
-License:      	GNU General Public License v2 or later
-License URI:  	http://www.gnu.org/licenses/gpl-2.0.html
-Text Domain:	do-action
-Template:		storefront
+Theme Name:   do_action
+Theme URI:    https://doaction.org
+Author:       WooThemes
+Author URI:   http://hughlashbrooke.com
+Description:  Storefront child theme for doaction.org
+Version:      1.0
+License:      GNU General Public License v2 or later
+License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain:  do-action
+Template:     storefront
 */
 
 .site-branding .custom-logo-link img { max-width: 350px; margin: 0 auto; }
