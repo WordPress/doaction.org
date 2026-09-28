@@ -11,6 +11,14 @@ class do_action_tools {
 	 */
 	private static $_instance = null;
 
+	/**
+	 * The main plugin instance.
+	 * @var     do_action|null
+	 * @access  public
+	 * @since   1.0.0
+	 */
+	public $parent;
+
 	public function __construct ( $parent = null ) {
 
 		$this->parent = $parent;
