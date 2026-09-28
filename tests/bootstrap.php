@@ -23,16 +23,15 @@ if ( getenv( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' ) ) {
 require_once $do_action_tests_dir . '/includes/functions.php';
 
 tests_add_filter(
-	'init',
+	'muplugins_loaded',
 	/**
-	 * Load the plugin before its init callbacks, after translations are available.
+	 * Load the plugin before WordPress fires its init callbacks, as it would in production.
 	 *
 	 * @return void
 	 */
 	static function (): void {
 		require dirname( __DIR__ ) . '/wp-content/plugins/do-action/do-action.php';
-	},
-	0
+	}
 );
 
 require $do_action_tests_dir . '/includes/bootstrap.php';
