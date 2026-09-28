@@ -13,9 +13,9 @@ class do_action_tools {
 
 	/**
 	 * The main plugin instance.
-	 * @var 	do_action|null
+	 * @var     do_action|null
 	 * @access  public
-	 * @since 	1.0.0
+	 * @since   1.0.0
 	 */
 	public $parent;
 
