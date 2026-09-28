@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class do_action_Taxonomy {
+class Do_Action_Taxonomy {
 
 	/**
 	 * The name for the taxonomy.

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class do_action_Post_Type {
+class Do_Action_Post_Type {
 
 	/**
 	 * The name for the custom post type.
@@ -173,6 +173,7 @@ class do_action_Post_Type {
 	 */
 	public function bulk_updated_messages( $bulk_messages = array(), $bulk_counts = array() ) {
 
+		// phpcs:disable WordPress.WP.I18n.MismatchedPlaceholders -- Singular forms use the singular label (%2$s), plural forms the plural label (%3$s).
 		$bulk_messages[ $this->post_type ] = array(
 			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
 			'updated'   => sprintf( _n( '%1$s %2$s updated.', '%1$s %3$s updated.', $bulk_counts['updated'], 'do-action' ), $bulk_counts['updated'], $this->single, $this->plural ),
@@ -185,6 +186,7 @@ class do_action_Post_Type {
 			/* translators: 1: Number of posts, 2: Singular post type label, 3: Plural post type label. */
 			'untrashed' => sprintf( _n( '%1$s %2$s restored from the Trash.', '%1$s %3$s restored from the Trash.', $bulk_counts['untrashed'], 'do-action' ), $bulk_counts['untrashed'], $this->single, $this->plural ),
 		);
+		// phpcs:enable
 
 		return $bulk_messages;
 	}

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class do_action {
+class Do_Action {
 
 	/**
 	 * The single instance of do_action.
@@ -96,7 +96,7 @@ class do_action {
 
 	/**
 	 * Admin API instance.
-	 * @var     do_action_Admin_API|null
+	 * @var     Do_Action_Admin_API|null
 	 * @access  public
 	 * @since   1.0.0
 	 */
@@ -104,7 +104,7 @@ class do_action {
 
 	/**
 	 * Tools instance.
-	 * @var     do_action_tools|null
+	 * @var     Do_Action_Tools|null
 	 * @access  public
 	 * @since   1.0.0
 	 */
@@ -183,7 +183,7 @@ class do_action {
 
 		// Load API for generic admin functions
 		if ( is_admin() ) {
-			$this->admin = new do_action_Admin_API();
+			$this->admin = new Do_Action_Admin_API();
 		}
 	} // End __construct ()
 
@@ -197,7 +197,7 @@ class do_action {
 		<ul class="upcoming-events">
 		<?php
 
-		$today = date( 'Y-m-d' );
+		$today = gmdate( 'Y-m-d' );
 
 		$args = array(
 			'post_type'      => 'event',
@@ -254,7 +254,7 @@ class do_action {
 							break;
 					}
 					?>
-					<a class="event-button button" href="<?php echo esc_url( get_permalink( $event->ID ) ); ?>"><?php esc_html_e( $action_button ); ?></a>
+					<a class="event-button button" href="<?php echo esc_url( get_permalink( $event->ID ) ); ?>"><?php echo esc_html( $action_button ); ?></a>
 				</span>
 			</li>
 		<?php } ?>
@@ -460,7 +460,7 @@ class do_action {
 
 	public function get_pll_current_language_path() {
 		if ( function_exists( 'pll_current_language' ) ) {
-			if ( pll_current_language() == 'en' ) {
+			if ( 'en' === pll_current_language() ) {
 				return null;
 			} else {
 				return '/' . pll_current_language();
@@ -567,9 +567,9 @@ class do_action {
 							}
 							?>
 							<li>
-								<label for="nonprofit-<?php esc_attr_e( $id ); ?>" class="<?php esc_attr_e( $label_class ); ?>">
+								<label for="nonprofit-<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $label_class ); ?>">
 									<?php // if( $available ) { ?>
-										<input type="radio" class="non-profit-selector" value="<?php esc_attr_e( $id ); ?>" name="nonprofit" id="nonprofit-<?php esc_attr_e( $id ); ?>" />
+										<input type="radio" class="non-profit-selector" value="<?php echo esc_attr( $id ); ?>" name="nonprofit" id="nonprofit-<?php echo esc_attr( $id ); ?>" />
 									<?php // } ?>
 									<span class="nonprofit-title"><?php echo esc_html( $org->post_title ); ?> <em><?php echo esc_html( $positions ); ?></em></span>
 									<?php
@@ -598,23 +598,24 @@ class do_action {
 							if ( $roles && 0 < count( $roles ) ) {
 								shuffle( $roles );
 								?>
-								<ul class="role-selector-list" id="role-list-<?php esc_attr_e( $id ); ?>">
+								<ul class="role-selector-list" id="role-list-<?php echo esc_attr( $id ); ?>">
 									<?php
 									foreach ( $roles as $role ) {
 										$participant = get_post_meta( $id, $role->slug . '_name', true );
-										$disabled    = $role_tail = '';
+										$disabled    = '';
+										$role_tail   = '';
 										if ( $participant ) {
 											$disabled  = 'disabled';
 											$role_tail = ' - ' . $participant;
 										}
 										$role_name = $role->name;
-										if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5' ) ) ) {
+										if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5' ), true ) ) {
 											$role_name = __( 'Developer', 'do-action' );
 										}
 										?>
-										<li class="<?php esc_attr_e( $disabled ); ?>">
-											<label for="role-<?php esc_attr_e( $id ); ?>-<?php esc_attr_e( $role->term_id ); ?>">
-												<input type="radio" class="role-selector <?php esc_attr_e( $role->slug ); ?>" value="<?php esc_attr_e( $role->term_id ); ?>" name="role" id="role-<?php esc_attr_e( $id ); ?>-<?php esc_attr_e( $role->term_id ); ?>" <?php esc_attr_e( $disabled ); ?> />
+										<li class="<?php echo esc_attr( $disabled ); ?>">
+											<label for="role-<?php echo esc_attr( $id ); ?>-<?php echo esc_attr( $role->term_id ); ?>">
+												<input type="radio" class="role-selector <?php echo esc_attr( $role->slug ); ?>" value="<?php echo esc_attr( $role->term_id ); ?>" name="role" id="role-<?php echo esc_attr( $id ); ?>-<?php echo esc_attr( $role->term_id ); ?>" <?php echo esc_attr( $disabled ); ?> />
 												<?php echo esc_html( $role_name . $role_tail ); ?>
 											</label>
 										</li>
@@ -634,11 +635,11 @@ class do_action {
 						);
 			foreach ( $all_roles as $role ) {
 				$role_name = $role->name;
-				if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5' ) ) ) {
+				if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5' ), true ) ) {
 					$role_name = __( 'Developer', 'do-action' );
 				}
 				?>
-							<p class="role-description" id="role-description-<?php esc_attr_e( $role->term_id ); ?>">
+							<p class="role-description" id="role-description-<?php echo esc_attr( $role->term_id ); ?>">
 								<strong><?php echo esc_html( $role_name ); ?>:</strong> <?php echo wp_kses_post( $role->description ); ?>
 							</p>
 							<?php
@@ -683,7 +684,7 @@ class do_action {
 	public function check_signup_form() {
 		global $post;
 
-		if ( isset( $_POST['doaction_signed_up'] ) && 'true' == $_POST['doaction_signed_up'] ) {
+		if ( isset( $_POST['doaction_signed_up'] ) && 'true' === $_POST['doaction_signed_up'] ) {
 
 			// Require a valid nonce from the sign-up form before doing any work.
 			if ( ! isset( $_POST['doaction_signup_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['doaction_signup_nonce'] ) ), 'doaction_signup' ) ) {
@@ -759,16 +760,8 @@ class do_action {
 
 		if ( function_exists( 'fuspam' ) ) {
 
-			// Get most accurate IP address for user
-			$user_ip = getenv( 'HTTP_CLIENT_IP' ) ?:
-			getenv( 'HTTP_X_FORWARDED_FOR' ) ?:
-			getenv( 'HTTP_X_FORWARDED' ) ?:
-			getenv( 'HTTP_FORWARDED_FOR' ) ?:
-			getenv( 'HTTP_FORWARDED' ) ?:
-			getenv( 'REMOTE_ADDR' );
-
 			$data['blog']                 = 'https://doaction.org/';
-			$data['user_ip']              = $user_ip;
+			$data['user_ip']              = $this->get_user_ip();
 			$data['user_agent']           = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
 			$data['referrer']             = isset( $_SERVER['HTTP_REFERER'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
 			$data['permalink']            = get_post_permalink( $event->ID );
@@ -780,7 +773,7 @@ class do_action {
 
 			$is_spam = fuspam( $data, 'check-spam', $this->akismet_api_key );
 
-			if ( 'true' == $is_spam ) {
+			if ( 'true' === $is_spam ) {
 				return false;
 			}
 		}
@@ -790,7 +783,7 @@ class do_action {
 		update_post_meta( $org->ID, $role->slug . '_phone_number', $participant_number );
 
 		// If this is a Project Manager signing up, set a new random password
-		if ( 'project-manager' == $role->slug && ( ! $org->post_password || 'do_action' == $org->post_password ) ) {
+		if ( 'project-manager' === $role->slug && ( ! $org->post_password || 'do_action' === $org->post_password ) ) {
 
 			$new_password = $this->random_password( 10 );
 
@@ -818,6 +811,24 @@ class do_action {
 		// Use WordPress' CSPRNG-backed generator. str_shuffle() is not cryptographically
 		// secure and only permutes a fixed 65-character alphabet, making its output guessable.
 		return wp_generate_password( $length, false );
+	}
+
+	/**
+	 * Get the most accurate IP address for the current user.
+	 *
+	 * @access  private
+	 * @since   1.0.0
+	 * @return  string|false IP address, or false if none is set.
+	 */
+	private function get_user_ip() {
+		foreach ( array( 'HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR' ) as $key ) {
+			$user_ip = getenv( $key );
+			if ( $user_ip ) {
+				break;
+			}
+		}
+
+		return $user_ip;
 	}
 
 	private function send_signup_email( $email = '', $name = '', $org = false, $role = false, $event = false ) {
@@ -851,7 +862,7 @@ class do_action {
 			?>
 		</p>
 
-		<?php if ( 'project-manager' == $role->slug ) { ?>
+		<?php if ( 'project-manager' === $role->slug ) { ?>
 			<p>
 				<?php
 				/* translators: 1: Opening team-page link tag, 2: Closing link tag, 3: Page password. */
@@ -892,7 +903,7 @@ class do_action {
 	public function check_application_form() {
 		global $post;
 
-		if ( isset( $_POST['doaction_application_sent'] ) && 'true' == $_POST['doaction_application_sent'] ) {
+		if ( isset( $_POST['doaction_application_sent'] ) && 'true' === $_POST['doaction_application_sent'] ) {
 
 			// Require a valid nonce from the application form before doing any work.
 			if ( ! isset( $_POST['doaction_application_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['doaction_application_nonce'] ) ), 'doaction_application' ) ) {
@@ -951,16 +962,8 @@ class do_action {
 
 		if ( function_exists( 'fuspam' ) ) {
 
-			// Get most accurate IP address for user
-			$user_ip = getenv( 'HTTP_CLIENT_IP' ) ?:
-			getenv( 'HTTP_X_FORWARDED_FOR' ) ?:
-			getenv( 'HTTP_X_FORWARDED' ) ?:
-			getenv( 'HTTP_FORWARDED_FOR' ) ?:
-			getenv( 'HTTP_FORWARDED' ) ?:
-			getenv( 'REMOTE_ADDR' );
-
 			$data['blog']                 = 'https://doaction.org/';
-			$data['user_ip']              = $user_ip;
+			$data['user_ip']              = $this->get_user_ip();
 			$data['user_agent']           = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
 			$data['referrer']             = isset( $_SERVER['HTTP_REFERER'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
 			$data['permalink']            = get_post_permalink( $event->ID );
@@ -972,7 +975,7 @@ class do_action {
 
 			$is_spam = fuspam( $data, 'check-spam', $this->akismet_api_key );
 
-			if ( 'true' == $is_spam ) {
+			if ( 'true' === $is_spam ) {
 				return false;
 			}
 		}
@@ -1007,7 +1010,7 @@ class do_action {
 		$roles = array();
 		foreach ( $all_roles as $role_id ) {
 			$role_id = intval( $role_id );
-			if ( ! in_array( $role_id, array( 52, 54 ) ) ) {
+			if ( ! in_array( $role_id, array( 52, 54 ), true ) ) {
 				$roles[] = $role_id;
 			}
 		}
@@ -1080,9 +1083,9 @@ class do_action {
 
 	public function set_nonprofits_private( $post_id, $post ) {
 
-		if ( $post->post_type && 'non-profit' == $post->post_type ) {
+		if ( $post->post_type && 'non-profit' === $post->post_type ) {
 
-			if ( in_array( $post->post_status, array( 'auto-draft', 'trash' ) ) ) {
+			if ( in_array( $post->post_status, array( 'auto-draft', 'trash' ), true ) ) {
 				return;
 			}
 
@@ -1187,7 +1190,7 @@ class do_action {
 					}
 
 					$role_name = $role->name;
-					if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5' ) ) ) {
+					if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5' ), true ) ) {
 						$role_name = __( 'Developer', 'do-action' );
 					}
 					?>
@@ -1208,7 +1211,7 @@ class do_action {
 		<ul class="upcoming-events">
 		<?php
 
-		$today = date( 'Y-m-d' );
+		$today = gmdate( 'Y-m-d' );
 
 		$args = array(
 			'post_type'      => 'event',
@@ -1273,11 +1276,11 @@ class do_action {
 			return $request;
 		}
 
-		if ( 'edit.php' != $pagenow ) {
+		if ( 'edit.php' !== $pagenow ) {
 			return $request;
 		}
 
-		if ( ! in_array( $typenow, array( 'event', 'non-profit' ) ) ) {
+		if ( ! in_array( $typenow, array( 'event', 'non-profit' ), true ) ) {
 			return $request;
 		}
 
@@ -1307,11 +1310,11 @@ class do_action {
 			return $counts;
 		}
 
-		if ( 'edit.php' != $pagenow ) {
+		if ( 'edit.php' !== $pagenow ) {
 			return $counts;
 		}
 
-		if ( ! in_array( $typenow, array( 'event', 'non-profit' ) ) ) {
+		if ( ! in_array( $typenow, array( 'event', 'non-profit' ), true ) ) {
 			return $counts;
 		}
 
@@ -1339,23 +1342,23 @@ class do_action {
 		<header class="entry-header">
 		<?php
 		if ( is_single() ) {
-			if ( 'post' == get_post_type() ) {
+			if ( 'post' === get_post_type() ) {
 				storefront_posted_on();
 			}
 			the_title( '<h1 class="entry-title" itemprop="name headline">', '</h1>' );
 		} else {
-			if ( 'post' == get_post_type() ) {
+			if ( 'post' === get_post_type() ) {
 				storefront_posted_on();
 			}
 
 			the_title( sprintf( '<h1 class="entry-title" itemprop="name headline"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h1>' );
 		}
 
-		if ( 'event' == get_post_type() ) {
+		if ( 'event' === get_post_type() ) {
 			$date  = get_post_meta( get_the_ID(), 'date', true );
 			$venue = get_post_meta( get_the_ID(), 'venue_name', true );
 			echo '<span class="event-date">' . esc_html( gmdate( 'j F Y', strtotime( $date ) ) ) . ' ' . esc_html__( 'at', 'do-action' ) . ' ' . esc_html( $venue ) . '</span>';
-		} elseif ( 'sponsor' == get_post_type() ) {
+		} elseif ( 'sponsor' === get_post_type() ) {
 			$url = get_post_meta( get_the_ID(), 'url', true );
 			if ( $url ) {
 				echo '<span class="sponsor-meta"><a href="' . esc_url( $url ) . '" title="' . esc_attr( get_the_title() ) . '" target="_blank">' . esc_html__( 'Visit website', 'do-action' ) . '</a></span>';
@@ -1606,7 +1609,7 @@ class do_action {
 	public function add_meta_boxes( $post_type, $post ) {
 		foreach ( $this->post_types as $type => $details ) {
 
-			if ( $type != $post_type ) {
+			if ( $type !== $post_type ) {
 				continue;
 			}
 
@@ -1614,7 +1617,7 @@ class do_action {
 			/* translators: %s: Singular post type label. */
 			$this->admin->add_meta_box( $field_type . '_details', sprintf( __( '%s Details', 'do-action' ), $details['single'] ), array( $type ), 'normal', 'high' );
 
-			if ( 'non-profit' == $post_type ) {
+			if ( 'non-profit' === $post_type ) {
 				if ( $post && isset( $post->ID ) ) {
 					$roles = get_the_terms( $post, 'role' );
 
@@ -1626,7 +1629,7 @@ class do_action {
 						}
 					}
 				}
-			} elseif ( 'event' == $post_type ) {
+			} elseif ( 'event' === $post_type ) {
 				$orgs = $this->get_event_nonprofits( $post->ID );
 
 				if ( $orgs && 0 < count( $orgs ) ) {
@@ -1638,7 +1641,7 @@ class do_action {
 
 						$nonprofit_author = get_post_field( 'post_author', $id );
 
-						if ( current_user_can( 'administrator' ) || current_user_can( 'editor' ) || $nonprofit_author == $post->post_author ) {
+						if ( current_user_can( 'administrator' ) || current_user_can( 'editor' ) || (int) $nonprofit_author === (int) $post->post_author ) {
 							$edit_url   = admin_url( 'post.php?post=' . $id . '&action=edit' );
 							$box_title .= '&nbsp;<a href="' . $edit_url . '"><span class="dashicons dashicons-edit edit-non-profit-from-event"></span></a>';
 						}
@@ -1664,7 +1667,7 @@ class do_action {
 
 	public function filter_non_profits_list_table( $post_type, $which ) {
 
-		if ( 'non-profit' == $post_type ) {
+		if ( 'non-profit' === $post_type ) {
 
 			$event_args = array(
 				'post_type'      => 'event',
@@ -1712,7 +1715,7 @@ class do_action {
 	public function redirect_dashboard() {
 		global $pagenow;
 
-		if ( current_user_can( 'organiser' ) && 'index.php' == $pagenow ) {
+		if ( current_user_can( 'organiser' ) && 'index.php' === $pagenow ) {
 			wp_safe_redirect( admin_url( 'edit.php?post_type=event' ) );
 			exit;
 		}
@@ -1847,9 +1850,7 @@ class do_action {
 				$published = intval( $num_posts->publish );
 				$post_type = get_post_type_object( $type );
 
-				/* translators: %s: Published post count; the post type label follows the count. */
-				$text = _n( '%s ' . $post_type->labels->singular_name, '%s ' . $post_type->labels->name, $published, 'your_textdomain' );
-				$text = sprintf( $text, number_format_i18n( $published ) );
+				$text = number_format_i18n( $published ) . ' ' . ( 1 === $published ? $post_type->labels->singular_name : $post_type->labels->name );
 
 				if ( $post_type && current_user_can( $post_type->cap->edit_posts ) ) {
 					$items[] = sprintf( '<a class="%1$s-count" href="edit.php?post_type=%1$s">%2$s</a>', $type, $text ) . "\n";
@@ -1890,7 +1891,7 @@ class do_action {
 			return;
 		}
 
-		$post_type = new do_action_Post_Type( $post_type, $plural, $single, $description, $options );
+		$post_type = new Do_Action_Post_Type( $post_type, $plural, $single, $description, $options );
 
 		return $post_type;
 	}
@@ -1909,7 +1910,7 @@ class do_action {
 			return;
 		}
 
-		$taxonomy = new do_action_Taxonomy( $taxonomy, $plural, $single, $post_types, $taxonomy_args );
+		$taxonomy = new Do_Action_Taxonomy( $taxonomy, $plural, $single, $post_types, $taxonomy_args );
 
 		return $taxonomy;
 	}
@@ -1978,7 +1979,7 @@ class do_action {
 	 * @since 1.0.0
 	 * @static
 	 * @see do_action_functions()
-	 * @return Main do_action instance
+	 * @return Main Do_Action instance
 	 */
 	public static function instance( $file = '', $version = '1.0.0' ) {
 		if ( is_null( self::$_instance ) ) {

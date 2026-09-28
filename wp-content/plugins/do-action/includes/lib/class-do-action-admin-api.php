@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class do_action_Admin_API {
+class Do_Action_Admin_API {
 
 	/**
 	 * Constructor function
@@ -16,10 +16,10 @@ class do_action_Admin_API {
 	/**
 	 * Generate HTML for displaying fields
 	 * @param  array   $field Field data
-	 * @param  boolean $echo  Whether to echo the field HTML or return it
+	 * @param  boolean $display Whether to echo the field HTML or return it
 	 * @return void
 	 */
-	public function display_field( $data = array(), $post = false, $echo = true ) {
+	public function display_field( $data = array(), $post = false, $display = true ) {
 
 		// Get field info
 		if ( isset( $data['field'] ) ) {
@@ -59,9 +59,9 @@ class do_action_Admin_API {
 		}
 
 		// Show default data if no option saved and default is supplied
-		if ( $data === false && isset( $field['default'] ) ) {
+		if ( false === $data && isset( $field['default'] ) ) {
 			$data = $field['default'];
-		} elseif ( $data === false ) {
+		} elseif ( false === $data ) {
 			$data = '';
 		}
 
@@ -100,16 +100,17 @@ class do_action_Admin_API {
 
 			case 'checkbox':
 				$checked = '';
-				if ( $data && 'on' == $data ) {
+				if ( $data && 'on' === $data ) {
 					$checked = 'checked="checked"';
 				}
 				$html .= '<input id="' . esc_attr( $field['id'] ) . '" type="' . esc_attr( $field['type'] ) . '" name="' . esc_attr( $option_name ) . '" ' . $checked . '/>' . "\n";
 				break;
 
 			case 'checkbox_multi':
+				$data = array_map( 'strval', (array) $data );
 				foreach ( $field['options'] as $k => $v ) {
 					$checked = false;
-					if ( in_array( $k, $data ) ) {
+					if ( in_array( (string) $k, $data, true ) ) {
 						$checked = true;
 					}
 					$html .= '<label for="' . esc_attr( $field['id'] . '_' . $k ) . '" class="checkbox_multi"><input type="checkbox" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $option_name ) . '[]" value="' . esc_attr( $k ) . '" id="' . esc_attr( $field['id'] . '_' . $k ) . '" /> ' . esc_html( $v ) . '</label> ';
@@ -119,7 +120,7 @@ class do_action_Admin_API {
 			case 'radio':
 				foreach ( $field['options'] as $k => $v ) {
 					$checked = false;
-					if ( $k == $data ) {
+					if ( (string) $k === (string) $data ) {
 						$checked = true;
 					}
 					$html .= '<label for="' . esc_attr( $field['id'] . '_' . $k ) . '"><input type="radio" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $k ) . '" id="' . esc_attr( $field['id'] . '_' . $k ) . '" /> ' . esc_html( $v ) . '</label> ';
@@ -130,7 +131,7 @@ class do_action_Admin_API {
 				$html .= '<select name="' . esc_attr( $option_name ) . '" id="' . esc_attr( $field['id'] ) . '">';
 				foreach ( $field['options'] as $k => $v ) {
 					$selected = false;
-					if ( $k == $data ) {
+					if ( (string) $k === (string) $data ) {
 						$selected = true;
 					}
 					$html .= '<option ' . selected( $selected, true, false ) . ' value="' . esc_attr( $k ) . '">' . esc_html( $v ) . '</option>';
@@ -140,12 +141,10 @@ class do_action_Admin_API {
 
 			case 'select_multi':
 				$html .= '<select name="' . esc_attr( $option_name ) . '[]" id="' . esc_attr( $field['id'] ) . '" multiple="multiple">';
+				$data  = array_map( 'strval', (array) $data );
 				foreach ( $field['options'] as $k => $v ) {
 					$selected = false;
-					if ( ! is_array( $data ) ) {
-						$data = array( $data );
-					}
-					if ( in_array( $k, $data ) ) {
+					if ( in_array( (string) $k, $data, true ) ) {
 						$selected = true;
 					}
 					$html .= '<option ' . selected( $selected, true, false ) . ' value="' . esc_attr( $k ) . '">' . esc_html( $v ) . '</option>';
@@ -166,7 +165,7 @@ class do_action_Admin_API {
 
 			case 'color':
 				?><div class="color-picker" style="position:relative;">
-					<input type="text" name="<?php esc_attr_e( $option_name ); ?>" class="color" value="<?php esc_attr_e( $data ); ?>" />
+					<input type="text" name="<?php echo esc_attr( $option_name ); ?>" class="color" value="<?php echo esc_attr( $data ); ?>" />
 					<div style="position:absolute;background:#FFF;z-index:99;border-radius:100%;" class="colorpicker"></div>
 				</div>
 				<?php
@@ -174,9 +173,9 @@ class do_action_Admin_API {
 
 			case 'datepicker':
 				if ( ! $data ) {
-					$data = date( 'Y-m-d', time() );
+					$data = gmdate( 'Y-m-d' );
 				}
-				$display_date = date( 'j F Y', strtotime( $data ) );
+				$display_date = gmdate( 'j F Y', strtotime( $data ) );
 				$html        .= '<input id="' . esc_attr( $field['id'] ) . '_display" type="text" class="datepicker" placeholder="' . esc_attr( $field['placeholder'] ) . '" value="' . esc_attr( $display_date ) . '" />' . "\n";
 				$html        .= '<input id="' . esc_attr( $field['id'] ) . '_save" type="hidden" name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $data ) . '" />' . "\n";
 				break;
@@ -213,7 +212,7 @@ class do_action_Admin_API {
 				break;
 		}
 
-		if ( ! $echo ) {
+		if ( ! $display ) {
 			return $html;
 		}
 
@@ -281,7 +280,7 @@ class do_action_Admin_API {
 		$field_post_type = str_replace( '-', '_', $post->post_type );
 		$fields          = apply_filters( $field_post_type . '_custom_fields', array(), $post->post_type );
 
-		if ( ! is_array( $fields ) || 0 == count( $fields ) ) {
+		if ( ! is_array( $fields ) || 0 === count( $fields ) ) {
 			return;
 		}
 
@@ -299,7 +298,7 @@ class do_action_Admin_API {
 				$field['metabox'] = array( $field['metabox'] );
 			}
 
-			if ( in_array( $args['id'], $field['metabox'] ) ) {
+			if ( in_array( $args['id'], $field['metabox'], true ) ) {
 				$this->display_meta_box_field( $field, $post );
 			}
 		}
@@ -315,11 +314,11 @@ class do_action_Admin_API {
 	 */
 	public function display_meta_box_field( $field, $post ) {
 
-		if ( ! is_array( $field ) || 0 == count( $field ) ) {
+		if ( ! is_array( $field ) || 0 === count( $field ) ) {
 			return;
 		}
 
-		if ( 'hidden' == $field['type'] ) {
+		if ( 'hidden' === $field['type'] ) {
 			$field = $this->display_field( $field, $post, false ) . "\n";
 		} else {
 			$field = '<p class="form-field"><label for="' . esc_attr( $field['id'] ) . '">' . esc_html( $field['label'] ) . '</label>' . $this->display_field( $field, $post, false ) . '</p>' . "\n";
@@ -362,7 +361,7 @@ class do_action_Admin_API {
 		$field_post_type = str_replace( '-', '_', $post_type );
 		$fields          = apply_filters( $field_post_type . '_custom_fields', array(), $post_type );
 
-		if ( ! is_array( $fields ) || 0 == count( $fields ) ) {
+		if ( ! is_array( $fields ) || 0 === count( $fields ) ) {
 			return;
 		}
 

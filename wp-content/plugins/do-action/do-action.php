@@ -43,11 +43,11 @@ require_once 'includes/lib/class-do-action-taxonomy.php';
  * Returns the main instance of do_action to prevent the need to use globals.
  *
  * @since  1.0.0
- * @return object do_action
+ * @return object Do_Action
  */
 function do_action_functions() {
-	$instance        = do_action::instance( __FILE__, '1.0.0' );
-	$instance->tools = do_action_tools::instance( $instance );
+	$instance        = Do_Action::instance( __FILE__, '1.0.0' );
+	$instance->tools = Do_Action_Tools::instance( $instance );
 	return $instance;
 }
 

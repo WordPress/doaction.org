@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class do_action_tools {
+class Do_Action_Tools {
 	/**
 	 * The single instance of do_action.
 	 * @var     object
@@ -15,15 +15,15 @@ class do_action_tools {
 
 	/**
 	 * The main plugin instance.
-	 * @var     do_action|null
+	 * @var     Do_Action|null
 	 * @access  public
 	 * @since   1.0.0
 	 */
 	public $parent;
 
-	public function __construct( $parent = null ) {
+	public function __construct( $plugin = null ) {
 
-		$this->parent = $parent;
+		$this->parent = $plugin;
 
 		add_action( 'admin_menu', array( $this, 'add_tools_page' ) );
 
@@ -78,7 +78,8 @@ class do_action_tools {
 
 			$html .= '</h2>' . "\n";
 
-			$message_class = $message_note = '';
+			$message_class = '';
+			$message_note  = '';
 
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Only display the result of a prior request.
 			$mail_sent = isset( $_GET['mail_sent'] ) ? sanitize_key( wp_unslash( $_GET['mail_sent'] ) ) : '';
@@ -109,7 +110,7 @@ class do_action_tools {
 			$html .= wp_nonce_field( 'do_action_tools_ajax', 'do_action_tools_nonce', false, false );
 			$html .= '<form method="post" id="poststuff" action="" enctype="multipart/form-data" name="do-action-tools">' . "\n";
 
-			if ( 'email' == $tab ) {
+			if ( 'email' === $tab ) {
 
 				$event_args = array(
 					'post_type'      => 'event',
@@ -166,7 +167,7 @@ class do_action_tools {
 				foreach ( $all_roles as $role ) {
 					$role_name = $role->name;
 					$role_slug = $role->slug;
-					if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5', 'Developer 6' ) ) ) {
+					if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5', 'Developer 6' ), true ) ) {
 						if ( $dev_done ) {
 							continue;
 						}
@@ -224,7 +225,7 @@ class do_action_tools {
 					$html             .= '</div>' . "\n";
 				$html                 .= '</div>' . "\n";
 
-			} elseif ( 'export' == $tab ) {
+			} elseif ( 'export' === $tab ) {
 
 				$event_args = array(
 					'post_type'      => 'event',
@@ -281,7 +282,7 @@ class do_action_tools {
 				foreach ( $all_roles as $role ) {
 					$role_name = $role->name;
 					$role_slug = $role->slug;
-					if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5', 'Developer 6' ) ) ) {
+					if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3', 'Developer 4', 'Developer 5', 'Developer 6' ), true ) ) {
 						if ( $dev_done ) {
 							continue;
 						}
@@ -443,7 +444,8 @@ class do_action_tools {
 			return false;
 		}
 
-		$sent_mails = $failed_mails = array();
+		$sent_mails   = array();
+		$failed_mails = array();
 		if ( $event_id ) {
 
 			$organiser_email = get_post_meta( $event_id, 'organiser_email', true );
@@ -588,7 +590,7 @@ class do_action_tools {
 
 		$recipients = array();
 
-		if ( ! $event_id || 0 == count( $roles ) ) {
+		if ( ! $event_id || 0 === count( $roles ) ) {
 			return $recipients;
 		}
 
@@ -619,11 +621,11 @@ class do_action_tools {
 		}
 
 		foreach ( $roles as $role ) {
-			if ( 'organiser' == $role ) {
+			if ( 'organiser' === $role ) {
 				$recipient_set = $this->get_organiser_email_recipient( $event_id );
-			} elseif ( 'npo' == $role ) {
+			} elseif ( 'npo' === $role ) {
 				$recipient_set = $this->get_nonprofit_email_recipient( $event_id, $orgs );
-			} elseif ( 'developer' == $role ) {
+			} elseif ( 'developer' === $role ) {
 				$dev1recipients = $this->get_participant_email_recipients( $event_id, 'developer-1', $orgs );
 				$dev2recipients = $this->get_participant_email_recipients( $event_id, 'developer-2', $orgs );
 				$dev3recipients = $this->get_participant_email_recipients( $event_id, 'developer-3', $orgs );
@@ -725,7 +727,7 @@ class do_action_tools {
 			$role_obj = get_term_by( 'slug', $role, 'role' );
 
 			$role_name = $role_obj->name;
-			if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3' ) ) ) {
+			if ( in_array( $role_name, array( 'Developer 1', 'Developer 2', 'Developer 3' ), true ) ) {
 				$role_name = __( 'Developer', 'do-action' );
 			}
 			foreach ( $orgs as $id ) {
@@ -772,7 +774,7 @@ class do_action_tools {
 
 		$message = str_replace( array( '{{NAME}}', '{{NONPROFIT}}', '{{ROLE}}', '{{EMAILADDRESS}}' ), array( $name, $org, $role, $email ), $message );
 
-		if ( 'subject' == $context ) {
+		if ( 'subject' === $context ) {
 			$message = esc_html( $message );
 		} else {
 			$message = wp_kses_post( wpautop( $message ) );
@@ -782,14 +784,14 @@ class do_action_tools {
 	}
 
 	/**
-	 * Main do_action_tools Instance
+	 * Main Do_Action_Tools Instance
 	 *
-	 * Ensures only one instance of do_action_tools is loaded or can be loaded.
+	 * Ensures only one instance of Do_Action_Tools is loaded or can be loaded.
 	 *
 	 * @since 1.0.0
 	 * @static
 	 * @see do_action_functions()
-	 * @return Main do_action_tools instance
+	 * @return Main Do_Action_Tools instance
 	 */
 	public static function instance( $file = '', $version = '1.0.0' ) {
 		if ( is_null( self::$_instance ) ) {

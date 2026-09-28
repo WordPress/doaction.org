@@ -130,7 +130,7 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 	 * @return array Recipient records.
 	 */
 	private function recipients( array|false $orgs = false ): array {
-		$method = new ReflectionMethod( do_action_tools::class, 'get_people_data' );
+		$method = new ReflectionMethod( Do_Action_Tools::class, 'get_people_data' );
 		return $method->invoke( do_action_functions()->tools, $this->ids['event'], array( 'npo', 'designer' ), $orgs );
 	}
 
@@ -246,7 +246,7 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 	public function test_metabox_save_rejects_foreign_association(): void {
 		$_POST['do_action_meta_nonce'] = wp_create_nonce( 'do_action_save_meta_' . $this->ids['event'] );
 		$_REQUEST['nonprofits']        = array( $this->ids['other'] );
-		$admin                         = new do_action_Admin_API();
+		$admin                         = new Do_Action_Admin_API();
 		$admin->save_meta_boxes( $this->ids['event'] );
 		remove_action( 'save_post', array( $admin, 'save_meta_boxes' ) );
 		$this->assertSame( array( $this->ids['own'] ), get_post_meta( $this->ids['event'], 'nonprofits', true ) );
@@ -276,7 +276,7 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 		wp_set_current_user( $this->administrator->ID );
 		$_POST['do_action_meta_nonce'] = wp_create_nonce( 'do_action_save_meta_' . $this->ids['event'] );
 		$_REQUEST['nonprofits']        = array( $this->ids['other'] );
-		$admin                         = new do_action_Admin_API();
+		$admin                         = new Do_Action_Admin_API();
 		$admin->save_meta_boxes( $this->ids['event'] );
 		remove_action( 'save_post', array( $admin, 'save_meta_boxes' ) );
 		$this->assertSame( array( $this->ids['other'] ), get_post_meta( $this->ids['event'], 'nonprofits', true ) );
@@ -331,7 +331,7 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 	 * @return void
 	 */
 	public function test_email_preview_filters_html_after_substitution(): void {
-		$method = new ReflectionMethod( do_action_tools::class, 'format_email' );
+		$method = new ReflectionMethod( Do_Action_Tools::class, 'format_email' );
 		$html   = $method->invoke(
 			do_action_functions()->tools,
 			'<strong>Hello {{NAME}}</strong><script>alert(1)</script><a href="javascript:alert(1)">Link</a><img src=x onerror=alert(1)> C:\\team',
@@ -371,7 +371,7 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 		$_POST['do_action_meta_nonce'] = wp_create_nonce( 'do_action_save_meta_' . $this->ids['event'] );
 		$_REQUEST['venue_name']        = wp_slash( 'The "Hall" C:\\venue <script>alert(1)</script>' );
 		$_REQUEST['nonprofits']        = array( $this->ids['own'] );
-		$admin                         = new do_action_Admin_API();
+		$admin                         = new Do_Action_Admin_API();
 		$admin->save_meta_boxes( $this->ids['event'] );
 		remove_action( 'save_post', array( $admin, 'save_meta_boxes' ) );
 		$this->assertSame( 'The "Hall" C:\\venue', get_post_meta( $this->ids['event'], 'venue_name', true ) );
@@ -386,7 +386,7 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 		$url                           = 'https://example.org/a%20b/path%2Fpart?q=a%26b';
 		$_POST['do_action_meta_nonce'] = wp_create_nonce( 'do_action_save_meta_' . $this->ids['own'] );
 		$_REQUEST['url']               = wp_slash( $url );
-		$admin                         = new do_action_Admin_API();
+		$admin                         = new Do_Action_Admin_API();
 		$admin->save_meta_boxes( $this->ids['own'] );
 		remove_action( 'save_post', array( $admin, 'save_meta_boxes' ) );
 		$this->assertSame( $url, get_post_meta( $this->ids['own'], 'url', true ) );
@@ -401,7 +401,7 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 		$email                         = 'team%abcd@example.org';
 		$_POST['do_action_meta_nonce'] = wp_create_nonce( 'do_action_save_meta_' . $this->ids['event'] );
 		$_REQUEST['organiser_email']   = wp_slash( $email );
-		$admin                         = new do_action_Admin_API();
+		$admin                         = new Do_Action_Admin_API();
 		try {
 			$admin->save_meta_boxes( $this->ids['event'] );
 			$this->assertSame( $email, get_post_meta( $this->ids['event'], 'organiser_email', true ) );
@@ -417,7 +417,7 @@ class Tests_Do_Action_Security extends WP_UnitTestCase {
 	 */
 	public function test_admin_field_retains_controls_and_escapes_values(): void {
 		update_post_meta( $this->ids['event'], 'venue_name', '"><script>alert(1)</script>' );
-		$admin = new do_action_Admin_API();
+		$admin = new Do_Action_Admin_API();
 		ob_start();
 		$admin->display_meta_box_field(
 			array(
