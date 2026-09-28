@@ -1,17 +1,23 @@
 <?php
+/**
+ * Main do_action plugin class.
+ *
+ * @package do_action
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Main do_action plugin class.
+ */
 class Do_Action {
 
 	/**
 	 * The single instance of do_action.
 	 *
 	 * @var     object
-	 * @access  private
-	 * @since   1.0.0
 	 */
 	private static $instance = null;
 
@@ -19,8 +25,6 @@ class Do_Action {
 	 * The version number.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $version;
 
@@ -28,8 +32,6 @@ class Do_Action {
 	 * The token.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $token;
 
@@ -37,8 +39,6 @@ class Do_Action {
 	 * The main plugin file.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $file;
 
@@ -46,8 +46,6 @@ class Do_Action {
 	 * The main plugin directory.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $dir;
 
@@ -55,8 +53,6 @@ class Do_Action {
 	 * The plugin assets directory.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $assets_dir;
 
@@ -64,8 +60,6 @@ class Do_Action {
 	 * The plugin assets URL.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $assets_url;
 
@@ -73,8 +67,6 @@ class Do_Action {
 	 * Suffix for Javascripts.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $script_suffix;
 
@@ -82,8 +74,6 @@ class Do_Action {
 	 * Akismet API key.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $akismet_api_key;
 
@@ -91,8 +81,6 @@ class Do_Action {
 	 * Custom post types and their labels.
 	 *
 	 * @var     array
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $post_types = array();
 
@@ -100,8 +88,6 @@ class Do_Action {
 	 * Custom taxonomies and their labels.
 	 *
 	 * @var     array
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $taxonomies = array();
 
@@ -109,8 +95,6 @@ class Do_Action {
 	 * Admin API instance.
 	 *
 	 * @var     Do_Action_Admin_API|null
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $admin;
 
@@ -118,8 +102,6 @@ class Do_Action {
 	 * Tools instance.
 	 *
 	 * @var     Do_Action_Tools|null
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $tools;
 
@@ -128,13 +110,15 @@ class Do_Action {
 	 *
 	 * @access  public
 	 * @since   1.0.0
+	 * @param   string $file    Main plugin file.
+	 * @param   string $version Plugin version.
 	 * @return  void
 	 */
 	public function __construct( $file = '', $version = '1.0.0' ) {
 		$this->version = $version;
 		$this->token   = 'do_action';
 
-		// Load plugin environment variables
+		// Load plugin environment variables.
 		$this->file       = $file;
 		$this->dir        = dirname( $this->file );
 		$this->assets_dir = trailingslashit( $this->dir ) . 'assets';
@@ -146,7 +130,7 @@ class Do_Action {
 
 		register_activation_hook( $this->file, array( $this, 'install' ) );
 
-		// Set up post types & taxonomies
+		// Set up post types & taxonomies.
 		add_action( 'init', array( $this, 'define_content_types' ), 0 );
 		add_action( 'init', array( $this, 'register_post_types' ), 1 );
 		add_action( 'init', array( $this, 'register_taxonomies' ), 1 );
@@ -154,20 +138,20 @@ class Do_Action {
 		add_action( 'save_post', array( $this, 'set_nonprofits_private' ), 10, 2 );
 		add_action( 'restrict_manage_posts', array( $this, 'filter_non_profits_list_table' ) );
 
-		// Register custom fields & meta boxes
+		// Register custom fields & meta boxes.
 		add_action( 'init', array( $this, 'custom_fields' ) );
 		// Association changes must use the validated event selector, not native custom fields.
 		add_filter( 'auth_post_meta_nonprofits', '__return_false' );
 		add_filter( 'auth_post_meta__do_action_approved_nonprofits', '__return_false' );
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 10, 2 );
 
-		// Process the sign up form
+		// Process the sign up form.
 		add_action( 'wp', array( $this, 'check_signup_form' ) );
 
-		// Process the application form
+		// Process the application form.
 		add_action( 'wp', array( $this, 'check_application_form' ) );
 
-		// Cusomtise dashboard display
+		// Cusomtise dashboard display.
 		add_action( 'admin_init', array( $this, 'redirect_dashboard' ) );
 		add_action( 'admin_menu', array( $this, 'modify_admin_menu' ), 999 );
 		add_filter( 'request', array( $this, 'modify_admin_lists' ) );
@@ -178,29 +162,35 @@ class Do_Action {
 		// leaks raw (unprotected) titles of password-protected posts to anonymous users.
 		add_filter( 'rest_pre_dispatch', array( $this, 'restrict_polylang_untranslated_posts' ), 10, 3 );
 
-		// Register custom sidebars
+		// Register custom sidebars.
 		add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
 
-		// Add shortcodes
+		// Add shortcodes.
 		add_shortcode( 'upcoming_events', array( $this, 'upcoming_events' ) );
 		add_shortcode( 'event_map', array( $this, 'event_map' ) );
 		add_shortcode( 'event_sponsors', array( $this, 'event_sponsors' ) );
 		add_shortcode( 'past_events', array( $this, 'past_events' ) );
 
-		// Load frontend JS & CSS
+		// Load frontend JS & CSS.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
 
-		// Load admin JS & CSS
+		// Load admin JS & CSS.
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ) );
 
-		// Load API for generic admin functions
+		// Load API for generic admin functions.
 		if ( is_admin() ) {
 			$this->admin = new Do_Action_Admin_API();
 		}
 	} // End __construct ()
 
+	/**
+	 * Render the list of upcoming events for the [upcoming_events] shortcode.
+	 *
+	 * @since   1.0.0
+	 * @return  string
+	 */
 	public function upcoming_events() {
 		$output = '';
 
@@ -226,7 +216,7 @@ class Do_Action {
 			'meta_key'       => 'date', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Events are sorted by date meta.
 			'orderby'        => 'meta_value',
 			'order'          => 'ASC',
-			'lang'           => '', // Show events from all locales
+			'lang'           => '', // Show events from all locales.
 			'posts_per_page' => -1,
 		);
 
@@ -280,6 +270,12 @@ class Do_Action {
 		return $output;
 	}
 
+	/**
+	 * Render the Google map for the current event for the [event_map] shortcode.
+	 *
+	 * @since   1.0.0
+	 * @return  string|null
+	 */
 	public function event_map() {
 		global $post;
 
@@ -333,6 +329,12 @@ class Do_Action {
 		return ob_get_clean();
 	}
 
+	/**
+	 * Render the sponsor logos for the current event for the [event_sponsors] shortcode.
+	 *
+	 * @since   1.0.0
+	 * @return  string|null
+	 */
 	public function event_sponsors() {
 		global $post;
 
@@ -378,6 +380,12 @@ class Do_Action {
 		return ob_get_clean();
 	}
 
+	/**
+	 * Output the form or notice matching the current event's status.
+	 *
+	 * @since   1.0.0
+	 * @return  void
+	 */
 	public function event_form() {
 		global $post;
 
@@ -416,6 +424,13 @@ class Do_Action {
 		}
 	}
 
+	/**
+	 * Output the non-profit application form for an event.
+	 *
+	 * @since   1.0.0
+	 * @param   WP_Post|null $event Event post object.
+	 * @return  void
+	 */
 	public function event_application_form( $event = null ) {
 
 		if ( ! $event ) {
@@ -472,6 +487,12 @@ class Do_Action {
 		<?php
 	}
 
+	/**
+	 * Get the URL path prefix for the current Polylang language.
+	 *
+	 * @since   1.0.0
+	 * @return  string|null
+	 */
 	public function get_pll_current_language_path() {
 		if ( function_exists( 'pll_current_language' ) ) {
 			if ( 'en' === pll_current_language() ) {
@@ -533,6 +554,13 @@ class Do_Action {
 		return array_values( array_unique( $allowed ) );
 	}
 
+	/**
+	 * Output the participant sign-up form for an event.
+	 *
+	 * @since   1.0.0
+	 * @param   WP_Post|null $event Event post object.
+	 * @return  void
+	 */
 	public function event_sign_up_form( $event = null ) {
 
 		if ( ! $event ) {
@@ -693,6 +721,12 @@ class Do_Action {
 		}
 	}
 
+	/**
+	 * Handle a submitted participant sign-up form and redirect back to the event.
+	 *
+	 * @since   1.0.0
+	 * @return  void
+	 */
 	public function check_signup_form() {
 		global $post;
 
@@ -717,6 +751,14 @@ class Do_Action {
 		}
 	}
 
+	/**
+	 * Validate and save a participant sign-up submission.
+	 *
+	 * @since   1.0.0
+	 * @param   array         $post  Submitted form data.
+	 * @param   WP_Post|false $event Event post object.
+	 * @return  bool
+	 */
 	private function process_signup_form_submission( $post = array(), $event = false ) {
 
 		// The submission must be against a real event that is currently accepting sign-ups.
@@ -757,7 +799,7 @@ class Do_Action {
 			return false;
 		}
 
-		// Make sure we don't overwrite an existing participant
+		// Make sure we don't overwrite an existing participant.
 		$current_participant = get_post_meta( $org->ID, $role->slug . '_name', true );
 		if ( $current_participant ) {
 			return false;
@@ -767,7 +809,7 @@ class Do_Action {
 		$participant_email  = esc_html( $post['participant_email'] );
 		$participant_number = esc_html( $post['participant_number'] );
 
-		// Check for spam submissions
+		// Check for spam submissions.
 		require_once 'lib/akismet.fuspam.php';
 
 		if ( function_exists( 'fuspam' ) ) {
@@ -794,7 +836,7 @@ class Do_Action {
 		update_post_meta( $org->ID, $role->slug . '_email_address', $participant_email );
 		update_post_meta( $org->ID, $role->slug . '_phone_number', $participant_number );
 
-		// If this is a Project Manager signing up, set a new random password
+		// If this is a Project Manager signing up, set a new random password.
 		if ( 'project-manager' === $role->slug && ( ! $org->post_password || 'do_action' === $org->post_password ) ) {
 
 			$new_password = $this->random_password( 10 );
@@ -810,7 +852,7 @@ class Do_Action {
 
 			add_action( 'save_post', array( $this, 'set_nonprofits_private' ), 10, 2 );
 
-			// Get updated post object
+			// Get updated post object.
 			$org = get_post( $org->ID );
 		}
 
@@ -819,6 +861,13 @@ class Do_Action {
 		return true;
 	}
 
+	/**
+	 * Generate a random password.
+	 *
+	 * @since   1.0.0
+	 * @param   int $length Password length.
+	 * @return  string
+	 */
 	public function random_password( $length = 24 ) {
 		// Use WordPress' CSPRNG-backed generator. str_shuffle() is not cryptographically
 		// secure and only permutes a fixed 65-character alphabet, making its output guessable.
@@ -843,6 +892,17 @@ class Do_Action {
 		return $user_ip;
 	}
 
+	/**
+	 * Send the sign-up confirmation email to a participant.
+	 *
+	 * @since   1.0.0
+	 * @param   string        $email Participant email address.
+	 * @param   string        $name  Participant name.
+	 * @param   WP_Post|false $org   Non-profit post object.
+	 * @param   WP_Term|false $role  Role term object.
+	 * @param   WP_Post|false $event Event post object.
+	 * @return  bool
+	 */
 	private function send_signup_email( $email = '', $name = '', $org = false, $role = false, $event = false ) {
 
 		if ( ! $email || ! $name || ! $org || ! $role || ! $event ) {
@@ -912,6 +972,12 @@ class Do_Action {
 		return wp_mail( $email, $subject, $message, $headers );
 	}
 
+	/**
+	 * Handle a submitted non-profit application form and redirect back to the event.
+	 *
+	 * @since   1.0.0
+	 * @return  void
+	 */
 	public function check_application_form() {
 		global $post;
 
@@ -937,6 +1003,14 @@ class Do_Action {
 		}
 	}
 
+	/**
+	 * Validate a non-profit application and create the non-profit post.
+	 *
+	 * @since   1.0.0
+	 * @param   array         $post  Submitted form data.
+	 * @param   WP_Post|false $event Event post object.
+	 * @return  bool
+	 */
 	private function process_application_form_submission( $post = array(), $event = false ) {
 
 		// The submission must be against a real event that is currently accepting applications.
@@ -948,10 +1022,10 @@ class Do_Action {
 			return false;
 		}
 
-		// Get event organiser ID
+		// Get event organiser ID.
 		$organiser_id = get_post_field( 'post_author', $event->ID );
 
-		// Get event data
+		// Get event data.
 		$title           = esc_html( $post['org_name'] );
 		$url             = esc_sql( $post['org_url'] );
 		$org_description = esc_html( $post['org_description'] );
@@ -959,7 +1033,7 @@ class Do_Action {
 		$contact_name    = esc_html( $post['contact_name'] );
 		$contact_email   = esc_html( $post['contact_email'] );
 
-		// Set up post insert arguments
+		// Set up post insert arguments.
 		$post_args = array(
 			'post_title'    => $title,
 			'post_author'   => $organiser_id,
@@ -969,7 +1043,7 @@ class Do_Action {
 			'post_password' => $this->random_password(),
 		);
 
-		// Check for spam submissions
+		// Check for spam submissions.
 		require_once 'lib/akismet.fuspam.php';
 
 		if ( function_exists( 'fuspam' ) ) {
@@ -992,24 +1066,24 @@ class Do_Action {
 			}
 		}
 
-		// Insert new post
+		// Insert new post.
 		$org_id = wp_insert_post( $post_args );
 
 		if ( ! $org_id || is_wp_error( $org_id ) ) {
 			return false;
 		}
 
-		// Add organisation meta to post
+		// Add organisation meta to post.
 		update_post_meta( $org_id, 'url', $url );
 		update_post_meta( $org_id, 'contact_name', $contact_name );
 		update_post_meta( $org_id, 'contact_email', $contact_email );
 		update_post_meta( $org_id, 'org_achieve', $org_achieve );
 		update_post_meta( $org_id, 'event', $event->ID );
 
-		// Get organisation post object
+		// Get organisation post object.
 		$org = get_post( $org_id );
 
-		// Set all roles to be active by default
+		// Set all roles to be active by default.
 		$all_roles = get_terms(
 			array(
 				'taxonomy'   => 'role',
@@ -1018,7 +1092,7 @@ class Do_Action {
 			)
 		);
 
-		// Force IDs to be interpreted as integers
+		// Force IDs to be interpreted as integers.
 		$roles = array();
 		foreach ( $all_roles as $role_id ) {
 			$role_id = intval( $role_id );
@@ -1029,12 +1103,22 @@ class Do_Action {
 
 		wp_set_object_terms( $org_id, $roles, 'role' );
 
-		// Send email to applicant
+		// Send email to applicant.
 		$email_sent = $this->send_application_email( $contact_email, $contact_name, $org, $event );
 
 		return true;
 	}
 
+	/**
+	 * Send the application confirmation email to a non-profit contact.
+	 *
+	 * @since   1.0.0
+	 * @param   string        $email Contact email address.
+	 * @param   string        $name  Contact name.
+	 * @param   WP_Post|false $org   Non-profit post object.
+	 * @param   WP_Post|false $event Event post object.
+	 * @return  bool
+	 */
 	private function send_application_email( $email = '', $name = '', $org = false, $event = false ) {
 
 		if ( ! $email || ! $name || ! $org || ! $event ) {
@@ -1093,6 +1177,14 @@ class Do_Action {
 		return wp_mail( $email, $subject, $message, $headers );
 	}
 
+	/**
+	 * Keep non-profits published and password protected on save.
+	 *
+	 * @since   1.0.0
+	 * @param   int     $post_id Post ID.
+	 * @param   WP_Post $post    Post object.
+	 * @return  void
+	 */
 	public function set_nonprofits_private( $post_id, $post ) {
 
 		if ( $post->post_type && 'non-profit' === $post->post_type ) {
@@ -1121,6 +1213,13 @@ class Do_Action {
 		}
 	}
 
+	/**
+	 * Output a non-profit's details, contacts and build team.
+	 *
+	 * @since   1.0.0
+	 * @param   int|WP_Post $org Non-profit post ID or object.
+	 * @return  void
+	 */
 	public function nonprofit_team( $org ) {
 
 		if ( is_int( $org ) ) {
@@ -1213,6 +1312,12 @@ class Do_Action {
 		}
 	}
 
+	/**
+	 * Render the list of completed past events for the [past_events] shortcode.
+	 *
+	 * @since   1.0.0
+	 * @return  string
+	 */
 	public function past_events() {
 
 		ob_start();
@@ -1241,7 +1346,7 @@ class Do_Action {
 			'meta_key'       => 'date', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Events are sorted by date meta.
 			'orderby'        => 'meta_value',
 			'order'          => 'DESC',
-			'lang'           => '', // Show events from all locales
+			'lang'           => '', // Show events from all locales.
 			'posts_per_page' => -1,
 		);
 
@@ -1279,6 +1384,13 @@ class Do_Action {
 		return ob_get_clean();
 	}
 
+	/**
+	 * Filter admin event and non-profit lists by selected event and organiser.
+	 *
+	 * @since   1.0.0
+	 * @param   array $request Query variables.
+	 * @return  array
+	 */
 	public function modify_admin_lists( $request ) {
 		global $pagenow, $typenow;
 
@@ -1313,6 +1425,14 @@ class Do_Action {
 		return $request;
 	}
 
+	/**
+	 * Limit admin post counts to the current organiser's posts.
+	 *
+	 * @since   1.0.0
+	 * @param   object $counts Post counts by status.
+	 * @param   string $type   Post type.
+	 * @return  object
+	 */
 	public function modify_post_counts( $counts, $type ) {
 		global $pagenow, $typenow;
 
@@ -1334,10 +1454,10 @@ class Do_Action {
 			'posts_per_page' => -1,
 		);
 
-		// Get all available statuses
+		// Get all available statuses.
 		$stati = get_post_stati();
 
-		// Update count object
+		// Update count object.
 		foreach ( $stati as $status ) {
 			$args['post_status'] = $status;
 			$posts               = get_posts( $args );
@@ -1347,6 +1467,12 @@ class Do_Action {
 		return $counts;
 	}
 
+	/**
+	 * Output the Storefront entry header with event and sponsor meta.
+	 *
+	 * @since   1.0.0
+	 * @return  void
+	 */
 	public function storefront_post_header() {
 		?>
 		<header class="entry-header">
@@ -1380,6 +1506,12 @@ class Do_Action {
 		<?php
 	}
 
+	/**
+	 * Hook up the custom field definitions for each post type.
+	 *
+	 * @since   1.0.0
+	 * @return  void
+	 */
 	public function custom_fields() {
 		foreach ( $this->post_types as $type => $details ) {
 			$type = str_replace( '-', '_', $type );
@@ -1387,6 +1519,13 @@ class Do_Action {
 		}
 	}
 
+	/**
+	 * Define the custom fields for events.
+	 *
+	 * @since   1.0.0
+	 * @param   array $fields Existing fields.
+	 * @return  array
+	 */
 	public function event_custom_fields( $fields ) {
 
 		$org_args = array(
@@ -1510,6 +1649,13 @@ class Do_Action {
 		return $fields;
 	}
 
+	/**
+	 * Define the custom fields for non-profits, including per-role fields.
+	 *
+	 * @since   1.0.0
+	 * @param   array $fields Existing fields.
+	 * @return  array
+	 */
 	public function non_profit_custom_fields( $fields ) {
 		global $post;
 
@@ -1592,6 +1738,13 @@ class Do_Action {
 		return $fields;
 	}
 
+	/**
+	 * Define the custom fields for sponsors.
+	 *
+	 * @since   1.0.0
+	 * @param   array $fields Existing fields.
+	 * @return  array
+	 */
 	public function sponsor_custom_fields( $fields ) {
 
 		$fields = array(
@@ -1616,6 +1769,14 @@ class Do_Action {
 		return $fields;
 	}
 
+	/**
+	 * Register the meta boxes for the plugin's post types.
+	 *
+	 * @since   1.0.0
+	 * @param   string  $post_type Post type.
+	 * @param   WP_Post $post      Post object.
+	 * @return  void
+	 */
 	public function add_meta_boxes( $post_type, $post ) {
 		foreach ( $this->post_types as $type => $details ) {
 
@@ -1663,6 +1824,14 @@ class Do_Action {
 		}
 	}
 
+	/**
+	 * Output the non-profit team meta box on an event.
+	 *
+	 * @since   1.0.0
+	 * @param   WP_Post $post Event post object.
+	 * @param   array   $args Meta box arguments.
+	 * @return  void
+	 */
 	public function event_nonprofit_metabox_content( $post, $args ) {
 
 		$org_id = intval( $args['args']['org_id'] );
@@ -1675,6 +1844,13 @@ class Do_Action {
 		$this->nonprofit_team( $org_id );
 	}
 
+	/**
+	 * Output an event filter dropdown on the non-profits list table.
+	 *
+	 * @since   1.0.0
+	 * @param   string $post_type Post type.
+	 * @return  void
+	 */
 	public function filter_non_profits_list_table( $post_type ) {
 
 		if ( 'non-profit' === $post_type ) {
@@ -1722,6 +1898,12 @@ class Do_Action {
 		}
 	}
 
+	/**
+	 * Redirect organisers from the dashboard to the events list.
+	 *
+	 * @since   1.0.0
+	 * @return  void
+	 */
 	public function redirect_dashboard() {
 		global $pagenow;
 
@@ -1731,6 +1913,12 @@ class Do_Action {
 		}
 	}
 
+	/**
+	 * Remove unneeded admin menu items for organisers.
+	 *
+	 * @since   1.0.0
+	 * @return  void
+	 */
 	public function modify_admin_menu() {
 		if ( current_user_can( 'organiser' ) ) {
 			remove_menu_page( 'index.php' );
@@ -1783,18 +1971,37 @@ class Do_Action {
 		);
 	}
 
+	/**
+	 * Register the plugin's custom post types.
+	 *
+	 * @since   1.0.0
+	 * @return  void
+	 */
 	public function register_post_types() {
 		foreach ( $this->post_types as $type => $details ) {
 			$this->register_post_type( $type, $details['plural'], $details['single'], '', $details['options'] );
 		}
 	}
 
+	/**
+	 * Register the plugin's custom taxonomies.
+	 *
+	 * @since   1.0.0
+	 * @return  void
+	 */
 	public function register_taxonomies() {
 		foreach ( $this->taxonomies as $tax => $details ) {
 			$this->register_taxonomy( $tax, $details['plural'], $details['single'], $details['post_types'], $details['args'] );
 		}
 	}
 
+	/**
+	 * Add the plugin's query args to the removable list.
+	 *
+	 * @since   1.0.0
+	 * @param   array $args Removable query args.
+	 * @return  array
+	 */
 	public function removable_query_args( $args = array() ) {
 		$args['mail_sent'] = true;
 		return $args;
@@ -1845,6 +2052,13 @@ class Do_Action {
 		return $result;
 	}
 
+	/**
+	 * Add the plugin's post type counts to the At a Glance widget.
+	 *
+	 * @since   1.0.0
+	 * @param   array $items At a Glance items.
+	 * @return  array
+	 */
 	public function glance_items( $items = array() ) {
 
 		foreach ( $this->post_types as $type => $details ) {
@@ -1873,6 +2087,12 @@ class Do_Action {
 		return $items;
 	}
 
+	/**
+	 * Register the plugin's sidebars.
+	 *
+	 * @since   1.0.0
+	 * @return  void
+	 */
 	public function register_sidebars() {
 		register_sidebar(
 			array(
@@ -1888,13 +2108,14 @@ class Do_Action {
 	}
 
 	/**
-	 * Wrapper function to register a new post type
+	 * Wrapper function to register a new post type.
 	 *
-	 * @param  string $post_type   Post type name
-	 * @param  string $plural      Post type item plural name
-	 * @param  string $single      Post type item single name
-	 * @param  string $description Description of post type
-	 * @return object              Post type class object
+	 * @param  string $post_type   Post type name.
+	 * @param  string $plural      Post type item plural name.
+	 * @param  string $single      Post type item single name.
+	 * @param  string $description Description of post type.
+	 * @param  array  $options     Additional post type registration arguments.
+	 * @return Do_Action_Post_Type|null Post type class object, or null if no post type, plural or single label is given.
 	 */
 	public function register_post_type( $post_type = '', $plural = '', $single = '', $description = '', $options = array() ) {
 
@@ -1908,13 +2129,14 @@ class Do_Action {
 	}
 
 	/**
-	 * Wrapper function to register a new taxonomy
+	 * Wrapper function to register a new taxonomy.
 	 *
-	 * @param  string $taxonomy   Taxonomy name
-	 * @param  string $plural     Taxonomy single name
-	 * @param  string $single     Taxonomy plural name
-	 * @param  array  $post_types Post types to which this taxonomy applies
-	 * @return object             Taxonomy class object
+	 * @param  string $taxonomy      Taxonomy name.
+	 * @param  string $plural        Taxonomy single name.
+	 * @param  string $single        Taxonomy plural name.
+	 * @param  array  $post_types    Post types to which this taxonomy applies.
+	 * @param  array  $taxonomy_args Additional taxonomy registration arguments.
+	 * @return Do_Action_Taxonomy|null Taxonomy class object, or null if no taxonomy, plural or single label is given.
 	 */
 	public function register_taxonomy( $taxonomy = '', $plural = '', $single = '', $post_types = array(), $taxonomy_args = array() ) {
 
@@ -1995,7 +2217,9 @@ class Do_Action {
 	 * @since 1.0.0
 	 * @static
 	 * @see do_action_functions()
-	 * @return Main Do_Action instance
+	 * @param string $file    Main plugin file.
+	 * @param string $version Plugin version.
+	 * @return Do_Action Main instance.
 	 */
 	public static function instance( $file = '', $version = '1.0.0' ) {
 		if ( is_null( self::$instance ) ) {

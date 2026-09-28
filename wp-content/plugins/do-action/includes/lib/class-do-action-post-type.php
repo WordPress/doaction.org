@@ -1,17 +1,23 @@
 <?php
+/**
+ * Post type registration helper.
+ *
+ * @package do_action
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Registers a custom post type.
+ */
 class Do_Action_Post_Type {
 
 	/**
 	 * The name for the custom post type.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $post_type;
 
@@ -19,8 +25,6 @@ class Do_Action_Post_Type {
 	 * The plural name for the custom post type posts.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $plural;
 
@@ -28,8 +32,6 @@ class Do_Action_Post_Type {
 	 * The singular name for the custom post type posts.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $single;
 
@@ -37,8 +39,6 @@ class Do_Action_Post_Type {
 	 * The description of the custom post type.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $description;
 
@@ -46,28 +46,35 @@ class Do_Action_Post_Type {
 	 * The options of the custom post type.
 	 *
 	 * @var     array
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $options;
 
+	/**
+	 * Stores the post type settings and hooks its registration and messages.
+	 *
+	 * @param string $post_type   Post type name.
+	 * @param string $plural      Plural label for the post type.
+	 * @param string $single      Singular label for the post type.
+	 * @param string $description Post type description.
+	 * @param array  $options     Arguments merged into the post type registration arguments.
+	 */
 	public function __construct( $post_type = '', $plural = '', $single = '', $description = '', $options = array() ) {
 
 		if ( ! $post_type || ! $plural || ! $single ) {
 			return;
 		}
 
-		// Post type name and labels
+		// Post type name and labels.
 		$this->post_type   = $post_type;
 		$this->plural      = $plural;
 		$this->single      = $single;
 		$this->description = $description;
 		$this->options     = $options;
 
-		// Regsiter post type
+		// Regsiter post type.
 		add_action( 'init', array( $this, 'register_post_type' ) );
 
-		// Display custom update messages for posts edits
+		// Display custom update messages for posts edits.
 		add_filter( 'post_updated_messages', array( $this, 'updated_messages' ) );
 		add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_updated_messages' ), 10, 2 );
 	}
@@ -137,7 +144,7 @@ class Do_Action_Post_Type {
 	/**
 	 * Set up admin messages for post type
 	 *
-	 * @param  array $messages Default message
+	 * @param  array $messages Default message.
 	 * @return array           Modified messages
 	 */
 	public function updated_messages( $messages = array() ) {
@@ -174,8 +181,8 @@ class Do_Action_Post_Type {
 	/**
 	 * Set up bulk admin messages for post type
 	 *
-	 * @param  array $bulk_messages Default bulk messages
-	 * @param  array $bulk_counts   Counts of selected posts in each status
+	 * @param  array $bulk_messages Default bulk messages.
+	 * @param  array $bulk_counts   Counts of selected posts in each status.
 	 * @return array                Modified messages
 	 */
 	public function bulk_updated_messages( $bulk_messages = array(), $bulk_counts = array() ) {

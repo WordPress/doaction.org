@@ -1,16 +1,22 @@
 <?php
+/**
+ * Admin tools for emailing and exporting event participants.
+ *
+ * @package do_action
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Admin tools for emailing and exporting event participants.
+ */
 class Do_Action_Tools {
 	/**
 	 * The single instance of do_action.
 	 *
 	 * @var     object
-	 * @access  private
-	 * @since   1.0.0
 	 */
 	private static $instance = null;
 
@@ -18,18 +24,22 @@ class Do_Action_Tools {
 	 * The main plugin instance.
 	 *
 	 * @var     Do_Action|null
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $parent;
 
+	/**
+	 * Stores the main plugin instance and hooks the tools.
+	 *
+	 * @since 1.0.0
+	 * @param Do_Action|null $plugin Main plugin instance.
+	 */
 	public function __construct( $plugin = null ) {
 
 		$this->parent = $plugin;
 
 		add_action( 'admin_menu', array( $this, 'add_tools_page' ) );
 
-		// Tools actions
+		// Tools actions.
 		add_action( 'admin_init', array( $this, 'send_email' ) );
 		add_action( 'admin_init', array( $this, 'export_csv' ) );
 
@@ -38,13 +48,25 @@ class Do_Action_Tools {
 		add_action( 'wp_ajax_fetch_event_orgs', array( $this, 'fetch_event_orgs' ) );
 	}
 
+	/**
+	 * Registers the tools admin menu page.
+	 *
+	 * @since  1.0.0
+	 * @return void
+	 */
 	public function add_tools_page() {
 		add_menu_page( __( 'do_action Tools', 'do-action' ), __( 'do_action Tools', 'do-action' ), 'use_do_action_tools', 'do-action-tools', array( $this, 'tools_page' ), 'dashicons-admin-tools', 9 );
 	}
 
+	/**
+	 * Renders the tools admin page.
+	 *
+	 * @since  1.0.0
+	 * @return void
+	 */
 	public function tools_page() {
 
-		// Build page HTML
+		// Build page HTML.
 		$html      = '<div class="wrap" id="' . esc_attr( $this->parent->token ) . '_tools">' . "\n";
 			$html .= '<h2>' . esc_html__( 'do_action Tools', 'do-action' ) . '</h2>' . "\n";
 
@@ -63,17 +85,17 @@ class Do_Action_Tools {
 
 			foreach ( $tabs as $id => $label ) {
 
-				// Set tab class
+				// Set tab class.
 				$class = 'nav-tab';
 				if ( $id === $tab ) {
 					$class .= ' nav-tab-active';
 				}
 
-				// Set tab link
+				// Set tab link.
 				$tab_link = add_query_arg( array( 'tab' => $id ) );
 				$tab_link = remove_query_arg( array( 'settings-updated', 'mail_sent' ), $tab_link );
 
-				// Output tab
+				// Output tab.
 				$html .= '<a href="' . esc_url( $tab_link ) . '" class="' . esc_attr( $class ) . '">' . esc_html( $label ) . '</a>' . "\n";
 
 			}
@@ -129,7 +151,7 @@ class Do_Action_Tools {
 
 				$events = get_posts( $event_args );
 
-				// Select recipient event
+				// Select recipient event.
 				$html         .= '<p>' . "\n";
 					$html     .= '<label for="recipient_event">' . esc_html__( 'Event:', 'do-action' ) . '</label>' . "\n";
 					$html     .= '<select id="recipient_event" name="recipient_event">' . "\n";
@@ -140,7 +162,7 @@ class Do_Action_Tools {
 					$html .= '</select>' . "\n";
 				$html     .= '</p>' . "\n";
 
-				// Select recipient organisation
+				// Select recipient organisation.
 				$html         .= '<p id="recipient-org-wrapper">' . "\n";
 					$html     .= '<label for="recipient_org">' . esc_html__( 'Organisation(s):', 'do-action' ) . '</label>' . "\n";
 					$html     .= '<p>' . "\n";
@@ -152,7 +174,7 @@ class Do_Action_Tools {
 					$html     .= '</span>' . "\n";
 				$html         .= '</p>' . "\n";
 
-				// Select recipient roles
+				// Select recipient roles.
 				$html         .= '<p>' . "\n";
 					$html     .= '<label for="recipient_roles">' . esc_html__( 'Recipient roles:', 'do-action' ) . '</label>' . "\n";
 					$html     .= '<ul>' . "\n";
@@ -190,13 +212,13 @@ class Do_Action_Tools {
 					$html .= '<em>' . sprintf( esc_html__( 'The following placeholders are available for the email subject and body: %1$s, %2$s, %3$s and %4$s', 'do-action' ), '<code>{{NAME}}</code>', '<code>{{EMAILADDRESS}}</code>', '<code>{{NONPROFIT}}</code>', '<code>{{ROLE}}</code>' ) . '</em>' . "\n";
 				$html     .= '</p>' . "\n";
 
-				// Set email subject
+				// Set email subject.
 				$html     .= '<p>' . "\n";
 					$html .= '<label for="email_subject">' . esc_html__( 'Email subject:', 'do-action' ) . '</label>' . "\n";
 					$html .= '<input type="text" class="large-text" id="email_subject" name="email_subject" />' . "\n";
 				$html     .= '</p>' . "\n";
 
-				// Set email body
+				// Set email body.
 				$html     .= '<p>' . "\n";
 					$html .= '<label for="email_body">' . esc_html__( 'Email body:', 'do-action' ) . '</label>' . "\n";
 					ob_start();
@@ -206,7 +228,7 @@ class Do_Action_Tools {
 					$html .= '<input type="hidden" name="send_do_action_email" value="true" />' . "\n";
 				$html     .= '</p>' . "\n";
 
-				// Send email
+				// Send email.
 				$html     .= '<p class="submit">' . "\n";
 					$html .= '<input type="hidden" name="tab" value="' . esc_attr( $tab ) . '" />' . "\n";
 					$html .= '<input type="button" id="do-action-preview-email" class="button-secondary" value="' . esc_attr__( 'Preview', 'do-action' ) . '" />' . "\n";
@@ -244,7 +266,7 @@ class Do_Action_Tools {
 
 				$events = get_posts( $event_args );
 
-				// Select export event
+				// Select export event.
 				$html         .= '<p>' . "\n";
 					$html     .= '<label for="recipient_event">' . esc_html__( 'Event:', 'do-action' ) . '</label>' . "\n";
 					$html     .= '<select id="recipient_event" name="recipient_event">' . "\n";
@@ -255,7 +277,7 @@ class Do_Action_Tools {
 					$html .= '</select>' . "\n";
 				$html     .= '</p>' . "\n";
 
-				// Select export organisation(s)
+				// Select export organisation(s).
 				$html         .= '<p id="recipient-org-wrapper">' . "\n";
 					$html     .= '<label for="recipient_org">' . esc_html__( 'Organisation(s):', 'do-action' ) . '</label>' . "\n";
 					$html     .= '<p>' . "\n";
@@ -267,7 +289,7 @@ class Do_Action_Tools {
 					$html     .= '</span>' . "\n";
 				$html         .= '</p>' . "\n";
 
-				// Select export role(s)
+				// Select export role(s).
 				$html         .= '<p>' . "\n";
 					$html     .= '<label for="recipient_roles">' . esc_html__( 'Recipient roles:', 'do-action' ) . '</label>' . "\n";
 					$html     .= '<ul>' . "\n";
@@ -298,7 +320,7 @@ class Do_Action_Tools {
 					$html .= '</ul>' . "\n";
 				$html     .= '</p>' . "\n";
 
-				// Generate export data
+				// Generate export data.
 				$html     .= '<p class="submit">' . "\n";
 					$html .= '<input type="hidden" name="tab" value="' . esc_attr( $tab ) . '" />' . "\n";
 					$html .= wp_nonce_field( 'do_action_export_csv', '_wpnonce', true, false ) . "\n";
@@ -316,6 +338,12 @@ class Do_Action_Tools {
 			echo $html;
 	}
 
+	/**
+	 * Sends an email preview for a random event recipient as an AJAX response.
+	 *
+	 * @since  1.0.0
+	 * @return void
+	 */
 	public function format_email_preview() {
 
 		check_ajax_referer( 'do_action_tools_ajax', 'nonce' );
@@ -373,6 +401,12 @@ class Do_Action_Tools {
 		wp_send_json( $response );
 	}
 
+	/**
+	 * Sends the organisation select markup for an event as an AJAX response.
+	 *
+	 * @since  1.0.0
+	 * @return void
+	 */
 	public function fetch_event_orgs() {
 
 		check_ajax_referer( 'do_action_tools_ajax', 'nonce' );
@@ -424,6 +458,12 @@ class Do_Action_Tools {
 		wp_send_json( $response );
 	}
 
+	/**
+	 * Emails the selected event recipients and redirects back with the result.
+	 *
+	 * @since  1.0.0
+	 * @return false|void False if the request is not a valid send request.
+	 */
 	public function send_email() {
 
 		if ( ! isset( $_POST['send_do_action_email'] ) ) {
@@ -454,13 +494,13 @@ class Do_Action_Tools {
 
 			if ( $organiser_email ) {
 
-				// Get selected organisations
+				// Get selected organisations.
 				$orgs = false;
 				if ( isset( $_POST['recipient_orgs'] ) ) {
 					$orgs = map_deep( wp_unslash( $_POST['recipient_orgs'] ), 'sanitize_text_field' );
 				}
 
-				// Sanitise selected roles
+				// Sanitise selected roles.
 				$roles = isset( $_POST['recipient_roles'] ) ? map_deep( wp_unslash( (array) $_POST['recipient_roles'] ), 'sanitize_key' ) : array();
 
 				$recipients = $this->get_people_data( $event_id, $roles, $orgs );
@@ -506,6 +546,12 @@ class Do_Action_Tools {
 		exit;
 	}
 
+	/**
+	 * Streams the selected event recipients to the browser as a CSV download.
+	 *
+	 * @since  1.0.0
+	 * @return false|void False if the request is not a valid export request.
+	 */
 	public function export_csv() {
 
 		if ( ! isset( $_POST['export_do_action_data'] ) ) {
@@ -530,13 +576,13 @@ class Do_Action_Tools {
 
 		if ( $event_id ) {
 
-			// Get and sanitise selected organisations
+			// Get and sanitise selected organisations.
 			$orgs = false;
 			if ( isset( $_POST['recipient_orgs'] ) ) {
 				$orgs = map_deep( wp_unslash( $_POST['recipient_orgs'] ), 'sanitize_text_field' );
 			}
 
-			// Sanitise selected roles
+			// Sanitise selected roles.
 			$roles = isset( $_POST['recipient_roles'] ) ? map_deep( wp_unslash( (array) $_POST['recipient_roles'] ), 'sanitize_key' ) : array();
 
 			$data = $this->get_people_data( $event_id, $roles, $orgs );
@@ -555,10 +601,10 @@ class Do_Action_Tools {
 
 				$handler = fopen( 'php://output', 'w' );
 
-				// Generate CSV headers
+				// Generate CSV headers.
 				fputcsv( $handler, array( __( 'Name', 'do-action' ), __( 'Email', 'do-action' ), __( 'Phone', 'do-action' ), __( 'Role', 'do-action' ), __( 'Organisation', 'do-action' ) ) );
 
-				// Insert export data
+				// Insert export data.
 				foreach ( $data as $person ) {
 					fputcsv( $handler, array_map( array( $this, 'escape_csv_cell' ), $person ) );
 				}
@@ -588,6 +634,15 @@ class Do_Action_Tools {
 		return $value;
 	}
 
+	/**
+	 * Gets contact records for the selected roles and organisations of an event.
+	 *
+	 * @since  1.0.0
+	 * @param  int         $event_id Event ID.
+	 * @param  string[]    $roles    Role slugs.
+	 * @param  array|false $orgs     Organisation IDs, or false for all authorized organisations.
+	 * @return array Contact records.
+	 */
 	private function get_people_data( $event_id = 0, $roles = array(), $orgs = false ) {
 
 		$recipients = array();
@@ -641,6 +696,13 @@ class Do_Action_Tools {
 		return $recipients;
 	}
 
+	/**
+	 * Gets the organiser contact record for an event.
+	 *
+	 * @since  1.0.0
+	 * @param  int $event_id Event ID.
+	 * @return array Contact records.
+	 */
 	private function get_organiser_email_recipient( $event_id = 0 ) {
 
 		$recipients = array();
@@ -752,6 +814,15 @@ class Do_Action_Tools {
 		return $recipients;
 	}
 
+	/**
+	 * Replaces recipient placeholders in an email subject or body and sanitizes it.
+	 *
+	 * @since  1.0.0
+	 * @param  string $message   Email subject or body.
+	 * @param  array  $recipient Recipient contact record.
+	 * @param  string $context   Either 'subject' or 'body'.
+	 * @return string
+	 */
 	private function format_email( $message = '', $recipient = array(), $context = 'body' ) {
 
 		$name = '';
@@ -793,6 +864,8 @@ class Do_Action_Tools {
 	 * @since 1.0.0
 	 * @static
 	 * @see do_action_functions()
+	 * @param Do_Action|null $file    Main plugin instance.
+	 * @param string         $version Plugin version.
 	 * @return Main Do_Action_Tools instance
 	 */
 	public static function instance( $file = '', $version = '1.0.0' ) {

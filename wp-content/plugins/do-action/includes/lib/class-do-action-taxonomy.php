@@ -1,17 +1,23 @@
 <?php
+/**
+ * Taxonomy registration helper.
+ *
+ * @package do_action
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Registers a custom taxonomy.
+ */
 class Do_Action_Taxonomy {
 
 	/**
 	 * The name for the taxonomy.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $taxonomy;
 
@@ -19,8 +25,6 @@ class Do_Action_Taxonomy {
 	 * The plural name for the taxonomy terms.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $plural;
 
@@ -28,8 +32,6 @@ class Do_Action_Taxonomy {
 	 * The singular name for the taxonomy terms.
 	 *
 	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $single;
 
@@ -37,8 +39,6 @@ class Do_Action_Taxonomy {
 	 * The array of post types to which this taxonomy applies.
 	 *
 	 * @var     array
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $post_types;
 
@@ -46,18 +46,25 @@ class Do_Action_Taxonomy {
 	 * The array of taxonomy arguments
 	 *
 	 * @var     array
-	 * @access  public
-	 * @since   1.0.0
 	 */
 	public $taxonomy_args;
 
+	/**
+	 * Stores the taxonomy settings and hooks its registration.
+	 *
+	 * @param string       $taxonomy   Taxonomy name.
+	 * @param string       $plural     Plural label for the taxonomy terms.
+	 * @param string       $single     Singular label for the taxonomy terms.
+	 * @param string|array $post_types Post type or post types the taxonomy applies to.
+	 * @param array        $tax_args   Taxonomy arguments.
+	 */
 	public function __construct( $taxonomy = '', $plural = '', $single = '', $post_types = array(), $tax_args = array() ) {
 
 		if ( ! $taxonomy || ! $plural || ! $single ) {
 			return;
 		}
 
-		// Post type name and labels
+		// Post type name and labels.
 		$this->taxonomy = $taxonomy;
 		$this->plural   = $plural;
 		$this->single   = $single;
@@ -67,7 +74,7 @@ class Do_Action_Taxonomy {
 		$this->post_types    = $post_types;
 		$this->taxonomy_args = $tax_args;
 
-		// Register taxonomy
+		// Register taxonomy.
 		add_action( 'init', array( $this, 'register_taxonomy' ) );
 	}
 
