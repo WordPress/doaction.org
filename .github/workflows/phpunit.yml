@@ -1,0 +1,49 @@
+name: PHPUnit
+
+on: pull_request
+
+permissions:
+  contents: read
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start MySQL
+        run: sudo systemctl start mysql
+
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check out WordPress and its test library
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          repository: WordPress/wordpress-develop
+          path: wordpress-develop
+          sparse-checkout: |
+            src
+            tests/phpunit/data
+            tests/phpunit/includes
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+        with:
+          php-version: '8.5'
+
+      - name: Install PHPUnit and polyfills
+        run: composer global require phpunit/phpunit:^9.6 yoast/phpunit-polyfills:^2
+
+      - name: Configure test database
+        run: |
+          mysql -uroot -proot -e 'CREATE DATABASE wordpress_test'
+          cp wordpress-develop/wp-tests-config-sample.php wordpress-develop/wp-tests-config.php
+          sed -i 's/youremptytestdbnamehere/wordpress_test/; s/yourusernamehere/root/; s/yourpasswordhere/root/; s/localhost/127.0.0.1/' wordpress-develop/wp-tests-config.php
+
+      - name: Run PHPUnit
+        run: phpunit
+        env:
+          WP_TESTS_DIR: ${{ github.workspace }}/wordpress-develop/tests/phpunit
+          WP_TESTS_PHPUNIT_POLYFILLS_PATH: /home/runner/.composer/vendor/yoast/phpunit-polyfills
