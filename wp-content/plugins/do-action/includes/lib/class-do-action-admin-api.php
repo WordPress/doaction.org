@@ -18,7 +18,7 @@ class Do_Action_Admin_API {
 	 * Constructor function
 	 */
 	public function __construct() {
-		add_action( 'save_post', array( $this, 'save_meta_boxes' ), 10, 1 );
+		add_action( 'save_post', array( $this, 'save_meta_boxes' ) );
 	}
 
 	/**

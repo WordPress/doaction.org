@@ -134,7 +134,7 @@ class Do_Action {
 		add_action( 'init', array( $this, 'define_content_types' ), 0 );
 		add_action( 'init', array( $this, 'register_post_types' ), 1 );
 		add_action( 'init', array( $this, 'register_taxonomies' ), 1 );
-		add_filter( 'dashboard_glance_items', array( $this, 'glance_items' ), 10, 1 );
+		add_filter( 'dashboard_glance_items', array( $this, 'glance_items' ) );
 		add_action( 'save_post', array( $this, 'set_nonprofits_private' ), 10, 2 );
 		add_action( 'restrict_manage_posts', array( $this, 'filter_non_profits_list_table' ) );
 
@@ -156,7 +156,7 @@ class Do_Action {
 		add_action( 'admin_menu', array( $this, 'modify_admin_menu' ), 999 );
 		add_filter( 'request', array( $this, 'modify_admin_lists' ) );
 		add_filter( 'wp_count_posts', array( $this, 'modify_post_counts' ), 10, 2 );
-		add_filter( 'removable_query_args', array( $this, 'removable_query_args' ), 10, 1 );
+		add_filter( 'removable_query_args', array( $this, 'removable_query_args' ) );
 
 		// Require edit rights on Polylang's untranslated-posts REST endpoint, which otherwise
 		// leaks raw (unprotected) titles of password-protected posts to anonymous users.
@@ -172,8 +172,8 @@ class Do_Action {
 		add_shortcode( 'past_events', array( $this, 'past_events' ) );
 
 		// Load frontend JS & CSS.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Load admin JS & CSS.
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
