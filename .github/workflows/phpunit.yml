@@ -5,26 +5,23 @@ on: pull_request
 jobs:
   phpunit:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: wordpress_test
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - run: sudo systemctl start mysql
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: WordPress/wordpress-develop
           path: wordpress-develop
+          sparse-checkout: |
+            src
+            tests/phpunit/data
+            tests/phpunit/includes
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.5'
       - run: composer global require phpunit/phpunit:^9.6 yoast/phpunit-polyfills:^2
       - run: |
+          mysql -uroot -proot -e 'CREATE DATABASE wordpress_test'
           cp wordpress-develop/wp-tests-config-sample.php wordpress-develop/wp-tests-config.php
           sed -i 's/youremptytestdbnamehere/wordpress_test/; s/yourusernamehere/root/; s/yourpasswordhere/root/; s/localhost/127.0.0.1/' wordpress-develop/wp-tests-config.php
       - run: phpunit
