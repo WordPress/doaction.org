@@ -20,7 +20,7 @@ get_header(); ?>
 			$signed_up = isset( $_GET['signup'] ) ? sanitize_key( wp_unslash( $_GET['signup'] ) ) : '';
 			if ( $signed_up ) {
 
-				if ( 'success' == $signed_up ) {
+				if ( 'success' === $signed_up ) {
 					?>
 					<div class="form-success-box">
 						<?php
@@ -44,7 +44,7 @@ get_header(); ?>
 			$applied = isset( $_GET['application'] ) ? sanitize_key( wp_unslash( $_GET['application'] ) ) : '';
 			if ( $applied ) {
 
-				if ( 'success' == $applied ) {
+				if ( 'success' === $applied ) {
 					?>
 					<div class="form-success-box">
 						<?php

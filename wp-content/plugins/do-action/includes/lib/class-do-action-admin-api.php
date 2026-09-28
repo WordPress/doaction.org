@@ -1,67 +1,77 @@
 <?php
+/**
+ * Admin API for rendering, validating and saving custom fields and meta boxes.
+ *
+ * @package do_action
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class do_action_Admin_API {
+/**
+ * Renders, validates and saves custom fields and meta boxes.
+ */
+class Do_Action_Admin_API {
 
 	/**
 	 * Constructor function
 	 */
 	public function __construct() {
-		add_action( 'save_post', array( $this, 'save_meta_boxes' ), 10, 1 );
+		add_action( 'save_post', array( $this, 'save_meta_boxes' ) );
 	}
 
 	/**
 	 * Generate HTML for displaying fields
-	 * @param  array   $field Field data
-	 * @param  boolean $echo  Whether to echo the field HTML or return it
-	 * @return void
+	 *
+	 * @param  array         $data    Field data, optionally wrapped with 'field' and 'prefix' keys.
+	 * @param  WP_Post|false $post    Post to read the saved value from, or false to read an option.
+	 * @param  boolean       $display Whether to echo the field HTML or return it.
+	 * @return string|void Field HTML if $display is false.
 	 */
-	public function display_field( $data = array(), $post = false, $echo = true ) {
+	public function display_field( $data = array(), $post = false, $display = true ) {
 
-		// Get field info
+		// Get field info.
 		if ( isset( $data['field'] ) ) {
 			$field = $data['field'];
 		} else {
 			$field = $data;
 		}
 
-		// Check for prefix on option name
+		// Check for prefix on option name.
 		$option_name = '';
 		if ( isset( $data['prefix'] ) ) {
 			$option_name = $data['prefix'];
 		}
 
-		// Get saved data
+		// Get saved data.
 		$data = '';
 		if ( $post ) {
 
-			// Get saved field data
+			// Get saved field data.
 			$option_name .= $field['id'];
 			$option       = get_post_meta( $post->ID, $field['id'], true );
 
-			// Get data to display in field
+			// Get data to display in field.
 			if ( isset( $option ) ) {
 				$data = $option;
 			}
 		} else {
 
-			// Get saved option
+			// Get saved option.
 			$option_name .= $field['id'];
 			$option       = get_option( $option_name );
 
-			// Get data to display in field
+			// Get data to display in field.
 			if ( isset( $option ) ) {
 				$data = $option;
 			}
 		}
 
-		// Show default data if no option saved and default is supplied
-		if ( $data === false && isset( $field['default'] ) ) {
+		// Show default data if no option saved and default is supplied.
+		if ( false === $data && isset( $field['default'] ) ) {
 			$data = $field['default'];
-		} elseif ( $data === false ) {
+		} elseif ( false === $data ) {
 			$data = '';
 		}
 
@@ -100,16 +110,17 @@ class do_action_Admin_API {
 
 			case 'checkbox':
 				$checked = '';
-				if ( $data && 'on' == $data ) {
+				if ( $data && 'on' === $data ) {
 					$checked = 'checked="checked"';
 				}
 				$html .= '<input id="' . esc_attr( $field['id'] ) . '" type="' . esc_attr( $field['type'] ) . '" name="' . esc_attr( $option_name ) . '" ' . $checked . '/>' . "\n";
 				break;
 
 			case 'checkbox_multi':
+				$data = array_map( 'strval', (array) $data );
 				foreach ( $field['options'] as $k => $v ) {
 					$checked = false;
-					if ( in_array( $k, $data ) ) {
+					if ( in_array( (string) $k, $data, true ) ) {
 						$checked = true;
 					}
 					$html .= '<label for="' . esc_attr( $field['id'] . '_' . $k ) . '" class="checkbox_multi"><input type="checkbox" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $option_name ) . '[]" value="' . esc_attr( $k ) . '" id="' . esc_attr( $field['id'] . '_' . $k ) . '" /> ' . esc_html( $v ) . '</label> ';
@@ -119,7 +130,7 @@ class do_action_Admin_API {
 			case 'radio':
 				foreach ( $field['options'] as $k => $v ) {
 					$checked = false;
-					if ( $k == $data ) {
+					if ( (string) $k === (string) $data ) {
 						$checked = true;
 					}
 					$html .= '<label for="' . esc_attr( $field['id'] . '_' . $k ) . '"><input type="radio" ' . checked( $checked, true, false ) . ' name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $k ) . '" id="' . esc_attr( $field['id'] . '_' . $k ) . '" /> ' . esc_html( $v ) . '</label> ';
@@ -130,7 +141,7 @@ class do_action_Admin_API {
 				$html .= '<select name="' . esc_attr( $option_name ) . '" id="' . esc_attr( $field['id'] ) . '">';
 				foreach ( $field['options'] as $k => $v ) {
 					$selected = false;
-					if ( $k == $data ) {
+					if ( (string) $k === (string) $data ) {
 						$selected = true;
 					}
 					$html .= '<option ' . selected( $selected, true, false ) . ' value="' . esc_attr( $k ) . '">' . esc_html( $v ) . '</option>';
@@ -140,12 +151,10 @@ class do_action_Admin_API {
 
 			case 'select_multi':
 				$html .= '<select name="' . esc_attr( $option_name ) . '[]" id="' . esc_attr( $field['id'] ) . '" multiple="multiple">';
+				$data  = array_map( 'strval', (array) $data );
 				foreach ( $field['options'] as $k => $v ) {
 					$selected = false;
-					if ( ! is_array( $data ) ) {
-						$data = array( $data );
-					}
-					if ( in_array( $k, $data ) ) {
+					if ( in_array( (string) $k, $data, true ) ) {
 						$selected = true;
 					}
 					$html .= '<option ' . selected( $selected, true, false ) . ' value="' . esc_attr( $k ) . '">' . esc_html( $v ) . '</option>';
@@ -166,7 +175,7 @@ class do_action_Admin_API {
 
 			case 'color':
 				?><div class="color-picker" style="position:relative;">
-					<input type="text" name="<?php esc_attr_e( $option_name ); ?>" class="color" value="<?php esc_attr_e( $data ); ?>" />
+					<input type="text" name="<?php echo esc_attr( $option_name ); ?>" class="color" value="<?php echo esc_attr( $data ); ?>" />
 					<div style="position:absolute;background:#FFF;z-index:99;border-radius:100%;" class="colorpicker"></div>
 				</div>
 				<?php
@@ -174,9 +183,9 @@ class do_action_Admin_API {
 
 			case 'datepicker':
 				if ( ! $data ) {
-					$data = date( 'Y-m-d', time() );
+					$data = gmdate( 'Y-m-d' );
 				}
-				$display_date = date( 'j F Y', strtotime( $data ) );
+				$display_date = gmdate( 'j F Y', strtotime( $data ) );
 				$html        .= '<input id="' . esc_attr( $field['id'] ) . '_display" type="text" class="datepicker" placeholder="' . esc_attr( $field['placeholder'] ) . '" value="' . esc_attr( $display_date ) . '" />' . "\n";
 				$html        .= '<input id="' . esc_attr( $field['id'] ) . '_save" type="hidden" name="' . esc_attr( $option_name ) . '" value="' . esc_attr( $data ) . '" />' . "\n";
 				break;
@@ -213,7 +222,7 @@ class do_action_Admin_API {
 				break;
 		}
 
-		if ( ! $echo ) {
+		if ( ! $display ) {
 			return $html;
 		}
 
@@ -223,8 +232,9 @@ class do_action_Admin_API {
 
 	/**
 	 * Validate form field
-	 * @param  string $data Submitted value
-	 * @param  string $type Type of field to validate
+	 *
+	 * @param  string $data Submitted value.
+	 * @param  string $type Type of field to validate.
 	 * @return string       Validated value
 	 */
 	public function validate_field( $data = '', $type = 'text' ) {
@@ -249,22 +259,23 @@ class do_action_Admin_API {
 
 	/**
 	 * Add meta box to the dashboard
-	 * @param string $id            Unique ID for metabox
-	 * @param string $title         Display title of metabox
-	 * @param array  $post_types    Post types to which this metabox applies
-	 * @param string $context       Context in which to display this metabox ('advanced' or 'side')
-	 * @param string $priority      Priority of this metabox ('default', 'low' or 'high')
-	 * @param array  $callback_args Any axtra arguments that will be passed to the display function for this metabox
+	 *
+	 * @param string $id            Unique ID for metabox.
+	 * @param string $title         Display title of metabox.
+	 * @param array  $post_types    Post types to which this metabox applies.
+	 * @param string $context       Context in which to display this metabox ('advanced' or 'side').
+	 * @param string $priority      Priority of this metabox ('default', 'low' or 'high').
+	 * @param array  $callback_args Any axtra arguments that will be passed to the display function for this metabox.
 	 * @return void
 	 */
 	public function add_meta_box( $id = '', $title = '', $post_types = array(), $context = 'advanced', $priority = 'default', $callback_args = null ) {
 
-		// Get post type(s)
+		// Get post type(s).
 		if ( ! is_array( $post_types ) ) {
 			$post_types = array( $post_types );
 		}
 
-		// Generate each metabox
+		// Generate each metabox.
 		foreach ( $post_types as $post_type ) {
 			add_meta_box( $id, $title, array( $this, 'meta_box_content' ), $post_type, $context, $priority, $callback_args );
 		}
@@ -272,8 +283,9 @@ class do_action_Admin_API {
 
 	/**
 	 * Display metabox content
-	 * @param  object $post Post object
-	 * @param  array  $args Arguments unique to this metabox
+	 *
+	 * @param  object $post Post object.
+	 * @param  array  $args Arguments unique to this metabox.
 	 * @return void
 	 */
 	public function meta_box_content( $post, $args ) {
@@ -281,7 +293,7 @@ class do_action_Admin_API {
 		$field_post_type = str_replace( '-', '_', $post->post_type );
 		$fields          = apply_filters( $field_post_type . '_custom_fields', array(), $post->post_type );
 
-		if ( ! is_array( $fields ) || 0 == count( $fields ) ) {
+		if ( ! is_array( $fields ) || 0 === count( $fields ) ) {
 			return;
 		}
 
@@ -299,7 +311,7 @@ class do_action_Admin_API {
 				$field['metabox'] = array( $field['metabox'] );
 			}
 
-			if ( in_array( $args['id'], $field['metabox'] ) ) {
+			if ( in_array( $args['id'], $field['metabox'], true ) ) {
 				$this->display_meta_box_field( $field, $post );
 			}
 		}
@@ -309,17 +321,18 @@ class do_action_Admin_API {
 
 	/**
 	 * Dispay field in metabox
-	 * @param  array  $field Field data
-	 * @param  object $post  Post object
+	 *
+	 * @param  array  $field Field data.
+	 * @param  object $post  Post object.
 	 * @return void
 	 */
 	public function display_meta_box_field( $field, $post ) {
 
-		if ( ! is_array( $field ) || 0 == count( $field ) ) {
+		if ( ! is_array( $field ) || 0 === count( $field ) ) {
 			return;
 		}
 
-		if ( 'hidden' == $field['type'] ) {
+		if ( 'hidden' === $field['type'] ) {
 			$field = $this->display_field( $field, $post, false ) . "\n";
 		} else {
 			$field = '<p class="form-field"><label for="' . esc_attr( $field['id'] ) . '">' . esc_html( $field['label'] ) . '</label>' . $this->display_field( $field, $post, false ) . '</p>' . "\n";
@@ -331,7 +344,8 @@ class do_action_Admin_API {
 
 	/**
 	 * Save metabox fields
-	 * @param  integer $post_id Post ID
+	 *
+	 * @param  integer $post_id Post ID.
 	 * @return void
 	 */
 	public function save_meta_boxes( $post_id = 0 ) {
@@ -362,7 +376,7 @@ class do_action_Admin_API {
 		$field_post_type = str_replace( '-', '_', $post_type );
 		$fields          = apply_filters( $field_post_type . '_custom_fields', array(), $post_type );
 
-		if ( ! is_array( $fields ) || 0 == count( $fields ) ) {
+		if ( ! is_array( $fields ) || 0 === count( $fields ) ) {
 			return;
 		}
 

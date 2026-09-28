@@ -1,58 +1,70 @@
 <?php
+/**
+ * Taxonomy registration helper.
+ *
+ * @package do_action
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class do_action_Taxonomy {
+/**
+ * Registers a custom taxonomy.
+ */
+class Do_Action_Taxonomy {
 
 	/**
 	 * The name for the taxonomy.
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
+	 *
+	 * @var string
 	 */
 	public $taxonomy;
 
 	/**
 	 * The plural name for the taxonomy terms.
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
+	 *
+	 * @var string
 	 */
 	public $plural;
 
 	/**
 	 * The singular name for the taxonomy terms.
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
+	 *
+	 * @var string
 	 */
 	public $single;
 
 	/**
 	 * The array of post types to which this taxonomy applies.
-	 * @var     array
-	 * @access  public
-	 * @since   1.0.0
+	 *
+	 * @var array
 	 */
 	public $post_types;
 
 	/**
-		* The array of taxonomy arguments
-		* @var     array
-		* @access  public
-		* @since   1.0.0
-		*/
+	 * The array of taxonomy arguments
+	 *
+	 * @var array
+	 */
 	public $taxonomy_args;
 
+	/**
+	 * Stores the taxonomy settings and hooks its registration.
+	 *
+	 * @param string       $taxonomy   Taxonomy name.
+	 * @param string       $plural     Plural label for the taxonomy terms.
+	 * @param string       $single     Singular label for the taxonomy terms.
+	 * @param string|array $post_types Post type or post types the taxonomy applies to.
+	 * @param array        $tax_args   Taxonomy arguments.
+	 */
 	public function __construct( $taxonomy = '', $plural = '', $single = '', $post_types = array(), $tax_args = array() ) {
 
 		if ( ! $taxonomy || ! $plural || ! $single ) {
 			return;
 		}
 
-		// Post type name and labels
+		// Post type name and labels.
 		$this->taxonomy = $taxonomy;
 		$this->plural   = $plural;
 		$this->single   = $single;
@@ -62,12 +74,13 @@ class do_action_Taxonomy {
 		$this->post_types    = $post_types;
 		$this->taxonomy_args = $tax_args;
 
-		// Register taxonomy
+		// Register taxonomy.
 		add_action( 'init', array( $this, 'register_taxonomy' ) );
 	}
 
 	/**
 	 * Register new taxonomy
+	 *
 	 * @return void
 	 */
 	public function register_taxonomy() {

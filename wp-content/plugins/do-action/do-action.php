@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Plugin Name: do_action
  * Version: 1.0
  * Plugin URI: http://doaction.org/
@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Load plugin localisation
+// Load plugin localisation.
 add_action(
 	'init',
 	function () {
@@ -30,11 +30,11 @@ add_action(
 	0
 );
 
-// Load plugin class files
+// Load plugin class files.
 require_once 'includes/class-do-action.php';
 require_once 'includes/class-do-action-tools.php';
 
-// Load plugin libraries
+// Load plugin libraries.
 require_once 'includes/lib/class-do-action-admin-api.php';
 require_once 'includes/lib/class-do-action-post-type.php';
 require_once 'includes/lib/class-do-action-taxonomy.php';
@@ -43,11 +43,11 @@ require_once 'includes/lib/class-do-action-taxonomy.php';
  * Returns the main instance of do_action to prevent the need to use globals.
  *
  * @since  1.0.0
- * @return object do_action
+ * @return object Do_Action
  */
 function do_action_functions() {
-	$instance        = do_action::instance( __FILE__, '1.0.0' );
-	$instance->tools = do_action_tools::instance( $instance );
+	$instance        = Do_Action::instance( __FILE__, '1.0.0' );
+	$instance->tools = Do_Action_Tools::instance( $instance );
 	return $instance;
 }
 
