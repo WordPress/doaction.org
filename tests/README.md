@@ -9,6 +9,8 @@ WP_TESTS_PHPUNIT_POLYFILLS_PATH=/absolute/path/to/phpunit-polyfills \
 phpunit -c /absolute/path/to/doaction.org/phpunit.xml.dist
 ```
 
+CI runs the suite on every pull request.
+
 The WordPress test bootstrap recreates database tables. Never point the configuration at a live database. The tests load the plugin automatically and cover recipient authorization, nonprofit associations, native custom fields, and metadata escaping.
 
 Run the WordPress coding standards checks (configured in `phpcs.xml.dist`) with `phpcs` from the repository root; CI runs the same check on every pull request. Narrow inline exceptions cover read-only navigation and form markup whose individual values are already escaped.
