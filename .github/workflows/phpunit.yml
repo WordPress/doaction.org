@@ -2,6 +2,9 @@ name: PHPUnit
 
 on: pull_request
 
+permissions:
+  contents: read
+
 jobs:
   phpunit:
     runs-on: ubuntu-latest
@@ -10,11 +13,14 @@ jobs:
         run: sudo systemctl start mysql
 
       - name: Check out repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Check out WordPress and its test library
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          persist-credentials: false
           repository: WordPress/wordpress-develop
           path: wordpress-develop
           sparse-checkout: |
@@ -23,7 +29,7 @@ jobs:
             tests/phpunit/includes
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
         with:
           php-version: '8.5'
 
