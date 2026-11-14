@@ -4,7 +4,7 @@ Theme URI:    https://doaction.org
 Author:       WooThemes
 Author URI:   http://hughlashbrooke.com
 Description:  Storefront child theme for doaction.org
-Version:      1.0
+Version:      1.0.1
 License:      GNU General Public License v2 or later
 License URI:  http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain:  do-action
@@ -13,6 +13,11 @@ Template:     storefront
 
 .site-branding .custom-logo-link img { max-width: 350px; margin: 0 auto; }
 .single-event #post-navigation, .single-sponsor #post-navigation, .single-non-profit #post-navigation { display: none; }
+
+@media (max-width: 767px) {
+	/* The hero's negative top margin pulls it up beside the floated menu toggle, which squeezes it on narrow screens. */
+	.page-template-template-homepage:not(.has-post-thumbnail) .site-main > .sph-hero:first-child { margin-top: 0; }
+}
 
 @media (min-width: 768px) {
 	.storefront-primary-navigation { background: #f0f0f0 !important; }
